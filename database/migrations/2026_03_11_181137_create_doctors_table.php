@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name', 150);
             $table->string('specialization', 150)->nullable();
             $table->string('photo', 255)->nullable();
+            $table->json('schedule');
+            $table->text('statement')->nullable();
             $table->timestamps();
         });
     }

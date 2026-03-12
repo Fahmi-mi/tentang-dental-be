@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('doctor_id')->constrained('doctors')->onDelete('cascade');
             $table->text('complain');
             $table->date('reservation_date');
+            $table->time('appointment_time');
             $table->enum('status', ['pending', 'validated', 'completed', 'cancelled'])->default('pending');
             $table->timestamp('created_at')->nullable();
             

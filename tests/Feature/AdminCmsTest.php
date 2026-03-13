@@ -106,6 +106,8 @@ test('service validation rejects price and image fields', function () {
 });
 
 test('admin can create article with admin_id relationship', function () {
+    Sanctum::actingAs($this->admin);
+
     $response = $this->postJson('/api/admin/articles', [
         'title' => 'Tips Merawat Gigi',
         'content' => 'Konten artikel lengkap...',
@@ -116,17 +118,20 @@ test('admin can create article with admin_id relationship', function () {
         ->assertJson([
             'success' => true,
             'data' => [
-                'admin_id' => $this->admin->id,
+                'id' => Article::first()->id,
                 'title' => 'Tips Merawat Gigi',
+                'slug' => 'tips-merawat-gigi',
                 'content' => 'Konten artikel lengkap...',
                 'image_url' => asset('storage/articles/' . Article::first()->image),
+                'writer' => $this->admin->name,
             ],
-            'message' => 'Artikel berhasil dibuat'
+            'message' => 'Artikel berhasil ditambahkan'
         ]);
     
     $this->assertDatabaseHas('articles', [
         'admin_id' => $this->admin->id,
         'title' => 'Tips Merawat Gigi',
+        'slug' => 'tips-merawat-gigi',
         'content' => 'Konten artikel lengkap...',
         'image' => Article::first()->image,
     ]);
@@ -136,6 +141,7 @@ test('article automatically generates slug from title', function () {
     $response = $this->postJson('/api/admin/articles', [
         'title' => 'Tips Merawat Gigi Anak',
         'content' => 'Konten...',
+        'image' => UploadedFile::fake()->image('article.jpg'),
     ]);
     
     $response->assertStatus(201);
@@ -161,7 +167,12 @@ test('admin can create gallery', function () {
     $response->assertStatus(201)
         ->assertJson([
             'success' => true,
-            'message' => 'Galeri berhasil dibuat'
+            'data' => [
+                'id' => Gallery::first()->id,
+                'image_url' => asset('storage/galleries/' . Gallery::first()->image),
+                'caption' => 'Ruang tunggu klinik',
+            ],
+            'message' => 'Galeri berhasil ditambahkan'
         ]);
 });
 
@@ -187,7 +198,7 @@ test('admin can create doctor with schedule', function () {
     $response->assertStatus(201)
         ->assertJson([
             'success' => true,
-            'message' => 'Dokter berhasil dibuat'
+            'message' => 'Dokter berhasil ditambahkan'
         ]);
 });
 
@@ -202,7 +213,14 @@ test('admin can create testimonial', function () {
     $response->assertStatus(201)
         ->assertJson([
             'success' => true,
-            'message' => 'Testimoni berhasil dibuat'
+            'data' => [
+                'id' => Testimonial::first()->id,
+                'name' => 'John Doe',
+                'rating' => 5,
+                'testimoni' => 'Pelayanan sangat baik!',
+                'photo_url' => asset('storage/testimonials/' . Testimonial::first()->photo),
+            ],
+            'message' => 'Testimoni berhasil ditambahkan'
         ]);
 });
 
@@ -225,7 +243,12 @@ test('admin can create faq', function () {
     $response->assertStatus(201)
         ->assertJson([
             'success' => true,
-            'message' => 'FAQ berhasil dibuat'
+            'data' => [
+                'id' => Faq::first()->id,
+                'question' => 'Berapa biaya scaling?',
+                'answer' => 'Biaya scaling mulai dari Rp 150.000',
+            ],
+            'message' => 'FAQ berhasil ditambahkan'
         ]);
 });
 

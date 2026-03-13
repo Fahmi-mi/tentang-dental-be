@@ -25,7 +25,7 @@ class StoreDoctorRequest extends FormRequest
             'name' => 'required|string|max:150',
             'specialization' => 'nullable|string|max:150',
             'photo' => 'required|image|mimes:jpeg,jpg,png,webp|max:2048',
-            'schedule' => 'required|json',
+            'schedule' => 'required|array',
             'statement' => 'nullable|string',
         ];
     }
@@ -41,7 +41,7 @@ class StoreDoctorRequest extends FormRequest
             'photo.mimes' => 'Format gambar harus jpeg, jpg, png, atau webp',
             'photo.max' => 'Ukuran foto maksimal 2MB',
             'schedule.required' => 'Jadwal praktek wajib diisi',
-            'schedule.json' => 'Format jadwal harus JSON valid',
+            'schedule.array' => 'Format jadwal harus berupa array valid',
         ];
     }
 }

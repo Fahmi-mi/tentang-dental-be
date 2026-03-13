@@ -51,7 +51,7 @@ class ArticleController extends Controller
         }
     }
 
-    public function store(StoreArticleRequest $request, Request $req)
+    public function store(StoreArticleRequest $request)
     {
         DB::beginTransaction();
         
@@ -75,7 +75,7 @@ class ArticleController extends Controller
             }
 
             $article = Article::create([
-                'admin_id' => $req->user()->id,
+                'admin_id' => $request->user()->id,
                 'title' => $request->title,
                 'slug' => $slug,
                 'content' => $request->content,
@@ -90,7 +90,7 @@ class ArticleController extends Controller
                 'slug' => $article->slug,
                 'content' => $article->content,
                 'image_url' => asset('storage/articles/' . $article->image),
-                'writer' => $req->user()->name,
+                'writer' => $request->user()->name,
             ];
 
             return response()->json(

@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 test('can get list of promos', function () {
-    Promo::factory()->count(3)->create();
+    $promo = Promo::factory()->count(3)->create();
     
     $response = $this->getJson('/api/promos');
     
@@ -20,10 +20,11 @@ test('can get list of promos', function () {
         ->assertJsonStructure([
             'success',
             'data' => [
-                'promos' => [
-                    '*' => ['id', 'name', 'image_url', 'detail', 'original_price', 'promo_price']
-                ],
-                'pagination'
+                '*' => [
+                    'name',
+                    'original_price',
+                    'discount_percentage'
+                ]
             ],
             'message'
         ]);
@@ -44,9 +45,12 @@ test('can get single promo by id', function () {
             'data' => [
                 'id' => $promo->id,
                 'name' => 'Promo Scaling',
+                'detail' => $promo->detail,
                 'original_price' => 150000,
                 'promo_price' => 99000,
-            ]
+                'discount_percentage' => 34
+            ],
+            'message' => 'Detail promo berhasil diambil'
         ]);
 });
 
@@ -59,10 +63,7 @@ test('can get list of services', function () {
         ->assertJsonStructure([
             'success',
             'data' => [
-                'services' => [
-                    '*' => ['id', 'name', 'detail', 'icon_url']
-                ],
-                'pagination'
+                '*' => ['id', 'name', 'detail', 'icon_url']
             ],
             'message'
         ]);
@@ -164,10 +165,9 @@ test('can get list of galleries', function () {
         ->assertJsonStructure([
             'success',
             'data' => [
-                'galleries' => [
-                    '*' => ['id', 'image_url', 'caption', 'created_at']
-                ],
-                'pagination'
+                '*' => [
+                    'id', 'image_url', 'caption', 'uploaded_at'
+                ]
             ],
             'message'
         ]);
@@ -226,10 +226,9 @@ test('can get list of testimonials', function () {
         ->assertJsonStructure([
             'success',
             'data' => [
-                'testimonials' => [
-                    '*' => ['id', 'name', 'rating', 'testimoni', 'photo_url']
-                ],
-                'pagination'
+                '*' => [
+                    'id', 'name', 'rating', 'testimoni', 'photo_url'
+                ]
             ],
             'message'
         ]);
@@ -244,10 +243,9 @@ test('can get list of faqs', function () {
         ->assertJsonStructure([
             'success',
             'data' => [
-                'faqs' => [
-                    '*' => ['id', 'question', 'answer']
-                ],
-                'pagination'
+                '*' => [
+                    'id', 'question', 'answer'
+                ]
             ],
             'message'
         ]);

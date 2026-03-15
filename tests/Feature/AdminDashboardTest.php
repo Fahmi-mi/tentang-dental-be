@@ -18,34 +18,35 @@ beforeEach(function () {
 test('dashboard returns daily statistics', function () {
     $patient = Patient::factory()->create();
     $doctor = Doctor::factory()->create();
+    $service = Service::factory()->create();
     
-    Reservation::factory()->count(5)->create([
+    $reservations = Reservation::factory()->count(5)->create([
         'patient_id' => $patient->id,
         'doctor_id' => $doctor->id,
         'status' => 'pending',
-        'reservation_date' => now(),
+        'reservation_date' => now()->toDateString(),
     ]);
     
-    Reservation::factory()->count(3)->create([
-        'patient_id' => $patient->id,
-        'doctor_id' => $doctor->id,
-        'status' => 'validated',
-        'reservation_date' => now(),
-    ]);
-    
+    $reservations->each(function ($reservation) use ($service) {
+        $reservation->services()->attach($service->id);
+    });
+
     $response = $this->getJson('/api/admin/dashboard');
     
     $response->assertStatus(200)
         ->assertJsonStructure([
             'success',
             'data' => [
-                'total_reservations_today',
-                'pending_reservations',
-                'validated_reservations',
-                'completed_reservations',
-                'cancelled_reservations',
-                'total_patients',
-            ]
+                'daily_statistics' => [
+                    'pending', 'validated', 'completed', 'total'
+                ],
+                'totals' => [
+                    'total_patients', 'total_reservations', 'total_rontgens', 'pending_reservations'
+                ],
+                'monthly_analytics',
+                'recent_reservations'
+            ],
+            'message'
         ]);
 });
 

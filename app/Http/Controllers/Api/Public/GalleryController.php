@@ -20,7 +20,7 @@ class GalleryController extends Controller
                         'id' => $gallery->id,
                         'image_url' => $gallery->image ? asset('storage/galleries/' . $gallery->image) : null,
                         'caption' => $gallery->caption,
-                        'uploaded_at' => $gallery->created_at->format('d M Y'),
+                        'uploaded_at' => optional($gallery->created_at)->format('d M Y'),
                     ];
                 });
 

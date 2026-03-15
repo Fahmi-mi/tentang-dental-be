@@ -12,7 +12,7 @@ class GalleryFactory extends Factory
     public function definition(): array
     {
         return [
-            'image' => null,
+            'image' => 'gallery_' . fake()->uuid() . '.jpg',
             'caption' => fake()->sentence(8),
         ];
     }

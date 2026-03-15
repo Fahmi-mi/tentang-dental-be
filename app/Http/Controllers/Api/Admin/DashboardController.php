@@ -45,8 +45,10 @@ class DashboardController extends Controller
                     DB::raw('COUNT(reservations.id) as total_reservations'),
                     DB::raw('SUM(services.price) as total_revenue')
                 )
-                ->join('services', 'reservations.service_id', '=', 'services.id')
-                ->where(DB::raw('DATE_FORMAT(reservations.reservation_date, "%Y-%m")'), $currentMonth)
+                ->join('reservation_service', 'reservations.id', '=', 'reservation_service.reservation_id')
+                ->join('services', 'reservation_service.service_id', '=', 'services.id')
+                ->whereYear('reservations.reservation_date', now()->year)
+                ->whereMonth('reservations.reservation_date', now()->month)
                 ->groupBy('services.id', 'services.name')
                 ->orderByDesc('total_reservations')
                 ->get();

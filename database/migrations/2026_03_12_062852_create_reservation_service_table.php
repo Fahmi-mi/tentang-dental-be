@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('reservation_id')->constrained('reservations')->onDelete('cascade');
             $table->foreignId('service_id')->constrained('services')->onDelete('cascade');
-            $table->timestamp('created_at')->nullable();
+            $table->timestamps();
 
             $table->unique(['reservation_id', 'service_id']);
 

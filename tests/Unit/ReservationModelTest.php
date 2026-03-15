@@ -10,8 +10,8 @@ uses(RefreshDatabase::class);
 
 test('reservation has correct fillable attributes', function () {
     $fillable = [
-        'patient_id', 'doctor_id', 'complain', 'reservation_date',
-        'appointment_time', 'status'
+        'patient_id', 'patient_category', 'doctor_id', 'complain', 'reservation_date',
+        'birth_date', 'age', 'appointment_time', 'status'
     ];
     
     $reservation = new Reservation();

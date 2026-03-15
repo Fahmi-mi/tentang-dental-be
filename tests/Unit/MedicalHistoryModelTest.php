@@ -48,7 +48,7 @@ test('patient dental history has correct fillable', function () {
         'ever_dental_treatment', 'dental_treatment_detail', 'brushing_frequency',
         'use_floss_or_mouthwash', 'bad_habits', 'bad_habits_detail',
         'ever_braces', 'braces_years', 'root_canal_treatment', 'root_canal_detail',
-        'dentures', 'routine_checkup', 'dental_checkup_frequency'
+        'dentures', 'routine_checkup', 'dental_checkup_frequency', 'doctor_notes'
     ];
     
     $dentalHistory = new PatientDentalHistory();

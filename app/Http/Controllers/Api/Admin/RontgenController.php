@@ -9,6 +9,7 @@ use App\Http\Requests\StoreRontgenRequest;
 use App\Http\Requests\UpdateRontgenRequest;
 use App\Helpers\FileHelper;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
 class RontgenController extends Controller
@@ -33,7 +34,7 @@ class RontgenController extends Controller
                             'name' => $rontgen->patient->name,
                             'phone' => $rontgen->patient->phone,
                         ],
-                        'xray_image_url' => asset('storage/rontgens/' . $rontgen->xray_image),
+                        'xray_image_url' => $this->getRontgenImageUrl($rontgen->xray_image),
                         'detail' => $rontgen->detail,
                         'created_at' => $rontgen->created_at->format('Y-m-d H:i:s'),
                     ];
@@ -73,7 +74,7 @@ class RontgenController extends Controller
                 );
             }
 
-            $imageName = FileHelper::uploadImage($request->file('xray_image'), 'rontgens');
+            $imageName = FileHelper::uploadImage($request->file('xray_image'), 'rontgen');
 
             if (!$imageName) {
                 throw new \Exception('Gagal mengupload gambar rontgen');
@@ -94,7 +95,7 @@ class RontgenController extends Controller
                     'name' => $patient->name,
                     'phone' => $patient->phone,
                 ],
-                'xray_image_url' => asset('storage/rontgens/' . $rontgen->xray_image),
+                'xray_image_url' => $this->getRontgenImageUrl($rontgen->xray_image),
                 'detail' => $rontgen->detail,
                 'created_at' => $rontgen->created_at->format('Y-m-d H:i:s'),
             ];
@@ -108,7 +109,7 @@ class RontgenController extends Controller
             DB::rollBack();
             
             if (isset($imageName)) {
-                FileHelper::deleteImage('rontgens/' . $imageName);
+                FileHelper::deleteImage('rontgen/' . $imageName);
             }
 
             return response()->json(
@@ -136,20 +137,40 @@ class RontgenController extends Controller
                     'id' => $rontgen->patient->id,
                     'name' => $rontgen->patient->name,
                     'phone' => $rontgen->patient->phone,
-                    'email' => $rontgen->patient->email,
-                    'date_of_birth' => $rontgen->patient->date_of_birth,
+                    'birth_date' => $rontgen->patient->birth_date,
                     'gender' => $rontgen->patient->gender,
                     'medical_history' => $rontgen->patient->medicalHistory ? [
-                        'blood_type' => $rontgen->patient->medicalHistory->blood_type,
-                        'allergies' => $rontgen->patient->medicalHistory->allergies,
-                        'medical_conditions' => $rontgen->patient->medicalHistory->medical_conditions,
+                        'has_allergy' => $rontgen->patient->medicalHistory->has_allergy,
+                        'allergy_detail' => $rontgen->patient->medicalHistory->allergy_detail,
+                        'has_systemic_disease' => $rontgen->patient->medicalHistory->has_systemic_disease,
+                        'systemic_disease_detail' => $rontgen->patient->medicalHistory->systemic_disease_detail,
+                        'undergoing_treatment' => $rontgen->patient->medicalHistory->undergoing_treatment,
+                        'treatment_detail' => $rontgen->patient->medicalHistory->treatment_detail,
+                        'ever_hospitalized' => $rontgen->patient->medicalHistory->ever_hospitalized,
+                        'hospitalized_reason' => $rontgen->patient->medicalHistory->hospitalized_reason,
+                        'smoking_or_alcohol' => $rontgen->patient->medicalHistory->smoking_or_alcohol,
                     ] : null,
                     'dental_history' => $rontgen->patient->dentalHistory ? [
-                        'last_dental_visit' => $rontgen->patient->dentalHistory->last_dental_visit,
-                        'dental_problems' => $rontgen->patient->dentalHistory->dental_problems,
+                        'frequent_tooth_pain' => $rontgen->patient->dentalHistory->frequent_tooth_pain,
+                        'tooth_pain_detail' => $rontgen->patient->dentalHistory->tooth_pain_detail,
+                        'bleeding_gums' => $rontgen->patient->dentalHistory->bleeding_gums,
+                        'ever_dental_treatment' => $rontgen->patient->dentalHistory->ever_dental_treatment,
+                        'dental_treatment_detail' => $rontgen->patient->dentalHistory->dental_treatment_detail,
+                        'brushing_frequency' => $rontgen->patient->dentalHistory->brushing_frequency,
+                        'use_floss_or_mouthwash' => $rontgen->patient->dentalHistory->use_floss_or_mouthwash,
+                        'bad_habits' => $rontgen->patient->dentalHistory->bad_habits,
+                        'bad_habits_detail' => $rontgen->patient->dentalHistory->bad_habits_detail,
+                        'ever_braces' => $rontgen->patient->dentalHistory->ever_braces,
+                        'braces_years' => $rontgen->patient->dentalHistory->braces_years,
+                        'root_canal_treatment' => $rontgen->patient->dentalHistory->root_canal_treatment,
+                        'root_canal_detail' => $rontgen->patient->dentalHistory->root_canal_detail,
+                        'dentures' => $rontgen->patient->dentalHistory->dentures,
+                        'routine_checkup' => $rontgen->patient->dentalHistory->routine_checkup,
+                        'dental_checkup_frequency' => $rontgen->patient->dentalHistory->dental_checkup_frequency,
+                        'doctor_notes' => $rontgen->patient->dentalHistory->doctor_notes,
                     ] : null,
                 ],
-                'xray_image_url' => asset('storage/rontgens/' . $rontgen->xray_image),
+                'xray_image_url' => $this->getRontgenImageUrl($rontgen->xray_image),
                 'detail' => $rontgen->detail,
                 'created_at' => $rontgen->created_at->format('Y-m-d H:i:s'),
                 'updated_at' => $rontgen->updated_at->format('Y-m-d H:i:s'),
@@ -185,7 +206,7 @@ class RontgenController extends Controller
             $oldImage = $rontgen->xray_image;
 
             if ($request->hasFile('xray_image')) {
-                $imageName = FileHelper::uploadImage($request->file('xray_image'), 'rontgens');
+                $imageName = FileHelper::uploadImage($request->file('xray_image'), 'rontgen');
                 if ($imageName) {
                     $rontgen->xray_image = $imageName;
                 }
@@ -198,7 +219,7 @@ class RontgenController extends Controller
             $rontgen->save();
 
             if ($request->hasFile('xray_image') && $oldImage) {
-                FileHelper::deleteImage('rontgens/' . $oldImage);
+                FileHelper::deleteImage('rontgen/' . $oldImage);
             }
 
             DB::commit();
@@ -211,7 +232,7 @@ class RontgenController extends Controller
                     'id' => $rontgen->patient->id,
                     'name' => $rontgen->patient->name,
                 ],
-                'xray_image_url' => asset('storage/rontgens/' . $rontgen->xray_image),
+                'xray_image_url' => $this->getRontgenImageUrl($rontgen->xray_image),
                 'detail' => $rontgen->detail,
                 'updated_at' => $rontgen->updated_at->format('Y-m-d H:i:s'),
             ];
@@ -250,7 +271,7 @@ class RontgenController extends Controller
             $rontgen->delete();
 
             if ($oldImage) {
-                FileHelper::deleteImage('rontgens/' . $oldImage);
+                FileHelper::deleteImage('rontgen/' . $oldImage);
             }
 
             DB::commit();
@@ -268,5 +289,59 @@ class RontgenController extends Controller
                 500
             );
         }
+    }
+
+    public function download($id)
+    {
+        try {
+            $rontgen = Rontgen::find($id);
+
+            if (!$rontgen) {
+                return response()->json(
+                    FileHelper::formatResponse(false, null, 'Data rontgen tidak ditemukan'),
+                    404
+                );
+            }
+
+            $possiblePaths = [
+                'rontgen/' . $rontgen->xray_image,
+                'rontgens/' . $rontgen->xray_image,
+            ];
+
+            $path = null;
+            foreach ($possiblePaths as $candidate) {
+                if (Storage::disk('public')->exists($candidate)) {
+                    $path = $candidate;
+                    break;
+                }
+            }
+
+            if (!$path) {
+                return response()->json(
+                    FileHelper::formatResponse(false, null, 'File rontgen tidak ditemukan di storage'),
+                    404
+                );
+            }
+
+            return response()->download(storage_path('app/public/' . $path), basename($path));
+        } catch (\Exception $e) {
+            return response()->json(
+                FileHelper::formatResponse(false, null, 'Gagal download rontgen: ' . $e->getMessage()),
+                500
+            );
+        }
+    }
+
+    private function getRontgenImageUrl(string $fileName): ?string
+    {
+        if (Storage::disk('public')->exists('rontgen/' . $fileName)) {
+            return asset('storage/rontgen/' . $fileName);
+        }
+
+        if (Storage::disk('public')->exists('rontgens/' . $fileName)) {
+            return asset('storage/rontgens/' . $fileName);
+        }
+
+        return null;
     }
 }

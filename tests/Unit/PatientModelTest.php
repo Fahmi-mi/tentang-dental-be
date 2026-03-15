@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-test('patient has fillable attributes according to BACKEND_PLAN', function () {
+test('patient has fillable attributes', function () {
     $fillable = [
         'name', 'nickname', 'gender', 'age', 'birth_place', 'birth_date',
         'address', 'village', 'district', 'city', 'phone', 'occupation',

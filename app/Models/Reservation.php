@@ -11,15 +11,20 @@ class Reservation extends Model
 
     protected $fillable = [
         'patient_id',
+        'patient_category',
         'doctor_id',
         'complain',
         'reservation_date',
+        'birth_date',
+        'age',
         'appointment_time',
         'status',
     ];
 
     protected $casts = [
         'reservation_date' => 'date',
+        'birth_date' => 'date',
+        'age' => 'integer',
         'appointment_time' => 'datetime:H:i',
     ];
 

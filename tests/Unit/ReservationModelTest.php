@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-test('reservation has correct fillable attributes according to BACKEND_PLAN', function () {
+test('reservation has correct fillable attributes', function () {
     $fillable = [
         'patient_id', 'doctor_id', 'complain', 'reservation_date',
         'appointment_time', 'status'
@@ -76,7 +76,7 @@ test('reservation belongs to many services through pivot table', function () {
         ->and($reservation->services->first())->toBeInstanceOf(Service::class);
 });
 
-test('reservation has only created_at timestamp according to BACKEND_PLAN', function () {
+test('reservation has only created_at timestamp', function () {
     $reservation = new Reservation();
     
     expect($reservation->timestamps)->toBeFalse();
@@ -102,7 +102,7 @@ test('reservation status enum values are correct', function () {
     }
 });
 
-test('reservation has appointment_time field as per BACKEND_PLAN', function () {
+test('reservation has appointment_time field', function () {
     $reservation = new Reservation();
     
     expect($reservation->getFillable())->toContain('appointment_time');

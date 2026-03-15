@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use App\Http\Requests\UpdatePatientRequest;
 use App\Helpers\FileHelper;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
 
 class PatientController extends Controller
 {
@@ -24,6 +26,7 @@ class PatientController extends Controller
                         'phone' => $patient->phone,
                         'birth_date' => $patient->birth_date,
                         'gender' => $patient->gender,
+                        'age' => $patient->age,
                         'created_at' => $patient->created_at->format('Y-m-d H:i:s'),
                     ];
                 }),
@@ -99,11 +102,18 @@ class PatientController extends Controller
                     'dentures' => $patient->dentalHistory->dentures,
                     'routine_checkup' => $patient->dentalHistory->routine_checkup,
                     'dental_checkup_frequency' => $patient->dentalHistory->dental_checkup_frequency,
+                    'doctor_notes' => $patient->dentalHistory->doctor_notes,
                 ] : null,
                 'reservations' => $patient->reservations->map(function ($reservation) {
                     return [
                         'id' => $reservation->id,
-                        'services' => $reservation->services->pluck('name'),
+                        'complain' => $reservation->complain,
+                        'services' => $reservation->services->map(function ($service) {
+                            return [
+                                'id' => $service->id,
+                                'name' => $service->name,
+                            ];
+                        }),
                         'doctor_name' => $reservation->doctor->name,
                         'reservation_date' => $reservation->reservation_date,
                         'appointment_time' => substr($reservation->appointment_time, 0, 5),
@@ -113,7 +123,7 @@ class PatientController extends Controller
                 'rontgens' => $patient->rontgens->map(function ($rontgen) {
                     return [
                         'id' => $rontgen->id,
-                        'xray_image_url' => asset('storage/rontgens/' . $rontgen->xray_image),
+                        'xray_image_url' => $this->getRontgenImageUrl($rontgen->xray_image),
                         'detail' => $rontgen->detail,
                         'created_at' => $rontgen->created_at->format('Y-m-d H:i:s'),
                     ];
@@ -214,6 +224,7 @@ class PatientController extends Controller
                     'dentures' => $patient->dentalHistory->dentures,
                     'routine_checkup' => $patient->dentalHistory->routine_checkup,
                     'dental_checkup_frequency' => $patient->dentalHistory->dental_checkup_frequency,
+                    'doctor_notes' => $patient->dentalHistory->doctor_notes,
                 ] : null,
             ];
 
@@ -254,13 +265,13 @@ class PatientController extends Controller
             }
 
             foreach ($patient->rontgens as $rontgen) {
-                FileHelper::deleteImage('rontgens/' . $rontgen->xray_image);
+                FileHelper::deleteImage('rontgen/' . $rontgen->xray_image);
             }
 
             $patient->delete();
 
             return response()->json(
-                FileHelper::formatResponse(true, null, 'Pasien berhasil dihapus'),
+                FileHelper::formatResponse(true, null, 'Data pasien berhasil dihapus'),
                 200
             );
 
@@ -270,5 +281,47 @@ class PatientController extends Controller
                 500
             );
         }
+    }
+
+    public function downloadPdf($id)
+    {
+        try {
+            $patient = Patient::with(['medicalHistory', 'dentalHistory'])->find($id);
+
+            if (!$patient) {
+                return response()->json(
+                    FileHelper::formatResponse(false, null, 'Pasien tidak ditemukan'),
+                    404
+                );
+            }
+
+            $pdf = Pdf::loadView('pdf.patient-data', [
+                'patient' => $patient,
+                'medicalHistory' => $patient->medicalHistory,
+                'dentalHistory' => $patient->dentalHistory,
+            ])->setPaper('a4', 'portrait');
+
+            $fileName = 'patient_' . $patient->id . '_' . now()->format('Ymd_His') . '.pdf';
+
+            return $pdf->download($fileName);
+        } catch (\Exception $e) {
+            return response()->json(
+                FileHelper::formatResponse(false, null, 'Gagal download PDF data pasien: ' . $e->getMessage()),
+                500
+            );
+        }
+    }
+
+    private function getRontgenImageUrl(string $fileName): ?string
+    {
+        if (Storage::disk('public')->exists('rontgen/' . $fileName)) {
+            return asset('storage/rontgen/' . $fileName);
+        }
+
+        if (Storage::disk('public')->exists('rontgens/' . $fileName)) {
+            return asset('storage/rontgens/' . $fileName);
+        }
+
+        return null;
     }
 }

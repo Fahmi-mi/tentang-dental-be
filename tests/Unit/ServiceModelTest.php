@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-test('service has correct fillable attributes according to BACKEND_PLAN', function () {
+test('service has correct fillable attributes', function () {
     $fillable = [
         'name', 'detail', 'icon', 'article_content', 'support_image'
     ];
@@ -69,7 +69,7 @@ test('service does not have image field in fillable', function () {
     expect($service->getFillable())->not->toContain('image');
 });
 
-test('service has icon and support_image fields as per BACKEND_PLAN', function () {
+test('service has icon and support_image fields', function () {
     $service = new Service();
     
     expect($service->getFillable())

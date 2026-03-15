@@ -14,7 +14,7 @@ class RontgenFactory extends Factory
     {
         return [
             'patient_id' => Patient::factory(),
-            'xray_image' => null,
+            'xray_image' => fake()->uuid() . '.jpg',
             'detail' => fake()->sentence(15),
         ];
     }

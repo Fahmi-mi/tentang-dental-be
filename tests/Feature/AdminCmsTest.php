@@ -152,7 +152,7 @@ test('article automatically generates slug from title', function () {
     ]);
 });
 
-test('gallery has only created_at timestamp as per BACKEND_PLAN', function () {
+test('gallery has only created_at timestamp', function () {
     $gallery = new Gallery();
     
     expect($gallery->timestamps)->toBeFalse();

@@ -22,7 +22,7 @@ class UpdatePatientRequest extends FormRequest
      */
     public function rules(): array
     {
-        $patientId = $this->route('patient');
+        $patientId = $this->route('id');
 
         return [
             'name' => 'sometimes|required|string|max:150',

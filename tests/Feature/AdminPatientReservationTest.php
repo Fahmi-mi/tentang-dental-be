@@ -219,7 +219,7 @@ test('reservation response has appointment_time not reservation_time', function 
         ]);
 });
 
-test('patient detail shows medical history with BACKEND_PLAN fields', function () {
+test('patient detail shows medical history', function () {
     $patient = Patient::factory()->create();
     \App\Models\PatientMedicalHistory::create([
         'patient_id' => $patient->id,
@@ -250,7 +250,7 @@ test('patient detail shows medical history with BACKEND_PLAN fields', function (
     $response->assertJsonMissing(['blood_type', 'current_medications']);
 });
 
-test('patient detail shows dental history with BACKEND_PLAN fields', function () {
+test('patient detail shows dental history', function () {
     $patient = Patient::factory()->create();
     \App\Models\PatientDentalHistory::create([
         'patient_id' => $patient->id,

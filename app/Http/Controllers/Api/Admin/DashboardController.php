@@ -8,6 +8,7 @@ use App\Models\Patient;
 use App\Models\Service;
 use App\Models\Rontgen;
 use App\Helpers\FileHelper;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -38,12 +39,9 @@ class DashboardController extends Controller
                 'pending_reservations' => Reservation::where('status', 'pending')->count(),
             ];
 
-            $currentMonth = now()->format('Y-m');
-            
             $monthlyAnalytics = Reservation::select(
                     'services.name as service_name',
-                    DB::raw('COUNT(reservations.id) as total_reservations'),
-                    DB::raw('SUM(services.price) as total_revenue')
+                    DB::raw('COUNT(reservations.id) as total_reservations')
                 )
                 ->join('reservation_service', 'reservations.id', '=', 'reservation_service.reservation_id')
                 ->join('services', 'reservation_service.service_id', '=', 'services.id')
@@ -53,18 +51,18 @@ class DashboardController extends Controller
                 ->orderByDesc('total_reservations')
                 ->get();
 
-            $recentReservations = Reservation::with(['patient', 'service', 'doctor'])
+            $recentReservations = Reservation::with(['patient', 'services', 'doctor'])
                 ->latest()
                 ->take(5)
                 ->get()
                 ->map(function ($reservation) {
                     return [
                         'id' => $reservation->id,
-                        'patient_name' => $reservation->patient->name,
-                        'service_name' => $reservation->service->name,
-                        'doctor_name' => $reservation->doctor->name,
+                        'patient_name' => optional($reservation->patient)->name,
+                        'service_name' => optional($reservation->services->first())->name,
+                        'doctor_name' => optional($reservation->doctor)->name,
                         'reservation_date' => $reservation->reservation_date,
-                        'reservation_time' => substr($reservation->reservation_time, 0, 5),
+                        'appointment_time' => substr((string) $reservation->appointment_time, 0, 5),
                         'status' => $reservation->status,
                     ];
                 });
@@ -72,11 +70,14 @@ class DashboardController extends Controller
             $data = [
                 'daily_statistics' => $dailyStats,
                 'totals' => $totals,
+                'pending_reservations' => $dailyStats['pending'],
+                'validated_reservations' => $dailyStats['validated'],
+                'completed_reservations' => $dailyStats['completed'],
+                'total_patients' => $totals['total_patients'],
                 'monthly_analytics' => $monthlyAnalytics->map(function ($item) {
                     return [
                         'service_name' => $item->service_name,
                         'total_reservations' => $item->total_reservations,
-                        'total_revenue' => (float) $item->total_revenue,
                     ];
                 }),
                 'recent_reservations' => $recentReservations,
@@ -98,8 +99,9 @@ class DashboardController extends Controller
     public function reservationStats(Request $request)
     {
         try {
-            $startDate = $request->input('start_date', now()->startOfMonth()->toDateString());
-            $endDate = $request->input('end_date', now()->endOfMonth()->toDateString());
+            $month = $request->input('month', now()->format('Y-m'));
+            $startDate = $request->input('start_date', $month . '-01');
+            $endDate = $request->input('end_date', Carbon::parse($startDate)->endOfMonth()->toDateString());
 
             $stats = Reservation::whereBetween('reservation_date', [$startDate, $endDate])
                 ->select(
@@ -110,17 +112,38 @@ class DashboardController extends Controller
                 ->get()
                 ->pluck('count', 'status');
 
+            $byDate = Reservation::whereBetween('reservation_date', [$startDate, $endDate])
+                ->select('reservation_date', DB::raw('COUNT(*) as total'))
+                ->groupBy('reservation_date')
+                ->orderBy('reservation_date')
+                ->get()
+                ->map(function ($item) {
+                    return [
+                        'date' => (string) $item->reservation_date,
+                        'total' => (int) $item->total,
+                    ];
+                });
+
             $data = [
+                'month' => $month,
+                'total_reservations' => (int) $stats->sum(),
+                'by_status' => [
+                    'pending' => (int) ($stats['pending'] ?? 0),
+                    'validated' => (int) ($stats['validated'] ?? 0),
+                    'completed' => (int) ($stats['completed'] ?? 0),
+                    'cancelled' => (int) ($stats['cancelled'] ?? 0),
+                ],
+                'by_date' => $byDate,
                 'period' => [
                     'start_date' => $startDate,
                     'end_date' => $endDate,
                 ],
                 'statistics' => [
-                    'pending' => $stats['pending'] ?? 0,
-                    'validated' => $stats['validated'] ?? 0,
-                    'completed' => $stats['completed'] ?? 0,
-                    'cancelled' => $stats['cancelled'] ?? 0,
-                    'total' => $stats->sum(),
+                    'pending' => (int) ($stats['pending'] ?? 0),
+                    'validated' => (int) ($stats['validated'] ?? 0),
+                    'completed' => (int) ($stats['completed'] ?? 0),
+                    'cancelled' => (int) ($stats['cancelled'] ?? 0),
+                    'total' => (int) $stats->sum(),
                 ],
             ];
 
@@ -140,23 +163,24 @@ class DashboardController extends Controller
     public function serviceAnalytics(Request $request)
     {
         try {
-            $startDate = $request->input('start_date', now()->startOfMonth()->toDateString());
-            $endDate = $request->input('end_date', now()->endOfMonth()->toDateString());
+            $month = $request->input('month', now()->format('Y-m'));
+            $startDate = $request->input('start_date', $month . '-01');
+            $endDate = $request->input('end_date', Carbon::parse($startDate)->endOfMonth()->toDateString());
 
             $analytics = Reservation::select(
                     'services.id',
                     'services.name',
-                    'services.price',
-                    DB::raw('COUNT(reservations.id) as total_reservations'),
-                    DB::raw('SUM(services.price) as total_revenue')
+                    DB::raw('COUNT(reservations.id) as total_reservations')
                 )
-                ->join('services', 'reservations.service_id', '=', 'services.id')
+                ->join('reservation_service', 'reservations.id', '=', 'reservation_service.reservation_id')
+                ->join('services', 'reservation_service.service_id', '=', 'services.id')
                 ->whereBetween('reservations.reservation_date', [$startDate, $endDate])
-                ->groupBy('services.id', 'services.name', 'services.price')
+                ->groupBy('services.id', 'services.name')
                 ->orderByDesc('total_reservations')
                 ->get();
 
             $data = [
+                'month' => $month,
                 'period' => [
                     'start_date' => $startDate,
                     'end_date' => $endDate,
@@ -165,14 +189,12 @@ class DashboardController extends Controller
                     return [
                         'service_id' => $item->id,
                         'service_name' => $item->name,
-                        'service_price' => (float) $item->price,
-                        'total_reservations' => $item->total_reservations,
-                        'total_revenue' => (float) $item->total_revenue,
+                        'reservation_count' => (int) $item->total_reservations,
+                        'total_reservations' => (int) $item->total_reservations,
                     ];
                 }),
                 'summary' => [
-                    'total_reservations' => $analytics->sum('total_reservations'),
-                    'total_revenue' => (float) $analytics->sum('total_revenue'),
+                    'total_reservations' => (int) $analytics->sum('total_reservations'),
                 ],
             ];
 

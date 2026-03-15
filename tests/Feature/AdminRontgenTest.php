@@ -50,7 +50,7 @@ test('rontgen admin can create rontgen', function () {
     $response->assertStatus(201)
         ->assertJson([
             'success' => true,
-            'message' => 'Rontgen berhasil dibuat'
+            'message' => 'Data rontgen berhasil ditambahkan'
         ]);
     
     $this->assertDatabaseHas('rontgen', [
@@ -94,7 +94,7 @@ test('rontgen admin can delete rontgen', function () {
     $response->assertStatus(200)
         ->assertJson([
             'success' => true,
-            'message' => 'Rontgen berhasil dihapus'
+            'message' => 'Data rontgen berhasil dihapus'
         ]);
     
     $this->assertDatabaseMissing('rontgen', ['id' => $rontgen->id]);

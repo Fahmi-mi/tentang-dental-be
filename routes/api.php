@@ -17,10 +17,8 @@ use App\Http\Controllers\Api\Public\DoctorController;
 use App\Http\Controllers\Api\Public\FaqController;
 use App\Http\Controllers\Api\Public\GalleryController;
 use App\Http\Controllers\Api\Public\PromoController;
-use App\Http\Controllers\Api\Public\ReservationController;
 use App\Http\Controllers\Api\Public\ServiceController;
 use App\Http\Controllers\Api\Public\TestimonialController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/promos', [PromoController::class, 'index']);
@@ -40,11 +38,6 @@ Route::get('/doctors/{id}', [DoctorController::class, 'show']);
 Route::get('/testimonials', [TestimonialController::class, 'index']);
 
 Route::get('/faqs', [FaqController::class, 'index']);
-
-Route::post('/reservations/new-patient', [ReservationController::class, 'storeNewPatient']);
-Route::post('/reservations/existing-patient', [ReservationController::class, 'storeExistingPatient']);
-Route::post('/reservations/check-patient', [ReservationController::class, 'checkPatient']);
-
 
 Route::prefix('admin')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
@@ -71,31 +64,32 @@ Route::prefix('admin')->group(function () {
             Route::get('/dashboard/service-analytics', [DashboardController::class, 'serviceAnalytics']);
             
             // Reservation Management
+            Route::post('/reservations', [AdminReservationController::class, 'store']);
             Route::get('/reservations', [AdminReservationController::class, 'index']);
             Route::get('/reservations/{id}', [AdminReservationController::class, 'show']);
             Route::put('/reservations/{id}', [AdminReservationController::class, 'update']);
+            Route::put('/reservations/{id}/patient-details', [AdminReservationController::class, 'updatePatientDetails']);
             Route::delete('/reservations/{id}', [AdminReservationController::class, 'destroy']);
             
-            // Patient Management
-            Route::get('/patients', [PatientController::class, 'index']);
-            Route::get('/patients/{id}', [PatientController::class, 'show']);
+            // Patient Management (write)
             Route::put('/patients/{id}', [PatientController::class, 'update']);
             Route::delete('/patients/{id}', [PatientController::class, 'destroy']);
-            
-            // Rontgen (View-only for registration role)
+        });
+
+        Route::middleware('role:registration,rontgen')->group(function () {
+            // Shared read/download access
+            Route::get('/patients', [PatientController::class, 'index']);
+            Route::get('/patients/{id}', [PatientController::class, 'show']);
+            Route::get('/patients/{id}/download-pdf', [PatientController::class, 'downloadPdf']);
+
             Route::get('/rontgens', [RontgenController::class, 'index']);
             Route::get('/rontgens/{id}', [RontgenController::class, 'show']);
+            Route::get('/rontgens/{id}/download', [RontgenController::class, 'download']);
         });
         
         Route::middleware('role:rontgen')->group(function () {
-            // Patient Data (View-only)
-            Route::get('/patients', [PatientController::class, 'index']);
-            Route::get('/patients/{id}', [PatientController::class, 'show']);
-            
-            // Rontgen Management
-            Route::get('/rontgens', [RontgenController::class, 'index']);
+            // Rontgen Management (write)
             Route::post('/rontgens', [RontgenController::class, 'store']);
-            Route::get('/rontgens/{id}', [RontgenController::class, 'show']);
             Route::put('/rontgens/{id}', [RontgenController::class, 'update']);
             Route::delete('/rontgens/{id}', [RontgenController::class, 'destroy']);
         });

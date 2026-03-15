@@ -27,6 +27,7 @@ class PatientDentalHistory extends Model
         'dentures',
         'routine_checkup',
         'dental_checkup_frequency',
+        'doctor_notes',
     ];
 
     protected $casts = [

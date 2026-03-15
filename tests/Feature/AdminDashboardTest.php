@@ -10,12 +10,10 @@ use Laravel\Sanctum\Sanctum;
 
 uses(RefreshDatabase::class);
 
-beforeEach(function () {
-    $this->admin = Admin::factory()->create(['role' => 'registration']);
-    Sanctum::actingAs($this->admin);
-});
-
 test('dashboard returns daily statistics', function () {
+    $admin = Admin::factory()->create(['role' => 'registration']);
+    Sanctum::actingAs($admin);
+
     $patient = Patient::factory()->create();
     $doctor = Doctor::factory()->create();
     $service = Service::factory()->create();
@@ -51,6 +49,9 @@ test('dashboard returns daily statistics', function () {
 });
 
 test('reservation stats returns monthly data', function () {
+    $admin = Admin::factory()->create(['role' => 'registration']);
+    Sanctum::actingAs($admin);
+
     $patient = Patient::factory()->create();
     $doctor = Doctor::factory()->create();
     
@@ -82,6 +83,9 @@ test('reservation stats returns monthly data', function () {
 });
 
 test('service analytics returns reservation count per service', function () {
+    $admin = Admin::factory()->create(['role' => 'registration']);
+    Sanctum::actingAs($admin);
+
     $patient = Patient::factory()->create();
     $doctor = Doctor::factory()->create();
     $service1 = Service::factory()->create(['name' => 'Scaling']);
@@ -133,6 +137,9 @@ test('service analytics returns reservation count per service', function () {
 });
 
 test('dashboard statistics show correct counts', function () {
+    $admin = Admin::factory()->create(['role' => 'registration']);
+    Sanctum::actingAs($admin);
+
     $patient1 = Patient::factory()->create();
     $patient2 = Patient::factory()->create();
     $doctor = Doctor::factory()->create();

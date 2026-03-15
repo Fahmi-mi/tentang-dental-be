@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-test('patient medical history has correct fillable according to BACKEND_PLAN', function () {
+test('patient medical history has correct fillable', function () {
     $fillable = [
         'patient_id', 'has_allergy', 'allergy_detail', 'has_systemic_disease',
         'systemic_disease_detail', 'undergoing_treatment', 'treatment_detail',
@@ -42,7 +42,7 @@ test('patient medical history has only created_at timestamp', function () {
     expect($medicalHistory->timestamps)->toBeFalse();
 });
 
-test('patient dental history has correct fillable according to BACKEND_PLAN', function () {
+test('patient dental history has correct fillable', function () {
     $fillable = [
         'patient_id', 'frequent_tooth_pain', 'tooth_pain_detail', 'bleeding_gums',
         'ever_dental_treatment', 'dental_treatment_detail', 'brushing_frequency',

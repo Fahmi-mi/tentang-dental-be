@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Public;
 
 use App\Helpers\FileHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Public\TestimonialResource;
 use App\Models\Testimonial;
 use Illuminate\Http\Request;
 
@@ -14,20 +15,10 @@ class TestimonialController extends Controller
         try {
             $testimonials = Testimonial::select('id', 'name', 'rating', 'testimoni', 'photo', 'created_at')
                 ->latest()
-                ->get()
-                ->map(function ($testimonial) {
-                    return [
-                        'id' => $testimonial->id,
-                        'name' => $testimonial->name,
-                        'rating' => $testimonial->rating,
-                        'testimoni' => $testimonial->testimoni,
-                        'photo_url' => $testimonial->photo ? asset('storage/testimonials/' . $testimonial->photo) : null,
-                        'created_at' => $testimonial->created_at->format('d M Y'),
-                    ];
-                });
+                ->get();
 
             return response()->json(
-                FileHelper::formatResponse(true, $testimonials, 'Data testimoni berhasil diambil'),
+                FileHelper::formatResponse(true, TestimonialResource::collection($testimonials), 'Data testimoni berhasil diambil'),
                 200
             );
         } catch (\Exception $e) {

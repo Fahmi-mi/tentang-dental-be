@@ -2,45 +2,30 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Http\Controllers\Api\Concerns\FormatsApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\ArticleResource;
 use App\Models\Article;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
 use App\Helpers\FileHelper;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
+    use FormatsApiResponse;
+
     public function index()
     {
         try {
             $articles = Article::with('admin:id,name')
                 ->latest()
                 ->paginate(10);
-
-            $data = [
-                'articles' => $articles->map(function ($article) {
-                    return [
-                        'id' => $article->id,
-                        'title' => $article->title,
-                        'slug' => $article->slug,
-                        'image_url' => $article->image ? asset('storage/articles/' . $article->image) : null,
-                        'writer' => $article->admin ? $article->admin->name : null,
-                        'created_at' => $article->created_at->format('Y-m-d H:i:s'),
-                    ];
-                }),
-                'pagination' => [
-                    'current_page' => $articles->currentPage(),
-                    'last_page' => $articles->lastPage(),
-                    'per_page' => $articles->perPage(),
-                    'total' => $articles->total(),
-                ],
-            ];
-
-            return response()->json(
-                FileHelper::formatResponse(true, $data, 'Data artikel berhasil diambil'),
-                200
+            return $this->paginatedResourceResponse(
+                $articles,
+                'articles',
+                ArticleResource::collection($articles->getCollection())->resolve(),
+                'Data artikel berhasil diambil'
             );
 
         } catch (\Exception $e) {
@@ -81,20 +66,12 @@ class ArticleController extends Controller
                 'content' => $request->content,
                 'image' => $imageName,
             ]);
+            $article->load('admin:id,name');
 
             DB::commit();
 
-            $data = [
-                'id' => $article->id,
-                'title' => $article->title,
-                'slug' => $article->slug,
-                'content' => $article->content,
-                'image_url' => asset('storage/articles/' . $article->image),
-                'writer' => $request->user()->name,
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'Artikel berhasil ditambahkan'),
+                FileHelper::formatResponse(true, new ArticleResource($article), 'Artikel berhasil ditambahkan'),
                 201
             );
 
@@ -124,19 +101,8 @@ class ArticleController extends Controller
                 );
             }
 
-            $data = [
-                'id' => $article->id,
-                'title' => $article->title,
-                'slug' => $article->slug,
-                'content' => $article->content,
-                'image_url' => $article->image ? asset('storage/articles/' . $article->image) : null,
-                'writer' => $article->admin ? $article->admin->name : null,
-                'created_at' => $article->created_at->format('Y-m-d H:i:s'),
-                'updated_at' => $article->updated_at->format('Y-m-d H:i:s'),
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'Detail artikel berhasil diambil'),
+                FileHelper::formatResponse(true, new ArticleResource($article), 'Detail artikel berhasil diambil'),
                 200
             );
 
@@ -194,18 +160,12 @@ class ArticleController extends Controller
                 FileHelper::deleteImage('articles/' . $oldImage);
             }
 
+            $article->load('admin:id,name');
+
             DB::commit();
 
-            $data = [
-                'id' => $article->id,
-                'title' => $article->title,
-                'slug' => $article->slug,
-                'content' => $article->content,
-                'image_url' => asset('storage/articles/' . $article->image),
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'Artikel berhasil diupdate'),
+                FileHelper::formatResponse(true, new ArticleResource($article), 'Artikel berhasil diupdate'),
                 200
             );
 

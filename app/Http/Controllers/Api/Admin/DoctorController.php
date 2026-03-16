@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Http\Controllers\Api\Concerns\FormatsApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\DoctorResource;
 use App\Models\Doctor;
 use App\Http\Requests\StoreDoctorRequest;
 use App\Http\Requests\UpdateDoctorRequest;
@@ -11,33 +13,17 @@ use Illuminate\Support\Facades\DB;
 
 class DoctorController extends Controller
 {
+    use FormatsApiResponse;
+
     public function index()
     {
         try {
             $doctors = Doctor::latest()->paginate(10);
-
-            $data = [
-                'doctors' => $doctors->map(function ($doctor) {
-                    return [
-                        'id' => $doctor->id,
-                        'name' => $doctor->name,
-                        'specialization' => $doctor->specialization,
-                        'photo_url' => $doctor->photo ? asset('storage/doctors/' . $doctor->photo) : null,
-                        'schedule' => $doctor->schedule,
-                        'created_at' => $doctor->created_at->format('Y-m-d H:i:s'),
-                    ];
-                }),
-                'pagination' => [
-                    'current_page' => $doctors->currentPage(),
-                    'last_page' => $doctors->lastPage(),
-                    'per_page' => $doctors->perPage(),
-                    'total' => $doctors->total(),
-                ],
-            ];
-
-            return response()->json(
-                FileHelper::formatResponse(true, $data, 'Data dokter berhasil diambil'),
-                200
+            return $this->paginatedResourceResponse(
+                $doctors,
+                'doctors',
+                DoctorResource::collection($doctors->getCollection())->resolve(),
+                'Data dokter berhasil diambil'
             );
 
         } catch (\Exception $e) {
@@ -72,17 +58,8 @@ class DoctorController extends Controller
 
             DB::commit();
 
-            $data = [
-                'id' => $doctor->id,
-                'name' => $doctor->name,
-                'specialization' => $doctor->specialization,
-                'photo_url' => asset('storage/doctors/' . $doctor->photo),
-                'schedule' => $doctor->schedule,
-                'statement' => $doctor->statement,
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'Dokter berhasil ditambahkan'),
+                FileHelper::formatResponse(true, new DoctorResource($doctor), 'Dokter berhasil ditambahkan'),
                 201
             );
 
@@ -112,19 +89,8 @@ class DoctorController extends Controller
                 );
             }
 
-            $data = [
-                'id' => $doctor->id,
-                'name' => $doctor->name,
-                'specialization' => $doctor->specialization,
-                'photo_url' => $doctor->photo ? asset('storage/doctors/' . $doctor->photo) : null,
-                'schedule' => $doctor->schedule,
-                'statement' => $doctor->statement,
-                'created_at' => $doctor->created_at->format('Y-m-d H:i:s'),
-                'updated_at' => $doctor->updated_at->format('Y-m-d H:i:s'),
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'Detail dokter berhasil diambil'),
+                FileHelper::formatResponse(true, new DoctorResource($doctor), 'Detail dokter berhasil diambil'),
                 200
             );
 
@@ -172,17 +138,8 @@ class DoctorController extends Controller
 
             DB::commit();
 
-            $data = [
-                'id' => $doctor->id,
-                'name' => $doctor->name,
-                'specialization' => $doctor->specialization,
-                'photo_url' => asset('storage/doctors/' . $doctor->photo),
-                'schedule' => $doctor->schedule,
-                'statement' => $doctor->statement,
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'Dokter berhasil diupdate'),
+                FileHelper::formatResponse(true, new DoctorResource($doctor), 'Dokter berhasil diupdate'),
                 200
             );
 

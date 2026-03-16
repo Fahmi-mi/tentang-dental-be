@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Http\Controllers\Api\Concerns\FormatsApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\TestimonialResource;
 use App\Models\Testimonial;
 use App\Http\Requests\StoreTestimonialRequest;
 use App\Http\Requests\UpdateTestimonialRequest;
@@ -11,33 +13,17 @@ use Illuminate\Support\Facades\DB;
 
 class TestimonialController extends Controller
 {
+    use FormatsApiResponse;
+
     public function index()
     {
         try {
             $testimonials = Testimonial::latest()->paginate(10);
-
-            $data = [
-                'testimonials' => $testimonials->map(function ($testimonial) {
-                    return [
-                        'id' => $testimonial->id,
-                        'name' => $testimonial->name,
-                        'rating' => $testimonial->rating,
-                        'testimoni' => $testimonial->testimoni,
-                        'photo_url' => $testimonial->photo ? asset('storage/testimonials/' . $testimonial->photo) : null,
-                        'created_at' => $testimonial->created_at->format('Y-m-d H:i:s'),
-                    ];
-                }),
-                'pagination' => [
-                    'current_page' => $testimonials->currentPage(),
-                    'last_page' => $testimonials->lastPage(),
-                    'per_page' => $testimonials->perPage(),
-                    'total' => $testimonials->total(),
-                ],
-            ];
-
-            return response()->json(
-                FileHelper::formatResponse(true, $data, 'Data testimoni berhasil diambil'),
-                200
+            return $this->paginatedResourceResponse(
+                $testimonials,
+                'testimonials',
+                TestimonialResource::collection($testimonials->getCollection())->resolve(),
+                'Data testimoni berhasil diambil'
             );
 
         } catch (\Exception $e) {
@@ -68,16 +54,8 @@ class TestimonialController extends Controller
 
             DB::commit();
 
-            $data = [
-                'id' => $testimonial->id,
-                'name' => $testimonial->name,
-                'rating' => $testimonial->rating,
-                'testimoni' => $testimonial->testimoni,
-                'photo_url' => $testimonial->photo ? asset('storage/testimonials/' . $testimonial->photo) : null,
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'Testimoni berhasil ditambahkan'),
+                FileHelper::formatResponse(true, new TestimonialResource($testimonial), 'Testimoni berhasil ditambahkan'),
                 201
             );
 
@@ -107,18 +85,8 @@ class TestimonialController extends Controller
                 );
             }
 
-            $data = [
-                'id' => $testimonial->id,
-                'name' => $testimonial->name,
-                'rating' => $testimonial->rating,
-                'testimoni' => $testimonial->testimoni,
-                'photo_url' => $testimonial->photo ? asset('storage/testimonials/' . $testimonial->photo) : null,
-                'created_at' => $testimonial->created_at->format('Y-m-d H:i:s'),
-                'updated_at' => $testimonial->updated_at->format('Y-m-d H:i:s'),
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'Detail testimoni berhasil diambil'),
+                FileHelper::formatResponse(true, new TestimonialResource($testimonial), 'Detail testimoni berhasil diambil'),
                 200
             );
 
@@ -165,16 +133,8 @@ class TestimonialController extends Controller
 
             DB::commit();
 
-            $data = [
-                'id' => $testimonial->id,
-                'name' => $testimonial->name,
-                'rating' => $testimonial->rating,
-                'testimoni' => $testimonial->testimoni,
-                'photo_url' => $testimonial->photo ? asset('storage/testimonials/' . $testimonial->photo) : null,
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'Testimoni berhasil diupdate'),
+                FileHelper::formatResponse(true, new TestimonialResource($testimonial), 'Testimoni berhasil diupdate'),
                 200
             );
 

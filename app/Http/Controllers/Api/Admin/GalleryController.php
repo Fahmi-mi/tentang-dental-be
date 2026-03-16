@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Http\Controllers\Api\Concerns\FormatsApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\GalleryResource;
 use App\Models\Gallery;
 use App\Http\Requests\StoreGalleryRequest;
 use App\Http\Requests\UpdateGalleryRequest;
@@ -11,31 +13,17 @@ use Illuminate\Support\Facades\DB;
 
 class GalleryController extends Controller
 {
+    use FormatsApiResponse;
+
     public function index()
     {
         try {
             $galleries = Gallery::latest()->paginate(10);
-
-            $data = [
-                'galleries' => $galleries->map(function ($gallery) {
-                    return [
-                        'id' => $gallery->id,
-                        'image_url' => $gallery->image ? asset('storage/galleries/' . $gallery->image) : null,
-                        'caption' => $gallery->caption,
-                        'created_at' => $gallery->created_at->format('Y-m-d H:i:s'),
-                    ];
-                }),
-                'pagination' => [
-                    'current_page' => $galleries->currentPage(),
-                    'last_page' => $galleries->lastPage(),
-                    'per_page' => $galleries->perPage(),
-                    'total' => $galleries->total(),
-                ],
-            ];
-
-            return response()->json(
-                FileHelper::formatResponse(true, $data, 'Data galeri berhasil diambil'),
-                200
+            return $this->paginatedResourceResponse(
+                $galleries,
+                'galleries',
+                GalleryResource::collection($galleries->getCollection())->resolve(),
+                'Data galeri berhasil diambil'
             );
 
         } catch (\Exception $e) {
@@ -67,14 +55,8 @@ class GalleryController extends Controller
 
             DB::commit();
 
-            $data = [
-                'id' => $gallery->id,
-                'image_url' => asset('storage/galleries/' . $gallery->image),
-                'caption' => $gallery->caption,
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'Galeri berhasil ditambahkan'),
+                FileHelper::formatResponse(true, new GalleryResource($gallery), 'Galeri berhasil ditambahkan'),
                 201
             );
 
@@ -104,15 +86,8 @@ class GalleryController extends Controller
                 );
             }
 
-            $data = [
-                'id' => $gallery->id,
-                'image_url' => $gallery->image ? asset('storage/galleries/' . $gallery->image) : null,
-                'caption' => $gallery->caption,
-                'created_at' => $gallery->created_at->format('Y-m-d H:i:s'),
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'Detail galeri berhasil diambil'),
+                FileHelper::formatResponse(true, new GalleryResource($gallery), 'Detail galeri berhasil diambil'),
                 200
             );
 
@@ -159,14 +134,8 @@ class GalleryController extends Controller
 
             DB::commit();
 
-            $data = [
-                'id' => $gallery->id,
-                'image_url' => asset('storage/galleries/' . $gallery->image),
-                'caption' => $gallery->caption,
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'Galeri berhasil diupdate'),
+                FileHelper::formatResponse(true, new GalleryResource($gallery), 'Galeri berhasil diupdate'),
                 200
             );
 

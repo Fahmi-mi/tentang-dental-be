@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Http\Controllers\Api\Concerns\FormatsApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\FaqResource;
 use App\Models\Faq;
 use App\Http\Requests\StoreFaqRequest;
 use App\Http\Requests\UpdateFaqRequest;
@@ -10,31 +12,17 @@ use App\Helpers\FileHelper;
 
 class FaqController extends Controller
 {
+    use FormatsApiResponse;
+
     public function index()
     {
         try {
             $faqs = Faq::latest()->paginate(10);
-
-            $data = [
-                'faqs' => $faqs->map(function ($faq) {
-                    return [
-                        'id' => $faq->id,
-                        'question' => $faq->question,
-                        'answer' => $faq->answer,
-                        'created_at' => $faq->created_at->format('Y-m-d H:i:s'),
-                    ];
-                }),
-                'pagination' => [
-                    'current_page' => $faqs->currentPage(),
-                    'last_page' => $faqs->lastPage(),
-                    'per_page' => $faqs->perPage(),
-                    'total' => $faqs->total(),
-                ],
-            ];
-
-            return response()->json(
-                FileHelper::formatResponse(true, $data, 'Data FAQ berhasil diambil'),
-                200
+            return $this->paginatedResourceResponse(
+                $faqs,
+                'faqs',
+                FaqResource::collection($faqs->getCollection())->resolve(),
+                'Data FAQ berhasil diambil'
             );
 
         } catch (\Exception $e) {
@@ -53,15 +41,8 @@ class FaqController extends Controller
                 'answer' => $request->answer,
             ]);
 
-            $data = [
-                'id' => $faq->id,
-                'question' => $faq->question,
-                'answer' => $faq->answer,
-                'created_at' => $faq->created_at->format('Y-m-d H:i:s'),
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'FAQ berhasil ditambahkan'),
+                FileHelper::formatResponse(true, new FaqResource($faq), 'FAQ berhasil ditambahkan'),
                 201
             );
 
@@ -85,16 +66,8 @@ class FaqController extends Controller
                 );
             }
 
-            $data = [
-                'id' => $faq->id,
-                'question' => $faq->question,
-                'answer' => $faq->answer,
-                'created_at' => $faq->created_at->format('Y-m-d H:i:s'),
-                'updated_at' => $faq->updated_at->format('Y-m-d H:i:s'),
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'Detail FAQ berhasil diambil'),
+                FileHelper::formatResponse(true, new FaqResource($faq), 'Detail FAQ berhasil diambil'),
                 200
             );
 
@@ -128,15 +101,8 @@ class FaqController extends Controller
 
             $faq->save();
 
-            $data = [
-                'id' => $faq->id,
-                'question' => $faq->question,
-                'answer' => $faq->answer,
-                'updated_at' => $faq->updated_at->format('Y-m-d H:i:s'),
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'FAQ berhasil diupdate'),
+                FileHelper::formatResponse(true, new FaqResource($faq), 'FAQ berhasil diupdate'),
                 200
             );
 

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Http\Controllers\Api\Concerns\FormatsApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\ServiceResource;
 use App\Models\Service;
 use App\Http\Requests\StoreServiceRequest;
 use App\Http\Requests\UpdateServiceRequest;
@@ -11,33 +13,17 @@ use Illuminate\Support\Facades\DB;
 
 class ServiceController extends Controller
 {
+    use FormatsApiResponse;
+
     public function index()
     {
         try {
             $services = Service::latest()->paginate(10);
-
-            $data = [
-                'services' => $services->map(function ($service) {
-                    return [
-                        'id' => $service->id,
-                        'name' => $service->name,
-                        'detail' => $service->detail,
-                        'icon_url' => $service->icon ? asset('storage/services/' . $service->icon) : null,
-                        'support_image_url' => $service->support_image ? asset('storage/services/' . $service->support_image):null,
-                        'created_at' => $service->created_at->format('Y-m-d H:i:s'),
-                    ];
-                }),
-                'pagination' => [
-                    'current_page' => $services->currentPage(),
-                    'last_page' => $services->lastPage(),
-                    'per_page' => $services->perPage(),
-                    'total' => $services->total(),
-                ],
-            ];
-
-            return response()->json(
-                FileHelper::formatResponse(true, $data, 'Data layanan berhasil diambil'),
-                200
+            return $this->paginatedResourceResponse(
+                $services,
+                'services',
+                ServiceResource::collection($services->getCollection())->resolve(),
+                'Data layanan berhasil diambil'
             );
 
         } catch (\Exception $e) {
@@ -74,17 +60,8 @@ class ServiceController extends Controller
 
             DB::commit();
 
-            $data = [
-                'id' => $service->id,
-                'name' => $service->name,
-                'detail' => $service->detail,
-                'icon_url' => asset('storage/services/' . $service->icon),
-                'article_content' => $service->article_content,
-                'support_image_url' => asset('storage/services/' . $service->support_image),
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'Layanan berhasil ditambahkan'),
+                FileHelper::formatResponse(true, new ServiceResource($service), 'Layanan berhasil ditambahkan'),
                 201
             );
 
@@ -113,19 +90,8 @@ class ServiceController extends Controller
                 );
             }
 
-            $data = [
-                'id' => $service->id,
-                'name' => $service->name,
-                'detail' => $service->detail,
-                'icon_url' => $service->icon ? asset('storage/services/' . $service->icon) : null,
-                'article_content' => $service->article_content,
-                'support_image_url' => $service->support_image ? asset('storage/services/' . $service->support_image) : null,
-                'created_at' => $service->created_at->format('Y-m-d H:i:s'),
-                'updated_at' => $service->updated_at->format('Y-m-d H:i:s'),
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'Detail layanan berhasil diambil'),
+                FileHelper::formatResponse(true, new ServiceResource($service), 'Detail layanan berhasil diambil'),
                 200
             );
 
@@ -183,17 +149,8 @@ class ServiceController extends Controller
 
             DB::commit();
 
-            $data = [
-                'id' => $service->id,
-                'name' => $service->name,
-                'detail' => $service->detail,
-                'icon_url' => asset('storage/services/' . $service->icon),
-                'article_content' => $service->article_content,
-                'support_image_url' => asset('storage/services/' . $service->support_image),
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'Layanan berhasil diupdate'),
+                FileHelper::formatResponse(true, new ServiceResource($service), 'Layanan berhasil diupdate'),
                 200
             );
 

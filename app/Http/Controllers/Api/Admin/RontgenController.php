@@ -32,8 +32,7 @@ class RontgenController extends Controller
             $rontgens = $query->latest()->paginate(10);
             return $this->paginatedResourceResponse(
                 $rontgens,
-                'rontgens',
-                RontgenListResource::collection($rontgens->getCollection())->resolve(),
+                ['rontgens' => RontgenListResource::collection($rontgens->getCollection())],
                 'Data rontgen berhasil diambil'
             );
 

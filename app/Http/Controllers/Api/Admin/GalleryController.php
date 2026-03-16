@@ -21,8 +21,7 @@ class GalleryController extends Controller
             $galleries = Gallery::latest()->paginate(10);
             return $this->paginatedResourceResponse(
                 $galleries,
-                'galleries',
-                GalleryResource::collection($galleries->getCollection())->resolve(),
+                ['galleries' => GalleryResource::collection($galleries->getCollection())],
                 'Data galeri berhasil diambil'
             );
 

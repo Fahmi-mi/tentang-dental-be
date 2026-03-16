@@ -67,8 +67,8 @@ class DashboardController extends Controller
                 'validated_reservations' => $dailyStats['validated'],
                 'completed_reservations' => $dailyStats['completed'],
                 'total_patients' => $totals['total_patients'],
-                'monthly_analytics' => DashboardMonthlyAnalyticsResource::collection($monthlyAnalytics)->resolve(),
-                'recent_reservations' => DashboardRecentReservationResource::collection($recentReservations)->resolve(),
+                'monthly_analytics' => DashboardMonthlyAnalyticsResource::collection($monthlyAnalytics),
+                'recent_reservations' => DashboardRecentReservationResource::collection($recentReservations),
             ];
 
             return response()->json(
@@ -115,7 +115,7 @@ class DashboardController extends Controller
                     'completed' => (int) ($stats['completed'] ?? 0),
                     'cancelled' => (int) ($stats['cancelled'] ?? 0),
                 ],
-                'by_date' => DashboardByDateResource::collection($byDate)->resolve(),
+                'by_date' => DashboardByDateResource::collection($byDate),
                 'period' => [
                     'start_date' => $startDate,
                     'end_date' => $endDate,
@@ -167,7 +167,7 @@ class DashboardController extends Controller
                     'start_date' => $startDate,
                     'end_date' => $endDate,
                 ],
-                'services' => DashboardServiceAnalyticsResource::collection($analytics)->resolve(),
+                'services' => DashboardServiceAnalyticsResource::collection($analytics),
                 'summary' => [
                     'total_reservations' => (int) $analytics->sum('total_reservations'),
                 ],

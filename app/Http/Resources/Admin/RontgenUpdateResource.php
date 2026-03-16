@@ -2,10 +2,13 @@
 
 namespace App\Http\Resources\Admin;
 
+use Dedoc\Scramble\Attributes\SchemaName;
+
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
+#[SchemaName("Admin.RontgenUpdateResource")]
 class RontgenUpdateResource extends JsonResource
 {
     public function toArray(Request $request): array

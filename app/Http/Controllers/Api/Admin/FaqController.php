@@ -20,8 +20,7 @@ class FaqController extends Controller
             $faqs = Faq::latest()->paginate(10);
             return $this->paginatedResourceResponse(
                 $faqs,
-                'faqs',
-                FaqResource::collection($faqs->getCollection())->resolve(),
+                ['faqs' => FaqResource::collection($faqs->getCollection())],
                 'Data FAQ berhasil diambil'
             );
 

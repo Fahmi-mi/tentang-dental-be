@@ -122,8 +122,7 @@ class ReservationController extends Controller
                 ->paginate(10);
             return $this->paginatedResourceResponse(
                 $reservations,
-                'reservations',
-                ReservationListResource::collection($reservations->getCollection())->resolve(),
+                ['reservations' => ReservationListResource::collection($reservations->getCollection())],
                 'Data reservasi berhasil diambil'
             );
 

@@ -23,8 +23,7 @@ class ArticleController extends Controller
                 ->paginate(10);
             return $this->paginatedResourceResponse(
                 $articles,
-                'articles',
-                ArticleResource::collection($articles->getCollection())->resolve(),
+                ['articles' => ArticleResource::collection($articles->getCollection())],
                 'Data artikel berhasil diambil'
             );
 

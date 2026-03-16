@@ -21,7 +21,8 @@ class DoctorController extends Controller
             );
         } catch (\Exception $e) {
             return response()->json(
-                FileHelper::formatResponse(false, null, 'Terjadi kesalahan: ' . $e->getMessage())
+                FileHelper::formatResponse(false, null, 'Terjadi kesalahan: ' . $e->getMessage()),
+                500
             );
         }
     }

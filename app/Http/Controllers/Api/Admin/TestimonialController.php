@@ -21,8 +21,7 @@ class TestimonialController extends Controller
             $testimonials = Testimonial::latest()->paginate(10);
             return $this->paginatedResourceResponse(
                 $testimonials,
-                'testimonials',
-                TestimonialResource::collection($testimonials->getCollection())->resolve(),
+                ['testimonials' => TestimonialResource::collection($testimonials->getCollection())],
                 'Data testimoni berhasil diambil'
             );
 

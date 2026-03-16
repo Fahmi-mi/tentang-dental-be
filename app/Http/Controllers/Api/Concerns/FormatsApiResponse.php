@@ -20,19 +20,15 @@ trait FormatsApiResponse
 
     protected function paginatedResourceResponse(
         LengthAwarePaginator $paginator,
-        string $collectionKey,
-        array $items,
+        array $data,
         string $message,
         int $status = 200
     ): JsonResponse {
-        $data = [
-            $collectionKey => $items,
-            'pagination' => [
-                'current_page' => $paginator->currentPage(),
-                'last_page' => $paginator->lastPage(),
-                'per_page' => $paginator->perPage(),
-                'total' => $paginator->total(),
-            ],
+        $data['pagination'] = [
+            'current_page' => $paginator->currentPage(),
+            'last_page' => $paginator->lastPage(),
+            'per_page' => $paginator->perPage(),
+            'total' => $paginator->total(),
         ];
 
         return $this->successResponse($data, $message, $status);

@@ -2,9 +2,12 @@
 
 namespace App\Http\Resources\Admin;
 
+use Dedoc\Scramble\Attributes\SchemaName;
+
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+#[SchemaName("Admin.GalleryResource")]
 class GalleryResource extends JsonResource
 {
     public function toArray(Request $request): array

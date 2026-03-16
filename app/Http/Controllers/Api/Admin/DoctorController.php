@@ -21,8 +21,7 @@ class DoctorController extends Controller
             $doctors = Doctor::latest()->paginate(10);
             return $this->paginatedResourceResponse(
                 $doctors,
-                'doctors',
-                DoctorResource::collection($doctors->getCollection())->resolve(),
+                ['doctors' => DoctorResource::collection($doctors->getCollection())],
                 'Data dokter berhasil diambil'
             );
 

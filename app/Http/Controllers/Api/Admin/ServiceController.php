@@ -21,8 +21,7 @@ class ServiceController extends Controller
             $services = Service::latest()->paginate(10);
             return $this->paginatedResourceResponse(
                 $services,
-                'services',
-                ServiceResource::collection($services->getCollection())->resolve(),
+                ['services' => ServiceResource::collection($services->getCollection())],
                 'Data layanan berhasil diambil'
             );
 

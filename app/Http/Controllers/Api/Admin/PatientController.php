@@ -25,8 +25,7 @@ class PatientController extends Controller
                 ->paginate(10);
             return $this->paginatedResourceResponse(
                 $patients,
-                'patients',
-                PatientListResource::collection($patients->getCollection())->resolve(),
+                ['patients' => PatientListResource::collection($patients->getCollection())],
                 'Data pasien berhasil diambil'
             );
 

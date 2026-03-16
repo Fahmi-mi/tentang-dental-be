@@ -21,8 +21,7 @@ class PromoController extends Controller
             $promos = Promo::latest()->paginate(10);
             return $this->paginatedResourceResponse(
                 $promos,
-                'promos',
-                PromoResource::collection($promos->getCollection())->resolve(),
+                ['promos' => PromoResource::collection($promos->getCollection())],
                 'Data promo berhasil diambil'
             );
 

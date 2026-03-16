@@ -2,9 +2,12 @@
 
 namespace App\Http\Resources\Public;
 
+use Dedoc\Scramble\Attributes\SchemaName;
+
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+#[SchemaName("Public.ArticleListResource")]
 class ArticleListResource extends JsonResource
 {
     public function toArray(Request $request): array

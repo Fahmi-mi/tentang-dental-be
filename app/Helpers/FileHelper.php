@@ -66,10 +66,11 @@ class FileHelper
     /**
      * Format standard API response
      *
+        * @template TData
      * @param bool $success
-     * @param mixed $data
+        * @param TData|null $data
      * @param string $message
-     * @return array
+        * @return array{success: bool, data?: TData, message?: string}
      */
     public static function formatResponse(bool $success, $data = null, string $message = ''): array
     {

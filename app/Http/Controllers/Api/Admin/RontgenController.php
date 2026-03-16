@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Http\Controllers\Api\Concerns\FormatsApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\RontgenDetailResource;
+use App\Http\Resources\Admin\RontgenListResource;
+use App\Http\Resources\Admin\RontgenUpdateResource;
 use App\Models\Rontgen;
 use App\Models\Patient;
 use App\Http\Requests\StoreRontgenRequest;
@@ -14,6 +18,8 @@ use Illuminate\Http\Request;
 
 class RontgenController extends Controller
 {
+    use FormatsApiResponse;
+
     public function index(Request $request)
     {
         try {
@@ -24,32 +30,11 @@ class RontgenController extends Controller
             }
 
             $rontgens = $query->latest()->paginate(10);
-
-            $data = [
-                'rontgens' => $rontgens->map(function ($rontgen) {
-                    return [
-                        'id' => $rontgen->id,
-                        'patient' => [
-                            'id' => $rontgen->patient->id,
-                            'name' => $rontgen->patient->name,
-                            'phone' => $rontgen->patient->phone,
-                        ],
-                        'xray_image_url' => $this->getRontgenImageUrl($rontgen->xray_image),
-                        'detail' => $rontgen->detail,
-                        'created_at' => $rontgen->created_at->format('Y-m-d H:i:s'),
-                    ];
-                }),
-                'pagination' => [
-                    'current_page' => $rontgens->currentPage(),
-                    'last_page' => $rontgens->lastPage(),
-                    'per_page' => $rontgens->perPage(),
-                    'total' => $rontgens->total(),
-                ],
-            ];
-
-            return response()->json(
-                FileHelper::formatResponse(true, $data, 'Data rontgen berhasil diambil'),
-                200
+            return $this->paginatedResourceResponse(
+                $rontgens,
+                'rontgens',
+                RontgenListResource::collection($rontgens->getCollection())->resolve(),
+                'Data rontgen berhasil diambil'
             );
 
         } catch (\Exception $e) {
@@ -85,23 +70,12 @@ class RontgenController extends Controller
                 'xray_image' => $imageName,
                 'detail' => $request->detail ?? null,
             ]);
+            $rontgen->setRelation('patient', $patient);
 
             DB::commit();
 
-            $data = [
-                'id' => $rontgen->id,
-                'patient' => [
-                    'id' => $patient->id,
-                    'name' => $patient->name,
-                    'phone' => $patient->phone,
-                ],
-                'xray_image_url' => $this->getRontgenImageUrl($rontgen->xray_image),
-                'detail' => $rontgen->detail,
-                'created_at' => $rontgen->created_at->format('Y-m-d H:i:s'),
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'Data rontgen berhasil ditambahkan'),
+                FileHelper::formatResponse(true, new RontgenListResource($rontgen), 'Data rontgen berhasil ditambahkan'),
                 201
             );
 
@@ -131,53 +105,8 @@ class RontgenController extends Controller
                 );
             }
 
-            $data = [
-                'id' => $rontgen->id,
-                'patient' => [
-                    'id' => $rontgen->patient->id,
-                    'name' => $rontgen->patient->name,
-                    'phone' => $rontgen->patient->phone,
-                    'birth_date' => $rontgen->patient->birth_date,
-                    'gender' => $rontgen->patient->gender,
-                    'medical_history' => $rontgen->patient->medicalHistory ? [
-                        'has_allergy' => $rontgen->patient->medicalHistory->has_allergy,
-                        'allergy_detail' => $rontgen->patient->medicalHistory->allergy_detail,
-                        'has_systemic_disease' => $rontgen->patient->medicalHistory->has_systemic_disease,
-                        'systemic_disease_detail' => $rontgen->patient->medicalHistory->systemic_disease_detail,
-                        'undergoing_treatment' => $rontgen->patient->medicalHistory->undergoing_treatment,
-                        'treatment_detail' => $rontgen->patient->medicalHistory->treatment_detail,
-                        'ever_hospitalized' => $rontgen->patient->medicalHistory->ever_hospitalized,
-                        'hospitalized_reason' => $rontgen->patient->medicalHistory->hospitalized_reason,
-                        'smoking_or_alcohol' => $rontgen->patient->medicalHistory->smoking_or_alcohol,
-                    ] : null,
-                    'dental_history' => $rontgen->patient->dentalHistory ? [
-                        'frequent_tooth_pain' => $rontgen->patient->dentalHistory->frequent_tooth_pain,
-                        'tooth_pain_detail' => $rontgen->patient->dentalHistory->tooth_pain_detail,
-                        'bleeding_gums' => $rontgen->patient->dentalHistory->bleeding_gums,
-                        'ever_dental_treatment' => $rontgen->patient->dentalHistory->ever_dental_treatment,
-                        'dental_treatment_detail' => $rontgen->patient->dentalHistory->dental_treatment_detail,
-                        'brushing_frequency' => $rontgen->patient->dentalHistory->brushing_frequency,
-                        'use_floss_or_mouthwash' => $rontgen->patient->dentalHistory->use_floss_or_mouthwash,
-                        'bad_habits' => $rontgen->patient->dentalHistory->bad_habits,
-                        'bad_habits_detail' => $rontgen->patient->dentalHistory->bad_habits_detail,
-                        'ever_braces' => $rontgen->patient->dentalHistory->ever_braces,
-                        'braces_years' => $rontgen->patient->dentalHistory->braces_years,
-                        'root_canal_treatment' => $rontgen->patient->dentalHistory->root_canal_treatment,
-                        'root_canal_detail' => $rontgen->patient->dentalHistory->root_canal_detail,
-                        'dentures' => $rontgen->patient->dentalHistory->dentures,
-                        'routine_checkup' => $rontgen->patient->dentalHistory->routine_checkup,
-                        'dental_checkup_frequency' => $rontgen->patient->dentalHistory->dental_checkup_frequency,
-                        'doctor_notes' => $rontgen->patient->dentalHistory->doctor_notes,
-                    ] : null,
-                ],
-                'xray_image_url' => $this->getRontgenImageUrl($rontgen->xray_image),
-                'detail' => $rontgen->detail,
-                'created_at' => $rontgen->created_at->format('Y-m-d H:i:s'),
-                'updated_at' => $rontgen->updated_at->format('Y-m-d H:i:s'),
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'Detail rontgen berhasil diambil'),
+                FileHelper::formatResponse(true, new RontgenDetailResource($rontgen), 'Detail rontgen berhasil diambil'),
                 200
             );
 
@@ -226,19 +155,8 @@ class RontgenController extends Controller
 
             $rontgen->load('patient');
 
-            $data = [
-                'id' => $rontgen->id,
-                'patient' => [
-                    'id' => $rontgen->patient->id,
-                    'name' => $rontgen->patient->name,
-                ],
-                'xray_image_url' => $this->getRontgenImageUrl($rontgen->xray_image),
-                'detail' => $rontgen->detail,
-                'updated_at' => $rontgen->updated_at->format('Y-m-d H:i:s'),
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'Data rontgen berhasil diupdate'),
+                FileHelper::formatResponse(true, new RontgenUpdateResource($rontgen), 'Data rontgen berhasil diupdate'),
                 200
             );
 
@@ -330,18 +248,5 @@ class RontgenController extends Controller
                 500
             );
         }
-    }
-
-    private function getRontgenImageUrl(string $fileName): ?string
-    {
-        if (Storage::disk('public')->exists('rontgen/' . $fileName)) {
-            return asset('storage/rontgen/' . $fileName);
-        }
-
-        if (Storage::disk('public')->exists('rontgens/' . $fileName)) {
-            return asset('storage/rontgens/' . $fileName);
-        }
-
-        return null;
     }
 }

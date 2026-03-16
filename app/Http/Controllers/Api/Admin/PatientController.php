@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Http\Controllers\Api\Concerns\FormatsApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\PatientDetailResource;
+use App\Http\Resources\Admin\PatientListResource;
+use App\Http\Resources\Admin\PatientUpdateResource;
 use App\Models\Patient;
 use App\Http\Requests\UpdatePatientRequest;
 use App\Helpers\FileHelper;
@@ -11,36 +15,19 @@ use Illuminate\Support\Facades\Storage;
 
 class PatientController extends Controller
 {
+    use FormatsApiResponse;
+
     public function index()
     {
         try {
             $patients = Patient::with(['medicalHistory', 'dentalHistory'])
                 ->latest()
                 ->paginate(10);
-
-            $data = [
-                'patients' => $patients->map(function ($patient) {
-                    return [
-                        'id' => $patient->id,
-                        'name' => $patient->name,
-                        'phone' => $patient->phone,
-                        'birth_date' => $patient->birth_date,
-                        'gender' => $patient->gender,
-                        'age' => $patient->age,
-                        'created_at' => $patient->created_at->format('Y-m-d H:i:s'),
-                    ];
-                }),
-                'pagination' => [
-                    'current_page' => $patients->currentPage(),
-                    'last_page' => $patients->lastPage(),
-                    'per_page' => $patients->perPage(),
-                    'total' => $patients->total(),
-                ],
-            ];
-
-            return response()->json(
-                FileHelper::formatResponse(true, $data, 'Data pasien berhasil diambil'),
-                200
+            return $this->paginatedResourceResponse(
+                $patients,
+                'patients',
+                PatientListResource::collection($patients->getCollection())->resolve(),
+                'Data pasien berhasil diambil'
             );
 
         } catch (\Exception $e) {
@@ -64,76 +51,8 @@ class PatientController extends Controller
                 );
             }
 
-            $data = [
-                'id' => $patient->id,
-                'name' => $patient->name,
-                'phone' => $patient->phone,
-                'birth_date' => $patient->birth_date,
-                'gender' => $patient->gender,
-                'address' => $patient->address,
-                'age' => $patient->age,
-                'medical_history' => $patient->medicalHistory ? [
-                    'id' => $patient->medicalHistory->id,
-                    'has_allergy' => $patient->medicalHistory->has_allergy,
-                    'allergy_detail' => $patient->medicalHistory->allergy_detail,
-                    'has_systemic_disease' => $patient->medicalHistory->has_systemic_disease,
-                    'systemic_disease_detail' => $patient->medicalHistory->systemic_disease_detail,
-                    'undergoing_treatment' => $patient->medicalHistory->undergoing_treatment,
-                    'treatment_detail' => $patient->medicalHistory->treatment_detail,
-                    'ever_hospitalized' => $patient->medicalHistory->ever_hospitalized,
-                    'hospitalized_reason' => $patient->medicalHistory->hospitalized_reason,
-                    'smoking_or_alcohol' => $patient->medicalHistory->smoking_or_alcohol,
-                ] : null,
-                'dental_history' => $patient->dentalHistory ? [
-                    'id' => $patient->dentalHistory->id,
-                    'frequent_tooth_pain' => $patient->dentalHistory->frequent_tooth_pain,
-                    'tooth_pain_detail' => $patient->dentalHistory->tooth_pain_detail,
-                    'bleeding_gums' => $patient->dentalHistory->bleeding_gums,
-                    'ever_dental_treatment' => $patient->dentalHistory->ever_dental_treatment,
-                    'dental_treatment_detail' => $patient->dentalHistory->dental_treatment_detail,
-                    'brushing_frequency' => $patient->dentalHistory->brushing_frequency,
-                    'use_floss_or_mouthwash' => $patient->dentalHistory->use_floss_or_mouthwash,
-                    'bad_habits' => $patient->dentalHistory->bad_habits,
-                    'bad_habits_detail' => $patient->dentalHistory->bad_habits_detail,
-                    'ever_braces' => $patient->dentalHistory->ever_braces,
-                    'braces_years' => $patient->dentalHistory->braces_years,
-                    'root_canal_treatment' => $patient->dentalHistory->root_canal_treatment,
-                    'root_canal_detail' => $patient->dentalHistory->root_canal_detail,
-                    'dentures' => $patient->dentalHistory->dentures,
-                    'routine_checkup' => $patient->dentalHistory->routine_checkup,
-                    'dental_checkup_frequency' => $patient->dentalHistory->dental_checkup_frequency,
-                    'doctor_notes' => $patient->dentalHistory->doctor_notes,
-                ] : null,
-                'reservations' => $patient->reservations->map(function ($reservation) {
-                    return [
-                        'id' => $reservation->id,
-                        'complain' => $reservation->complain,
-                        'services' => $reservation->services->map(function ($service) {
-                            return [
-                                'id' => $service->id,
-                                'name' => $service->name,
-                            ];
-                        }),
-                        'doctor_name' => $reservation->doctor->name,
-                        'reservation_date' => $reservation->reservation_date,
-                        'appointment_time' => substr($reservation->appointment_time, 0, 5),
-                        'status' => $reservation->status,
-                    ];
-                }),
-                'rontgens' => $patient->rontgens->map(function ($rontgen) {
-                    return [
-                        'id' => $rontgen->id,
-                        'xray_image_url' => $this->getRontgenImageUrl($rontgen->xray_image),
-                        'detail' => $rontgen->detail,
-                        'created_at' => $rontgen->created_at->format('Y-m-d H:i:s'),
-                    ];
-                }),
-                'created_at' => $patient->created_at->format('Y-m-d H:i:s'),
-                'updated_at' => $patient->updated_at->format('Y-m-d H:i:s'),
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'Detail pasien berhasil diambil'),
+                FileHelper::formatResponse(true, new PatientDetailResource($patient), 'Detail pasien berhasil diambil'),
                 200
             );
 
@@ -188,48 +107,8 @@ class PatientController extends Controller
 
             $patient->load(['medicalHistory', 'dentalHistory']);
 
-            $data = [
-                'id' => $patient->id,
-                'name' => $patient->name,
-                'phone' => $patient->phone,
-                'birth_date' => $patient->birth_date,
-                'gender' => $patient->gender,
-                'address' => $patient->address,
-                'age' => $patient->age,
-                'medical_history' => $patient->medicalHistory ? [
-                    'has_allergy' => $patient->medicalHistory->has_allergy,
-                    'allergy_detail' => $patient->medicalHistory->allergy_detail,
-                    'has_systemic_disease' => $patient->medicalHistory->has_systemic_disease,
-                    'systemic_disease_detail' => $patient->medicalHistory->systemic_disease_detail,
-                    'undergoing_treatment' => $patient->medicalHistory->undergoing_treatment,
-                    'treatment_detail' => $patient->medicalHistory->treatment_detail,
-                    'ever_hospitalized' => $patient->medicalHistory->ever_hospitalized,
-                    'hospitalized_reason' => $patient->medicalHistory->hospitalized_reason,
-                    'smoking_or_alcohol' => $patient->medicalHistory->smoking_or_alcohol,
-                ] : null,
-                'dental_history' => $patient->dentalHistory ? [
-                    'frequent_tooth_pain' => $patient->dentalHistory->frequent_tooth_pain,
-                    'tooth_pain_detail' => $patient->dentalHistory->tooth_pain_detail,
-                    'bleeding_gums' => $patient->dentalHistory->bleeding_gums,
-                    'ever_dental_treatment' => $patient->dentalHistory->ever_dental_treatment,
-                    'dental_treatment_detail' => $patient->dentalHistory->dental_treatment_detail,
-                    'brushing_frequency' => $patient->dentalHistory->brushing_frequency,
-                    'use_floss_or_mouthwash' => $patient->dentalHistory->use_floss_or_mouthwash,
-                    'bad_habits' => $patient->dentalHistory->bad_habits,
-                    'bad_habits_detail' => $patient->dentalHistory->bad_habits_detail,
-                    'ever_braces' => $patient->dentalHistory->ever_braces,
-                    'braces_years' => $patient->dentalHistory->braces_years,
-                    'root_canal_treatment' => $patient->dentalHistory->root_canal_treatment,
-                    'root_canal_detail' => $patient->dentalHistory->root_canal_detail,
-                    'dentures' => $patient->dentalHistory->dentures,
-                    'routine_checkup' => $patient->dentalHistory->routine_checkup,
-                    'dental_checkup_frequency' => $patient->dentalHistory->dental_checkup_frequency,
-                    'doctor_notes' => $patient->dentalHistory->doctor_notes,
-                ] : null,
-            ];
-
             return response()->json(
-                FileHelper::formatResponse(true, $data, 'Data pasien berhasil diupdate'),
+                FileHelper::formatResponse(true, new PatientUpdateResource($patient), 'Data pasien berhasil diupdate'),
                 200
             );
 
@@ -310,18 +189,5 @@ class PatientController extends Controller
                 500
             );
         }
-    }
-
-    private function getRontgenImageUrl(string $fileName): ?string
-    {
-        if (Storage::disk('public')->exists('rontgen/' . $fileName)) {
-            return asset('storage/rontgen/' . $fileName);
-        }
-
-        if (Storage::disk('public')->exists('rontgens/' . $fileName)) {
-            return asset('storage/rontgens/' . $fileName);
-        }
-
-        return null;
     }
 }

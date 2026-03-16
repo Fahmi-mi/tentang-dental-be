@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Admin\DashboardByDateResource;
+use App\Http\Resources\Admin\DashboardMonthlyAnalyticsResource;
+use App\Http\Resources\Admin\DashboardRecentReservationResource;
+use App\Http\Resources\Admin\DashboardServiceAnalyticsResource;
 use App\Models\Reservation;
 use App\Models\Patient;
 use App\Models\Service;
@@ -54,18 +58,7 @@ class DashboardController extends Controller
             $recentReservations = Reservation::with(['patient', 'services', 'doctor'])
                 ->latest()
                 ->take(5)
-                ->get()
-                ->map(function ($reservation) {
-                    return [
-                        'id' => $reservation->id,
-                        'patient_name' => optional($reservation->patient)->name,
-                        'service_name' => optional($reservation->services->first())->name,
-                        'doctor_name' => optional($reservation->doctor)->name,
-                        'reservation_date' => $reservation->reservation_date,
-                        'appointment_time' => substr((string) $reservation->appointment_time, 0, 5),
-                        'status' => $reservation->status,
-                    ];
-                });
+                ->get();
 
             $data = [
                 'daily_statistics' => $dailyStats,
@@ -74,13 +67,8 @@ class DashboardController extends Controller
                 'validated_reservations' => $dailyStats['validated'],
                 'completed_reservations' => $dailyStats['completed'],
                 'total_patients' => $totals['total_patients'],
-                'monthly_analytics' => $monthlyAnalytics->map(function ($item) {
-                    return [
-                        'service_name' => $item->service_name,
-                        'total_reservations' => $item->total_reservations,
-                    ];
-                }),
-                'recent_reservations' => $recentReservations,
+                'monthly_analytics' => DashboardMonthlyAnalyticsResource::collection($monthlyAnalytics)->resolve(),
+                'recent_reservations' => DashboardRecentReservationResource::collection($recentReservations)->resolve(),
             ];
 
             return response()->json(
@@ -116,13 +104,7 @@ class DashboardController extends Controller
                 ->select('reservation_date', DB::raw('COUNT(*) as total'))
                 ->groupBy('reservation_date')
                 ->orderBy('reservation_date')
-                ->get()
-                ->map(function ($item) {
-                    return [
-                        'date' => (string) $item->reservation_date,
-                        'total' => (int) $item->total,
-                    ];
-                });
+                ->get();
 
             $data = [
                 'month' => $month,
@@ -133,7 +115,7 @@ class DashboardController extends Controller
                     'completed' => (int) ($stats['completed'] ?? 0),
                     'cancelled' => (int) ($stats['cancelled'] ?? 0),
                 ],
-                'by_date' => $byDate,
+                'by_date' => DashboardByDateResource::collection($byDate)->resolve(),
                 'period' => [
                     'start_date' => $startDate,
                     'end_date' => $endDate,
@@ -185,14 +167,7 @@ class DashboardController extends Controller
                     'start_date' => $startDate,
                     'end_date' => $endDate,
                 ],
-                'services' => $analytics->map(function ($item) {
-                    return [
-                        'service_id' => $item->id,
-                        'service_name' => $item->name,
-                        'reservation_count' => (int) $item->total_reservations,
-                        'total_reservations' => (int) $item->total_reservations,
-                    ];
-                }),
+                'services' => DashboardServiceAnalyticsResource::collection($analytics)->resolve(),
                 'summary' => [
                     'total_reservations' => (int) $analytics->sum('total_reservations'),
                 ],

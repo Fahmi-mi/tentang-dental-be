@@ -41,12 +41,16 @@ Route::get('/faqs', [FaqController::class, 'index']);
 
 Route::prefix('admin')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
     
     Route::middleware('auth:sanctum')->group(function () {
         // Auth management
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::post('/refresh', [AuthController::class, 'refresh']);
         Route::get('/me', [AuthController::class, 'me']);
+        Route::put('/profile', [AuthController::class, 'updateProfile']);
+        Route::put('/change-email', [AuthController::class, 'changeEmail']);
+        Route::put('/change-password', [AuthController::class, 'changePassword']);
         
         Route::middleware('role:registration')->group(function () {
             // CMS Management

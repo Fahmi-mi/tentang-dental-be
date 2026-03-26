@@ -17,6 +17,7 @@ class AdminFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'password' => Hash::make('password'),
             'role' => fake()->randomElement(['registration', 'rontgen']),
+            'profile_image' => null,
         ];
     }
 }

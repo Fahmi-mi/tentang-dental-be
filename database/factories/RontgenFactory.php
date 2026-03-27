@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Rontgen;
 use App\Models\Patient;
+use App\Models\Doctor;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class RontgenFactory extends Factory
@@ -14,7 +15,7 @@ class RontgenFactory extends Factory
     {
         return [
             'patient_id' => Patient::factory(),
-            'xray_image' => fake()->uuid() . '.jpg',
+            'doctor_id' => Doctor::factory(),
             'detail' => fake()->sentence(15),
         ];
     }

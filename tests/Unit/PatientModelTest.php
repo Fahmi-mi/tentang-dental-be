@@ -1,11 +1,13 @@
 <?php
 
 use App\Models\Patient;
+use App\Models\Doctor;
 use App\Models\PatientMedicalHistory;
 use App\Models\PatientDentalHistory;
 use App\Models\Reservation;
 use App\Models\Rontgen;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Database\QueryException;
 
 uses(RefreshDatabase::class);
 
@@ -64,9 +66,9 @@ test('patient has one dental history relationship', function () {
 
 test('patient has many reservations relationship', function () {
     $patient = Patient::factory()->create();
-    $doctor = \App\Models\Doctor::factory()->create();
+    $doctor = Doctor::factory()->create();
     
-    $reservation1 = \App\Models\Reservation::create([
+    $reservation1 = Reservation::create([
         'patient_id' => $patient->id,
         'doctor_id' => $doctor->id,
         'complain' => 'Sakit gigi',
@@ -75,7 +77,7 @@ test('patient has many reservations relationship', function () {
         'status' => 'pending',
     ]);
     
-    $reservation2 = \App\Models\Reservation::create([
+    $reservation2 = Reservation::create([
         'patient_id' => $patient->id,
         'doctor_id' => $doctor->id,
         'complain' => 'Checkup rutin',
@@ -90,10 +92,11 @@ test('patient has many reservations relationship', function () {
 
 test('patient has many rontgen relationship', function () {
     $patient = Patient::factory()->create();
+    $doctor = Doctor::factory()->create();
     
     $rontgen = Rontgen::create([
         'patient_id' => $patient->id,
-        'xray_image' => 'rontgen_123.jpg',
+        'doctor_id' => $doctor->id,
         'detail' => 'Rontgen panoramic',
     ]);
     
@@ -107,7 +110,7 @@ test('patient phone must be unique', function () {
     expect(fn() => Patient::create([
         'name' => 'Jane Doe',
         'phone' => '081234567890',
-    ]))->toThrow(\Illuminate\Database\QueryException::class);
+    ]))->toThrow(QueryException::class);
 });
 
 test('patient does not have email field in fillable', function () {

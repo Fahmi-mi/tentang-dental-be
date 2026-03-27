@@ -23,8 +23,12 @@ class StoreRontgenRequest extends FormRequest
     {
         return [
             'patient_id' => 'required|exists:patients,id',
-            'xray_image' => 'required|image|mimes:jpeg,jpg,png,webp|max:5120',
+            'doctor_id' => 'nullable|exists:doctors,id',
+            'images' => 'required|array|min:1',
+            'images.*' => 'required|image|mimes:jpeg,jpg,png,webp|max:5120',
             'detail' => 'nullable|string',
+            'tag_ids' => 'sometimes|array',
+            'tag_ids.*' => 'exists:tags,id',
         ];
     }
 
@@ -33,10 +37,16 @@ class StoreRontgenRequest extends FormRequest
         return [
             'patient_id.required' => 'ID pasien wajib diisi',
             'patient_id.exists' => 'Data pasien tidak ditemukan',
-            'xray_image.required' => 'Foto rontgen wajib diupload',
-            'xray_image.image' => 'File harus berupa gambar',
-            'xray_image.mimes' => 'Format gambar harus jpeg, jpg, png, atau webp',
-            'xray_image.max' => 'Ukuran foto rontgen maksimal 5MB',
+            'doctor_id.exists' => 'Data dokter tidak ditemukan',
+            'images.required' => 'Minimal satu gambar pemeriksaan wajib diupload',
+            'images.array' => 'Gambar pemeriksaan harus berupa array',
+            'images.min' => 'Minimal satu gambar pemeriksaan wajib diupload',
+            'images.*.required' => 'File gambar pemeriksaan wajib diisi',
+            'images.*.image' => 'File harus berupa gambar',
+            'images.*.mimes' => 'Format gambar harus jpeg, jpg, png, atau webp',
+            'images.*.max' => 'Ukuran gambar pemeriksaan maksimal 5MB',
+            'tag_ids.array' => 'Tag harus berupa array',
+            'tag_ids.*.exists' => 'Tag tidak ditemukan',
         ];
     }
 }

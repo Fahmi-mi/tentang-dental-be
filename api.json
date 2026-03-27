@@ -13,9 +13,7 @@
         "/articles": {
             "get": {
                 "operationId": "public.article.index",
-                "tags": [
-                    "Article"
-                ],
+                "tags": ["Article"],
                 "responses": {
                     "500": {
                         "description": "",
@@ -34,11 +32,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -96,11 +90,7 @@
                                             "const": "Data artikel berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -111,9 +101,7 @@
         "/articles/{slug}": {
             "get": {
                 "operationId": "public.article.show",
-                "tags": [
-                    "Article"
-                ],
+                "tags": ["Article"],
                 "parameters": [
                     {
                         "name": "slug",
@@ -142,11 +130,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -169,11 +153,7 @@
                                             "const": "Detail artikel berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -196,11 +176,7 @@
                                             "const": "Artikel tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -211,9 +187,7 @@
         "/admin/articles": {
             "get": {
                 "operationId": "articles.index",
-                "tags": [
-                    "Article"
-                ],
+                "tags": ["Article"],
                 "responses": {
                     "500": {
                         "description": "",
@@ -232,11 +206,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -294,11 +264,7 @@
                                             "const": "Data artikel berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -310,9 +276,7 @@
             },
             "post": {
                 "operationId": "articles.store",
-                "tags": [
-                    "Article"
-                ],
+                "tags": ["Article"],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -392,11 +356,7 @@
                                             "const": "Artikel berhasil ditambahkan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -413,9 +373,7 @@
         "/admin/articles/{id}": {
             "get": {
                 "operationId": "articles.show",
-                "tags": [
-                    "Article"
-                ],
+                "tags": ["Article"],
                 "parameters": [
                     {
                         "name": "id",
@@ -444,11 +402,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -471,11 +425,7 @@
                                             "const": "Detail artikel berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -498,11 +448,7 @@
                                             "const": "Artikel tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -514,9 +460,7 @@
             },
             "put": {
                 "operationId": "articles.update",
-                "tags": [
-                    "Article"
-                ],
+                "tags": ["Article"],
                 "parameters": [
                     {
                         "name": "id",
@@ -554,11 +498,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -581,11 +521,7 @@
                                             "const": "Artikel berhasil diupdate"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -608,11 +544,7 @@
                                             "const": "Artikel tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -627,9 +559,7 @@
             },
             "delete": {
                 "operationId": "articles.destroy",
-                "tags": [
-                    "Article"
-                ],
+                "tags": ["Article"],
                 "parameters": [
                     {
                         "name": "id",
@@ -658,11 +588,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -685,11 +611,7 @@
                                             "const": "Artikel berhasil dihapus"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -712,11 +634,7 @@
                                             "const": "Artikel tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -730,9 +648,7 @@
         "/admin/login": {
             "post": {
                 "operationId": "auth.login",
-                "tags": [
-                    "Auth"
-                ],
+                "tags": ["Auth"],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -761,11 +677,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -810,21 +722,14 @@
                                                     "type": "string"
                                                 }
                                             },
-                                            "required": [
-                                                "admin",
-                                                "token"
-                                            ]
+                                            "required": ["admin", "token"]
                                         },
                                         "message": {
                                             "type": "string",
                                             "const": "Login berhasil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -847,11 +752,7 @@
                                             "const": "Email atau password salah"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -865,9 +766,7 @@
         "/admin/logout": {
             "post": {
                 "operationId": "auth.logout",
-                "tags": [
-                    "Auth"
-                ],
+                "tags": ["Auth"],
                 "responses": {
                     "500": {
                         "description": "",
@@ -886,11 +785,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -913,11 +808,7 @@
                                             "const": "Logout berhasil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -931,9 +822,7 @@
         "/admin/refresh": {
             "post": {
                 "operationId": "auth.refresh",
-                "tags": [
-                    "Auth"
-                ],
+                "tags": ["Auth"],
                 "responses": {
                     "500": {
                         "description": "",
@@ -952,11 +841,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -978,20 +863,14 @@
                                                     "type": "string"
                                                 }
                                             },
-                                            "required": [
-                                                "token"
-                                            ]
+                                            "required": ["token"]
                                         },
                                         "message": {
                                             "type": "string",
                                             "const": "Token berhasil di-refresh"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -1005,9 +884,7 @@
         "/admin/me": {
             "get": {
                 "operationId": "auth.me",
-                "tags": [
-                    "Auth"
-                ],
+                "tags": ["Auth"],
                 "responses": {
                     "500": {
                         "description": "",
@@ -1026,11 +903,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -1077,11 +950,7 @@
                                             "const": "Data admin berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -1095,9 +964,7 @@
         "/admin/dashboard": {
             "get": {
                 "operationId": "dashboard.index",
-                "tags": [
-                    "Dashboard"
-                ],
+                "tags": ["Dashboard"],
                 "responses": {
                     "500": {
                         "description": "",
@@ -1116,11 +983,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -1237,11 +1100,7 @@
                                             "const": "Data dashboard berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -1255,9 +1114,7 @@
         "/admin/dashboard/reservation-stats": {
             "get": {
                 "operationId": "dashboard.reservationStats",
-                "tags": [
-                    "Dashboard"
-                ],
+                "tags": ["Dashboard"],
                 "parameters": [
                     {
                         "name": "month",
@@ -1299,11 +1156,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -1407,11 +1260,7 @@
                                             "const": "Statistik reservasi berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -1425,9 +1274,7 @@
         "/admin/dashboard/service-analytics": {
             "get": {
                 "operationId": "dashboard.serviceAnalytics",
-                "tags": [
-                    "Dashboard"
-                ],
+                "tags": ["Dashboard"],
                 "parameters": [
                     {
                         "name": "month",
@@ -1469,11 +1316,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -1533,11 +1376,7 @@
                                             "const": "Analitik layanan berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -1551,9 +1390,7 @@
         "/doctors": {
             "get": {
                 "operationId": "public.doctor.index",
-                "tags": [
-                    "Doctor"
-                ],
+                "tags": ["Doctor"],
                 "responses": {
                     "500": {
                         "description": "",
@@ -1572,11 +1409,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -1602,11 +1435,7 @@
                                             "const": "Data dokter berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -1617,9 +1446,7 @@
         "/doctors/{id}": {
             "get": {
                 "operationId": "public.doctor.show",
-                "tags": [
-                    "Doctor"
-                ],
+                "tags": ["Doctor"],
                 "parameters": [
                     {
                         "name": "id",
@@ -1648,11 +1475,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -1675,11 +1498,7 @@
                                             "const": "Detail dokter berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -1702,11 +1521,7 @@
                                             "const": "Dokter tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -1717,9 +1532,7 @@
         "/admin/doctors": {
             "get": {
                 "operationId": "doctors.index",
-                "tags": [
-                    "Doctor"
-                ],
+                "tags": ["Doctor"],
                 "responses": {
                     "500": {
                         "description": "",
@@ -1738,11 +1551,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -1800,11 +1609,7 @@
                                             "const": "Data dokter berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -1816,9 +1621,7 @@
             },
             "post": {
                 "operationId": "doctors.store",
-                "tags": [
-                    "Doctor"
-                ],
+                "tags": ["Doctor"],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1898,11 +1701,7 @@
                                             "const": "Dokter berhasil ditambahkan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -1919,9 +1718,7 @@
         "/admin/doctors/{id}": {
             "get": {
                 "operationId": "doctors.show",
-                "tags": [
-                    "Doctor"
-                ],
+                "tags": ["Doctor"],
                 "parameters": [
                     {
                         "name": "id",
@@ -1950,11 +1747,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -1977,11 +1770,7 @@
                                             "const": "Detail dokter berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2004,11 +1793,7 @@
                                             "const": "Dokter tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2020,9 +1805,7 @@
             },
             "put": {
                 "operationId": "doctors.update",
-                "tags": [
-                    "Doctor"
-                ],
+                "tags": ["Doctor"],
                 "parameters": [
                     {
                         "name": "id",
@@ -2060,11 +1843,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2087,11 +1866,7 @@
                                             "const": "Dokter berhasil diupdate"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2114,11 +1889,7 @@
                                             "const": "Dokter tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2133,9 +1904,7 @@
             },
             "delete": {
                 "operationId": "doctors.destroy",
-                "tags": [
-                    "Doctor"
-                ],
+                "tags": ["Doctor"],
                 "parameters": [
                     {
                         "name": "id",
@@ -2164,11 +1933,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2191,11 +1956,7 @@
                                             "const": "Dokter berhasil dihapus"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2218,11 +1979,7 @@
                                             "const": "Dokter tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2236,9 +1993,7 @@
         "/faqs": {
             "get": {
                 "operationId": "public.faq.index",
-                "tags": [
-                    "Faq"
-                ],
+                "tags": ["Faq"],
                 "responses": {
                     "500": {
                         "description": "",
@@ -2257,11 +2012,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2287,11 +2038,7 @@
                                             "const": "Data FAQ berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2302,9 +2049,7 @@
         "/admin/faqs": {
             "get": {
                 "operationId": "faqs.index",
-                "tags": [
-                    "Faq"
-                ],
+                "tags": ["Faq"],
                 "responses": {
                     "500": {
                         "description": "",
@@ -2323,11 +2068,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2375,21 +2116,14 @@
                                                     ]
                                                 }
                                             },
-                                            "required": [
-                                                "faqs",
-                                                "pagination"
-                                            ]
+                                            "required": ["faqs", "pagination"]
                                         },
                                         "message": {
                                             "type": "string",
                                             "const": "Data FAQ berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2401,9 +2135,7 @@
             },
             "post": {
                 "operationId": "faqs.store",
-                "tags": [
-                    "Faq"
-                ],
+                "tags": ["Faq"],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -2432,11 +2164,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2459,11 +2187,7 @@
                                             "const": "FAQ berhasil ditambahkan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2480,9 +2204,7 @@
         "/admin/faqs/{id}": {
             "get": {
                 "operationId": "faqs.show",
-                "tags": [
-                    "Faq"
-                ],
+                "tags": ["Faq"],
                 "parameters": [
                     {
                         "name": "id",
@@ -2511,11 +2233,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2538,11 +2256,7 @@
                                             "const": "Detail FAQ berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2565,11 +2279,7 @@
                                             "const": "FAQ tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2581,9 +2291,7 @@
             },
             "put": {
                 "operationId": "faqs.update",
-                "tags": [
-                    "Faq"
-                ],
+                "tags": ["Faq"],
                 "parameters": [
                     {
                         "name": "id",
@@ -2621,11 +2329,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2648,11 +2352,7 @@
                                             "const": "FAQ berhasil diupdate"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2675,11 +2375,7 @@
                                             "const": "FAQ tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2694,9 +2390,7 @@
             },
             "delete": {
                 "operationId": "faqs.destroy",
-                "tags": [
-                    "Faq"
-                ],
+                "tags": ["Faq"],
                 "parameters": [
                     {
                         "name": "id",
@@ -2725,11 +2419,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2752,11 +2442,7 @@
                                             "const": "FAQ berhasil dihapus"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2779,11 +2465,7 @@
                                             "const": "FAQ tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2797,9 +2479,7 @@
         "/galleries": {
             "get": {
                 "operationId": "public.gallery.index",
-                "tags": [
-                    "Gallery"
-                ],
+                "tags": ["Gallery"],
                 "responses": {
                     "500": {
                         "description": "",
@@ -2818,11 +2498,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2848,11 +2524,7 @@
                                             "const": "Data galeri berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2863,9 +2535,7 @@
         "/admin/galleries": {
             "get": {
                 "operationId": "galleries.index",
-                "tags": [
-                    "Gallery"
-                ],
+                "tags": ["Gallery"],
                 "responses": {
                     "500": {
                         "description": "",
@@ -2884,11 +2554,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2946,11 +2612,7 @@
                                             "const": "Data galeri berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -2962,9 +2624,7 @@
             },
             "post": {
                 "operationId": "galleries.store",
-                "tags": [
-                    "Gallery"
-                ],
+                "tags": ["Gallery"],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -3044,11 +2704,7 @@
                                             "const": "Galeri berhasil ditambahkan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3065,9 +2721,7 @@
         "/admin/galleries/{id}": {
             "get": {
                 "operationId": "galleries.show",
-                "tags": [
-                    "Gallery"
-                ],
+                "tags": ["Gallery"],
                 "parameters": [
                     {
                         "name": "id",
@@ -3096,11 +2750,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3123,11 +2773,7 @@
                                             "const": "Detail galeri berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3150,11 +2796,7 @@
                                             "const": "Galeri tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3166,9 +2808,7 @@
             },
             "put": {
                 "operationId": "galleries.update",
-                "tags": [
-                    "Gallery"
-                ],
+                "tags": ["Gallery"],
                 "parameters": [
                     {
                         "name": "id",
@@ -3206,11 +2846,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3233,11 +2869,7 @@
                                             "const": "Galeri berhasil diupdate"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3260,11 +2892,7 @@
                                             "const": "Galeri tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3279,9 +2907,7 @@
             },
             "delete": {
                 "operationId": "galleries.destroy",
-                "tags": [
-                    "Gallery"
-                ],
+                "tags": ["Gallery"],
                 "parameters": [
                     {
                         "name": "id",
@@ -3310,11 +2936,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3337,11 +2959,7 @@
                                             "const": "Galeri berhasil dihapus"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3364,11 +2982,7 @@
                                             "const": "Galeri tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3382,9 +2996,7 @@
         "/admin/patients/{id}": {
             "put": {
                 "operationId": "patient.update",
-                "tags": [
-                    "Patient"
-                ],
+                "tags": ["Patient"],
                 "parameters": [
                     {
                         "name": "id",
@@ -3422,11 +3034,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3449,11 +3057,7 @@
                                             "const": "Data pasien berhasil diupdate"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3476,11 +3080,7 @@
                                             "const": "Pasien tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3495,9 +3095,7 @@
             },
             "delete": {
                 "operationId": "patient.destroy",
-                "tags": [
-                    "Patient"
-                ],
+                "tags": ["Patient"],
                 "parameters": [
                     {
                         "name": "id",
@@ -3526,11 +3124,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3553,11 +3147,7 @@
                                             "const": "Data pasien berhasil dihapus"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3580,11 +3170,7 @@
                                             "const": "Tidak dapat menghapus pasien dengan reservasi aktif"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3607,11 +3193,7 @@
                                             "const": "Pasien tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3623,9 +3205,7 @@
             },
             "get": {
                 "operationId": "patient.show",
-                "tags": [
-                    "Patient"
-                ],
+                "tags": ["Patient"],
                 "parameters": [
                     {
                         "name": "id",
@@ -3654,11 +3234,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3681,11 +3257,7 @@
                                             "const": "Detail pasien berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3708,11 +3280,7 @@
                                             "const": "Pasien tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3726,9 +3294,7 @@
         "/admin/patients": {
             "get": {
                 "operationId": "patient.index",
-                "tags": [
-                    "Patient"
-                ],
+                "tags": ["Patient"],
                 "responses": {
                     "500": {
                         "description": "",
@@ -3747,11 +3313,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3809,11 +3371,7 @@
                                             "const": "Data pasien berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3827,9 +3385,7 @@
         "/admin/patients/{id}/download-pdf": {
             "get": {
                 "operationId": "patient.downloadPdf",
-                "tags": [
-                    "Patient"
-                ],
+                "tags": ["Patient"],
                 "parameters": [
                     {
                         "name": "id",
@@ -3858,11 +3414,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3895,11 +3447,7 @@
                                             "const": "Pasien tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3913,9 +3461,7 @@
         "/promos": {
             "get": {
                 "operationId": "public.promo.index",
-                "tags": [
-                    "Promo"
-                ],
+                "tags": ["Promo"],
                 "responses": {
                     "500": {
                         "description": "",
@@ -3934,11 +3480,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3964,11 +3506,7 @@
                                             "const": "Data promo berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -3979,9 +3517,7 @@
         "/promos/{id}": {
             "get": {
                 "operationId": "public.promo.show",
-                "tags": [
-                    "Promo"
-                ],
+                "tags": ["Promo"],
                 "parameters": [
                     {
                         "name": "id",
@@ -4010,11 +3546,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4037,11 +3569,7 @@
                                             "const": "Detail promo berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4064,11 +3592,7 @@
                                             "const": "Promo tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4079,9 +3603,7 @@
         "/admin/promos": {
             "get": {
                 "operationId": "promos.index",
-                "tags": [
-                    "Promo"
-                ],
+                "tags": ["Promo"],
                 "responses": {
                     "500": {
                         "description": "",
@@ -4100,11 +3622,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4152,21 +3670,14 @@
                                                     ]
                                                 }
                                             },
-                                            "required": [
-                                                "promos",
-                                                "pagination"
-                                            ]
+                                            "required": ["promos", "pagination"]
                                         },
                                         "message": {
                                             "type": "string",
                                             "const": "Data promo berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4178,9 +3689,7 @@
             },
             "post": {
                 "operationId": "promos.store",
-                "tags": [
-                    "Promo"
-                ],
+                "tags": ["Promo"],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -4260,11 +3769,7 @@
                                             "const": "Promo berhasil ditambahkan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4281,9 +3786,7 @@
         "/admin/promos/{id}": {
             "get": {
                 "operationId": "promos.show",
-                "tags": [
-                    "Promo"
-                ],
+                "tags": ["Promo"],
                 "parameters": [
                     {
                         "name": "id",
@@ -4312,11 +3815,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4339,11 +3838,7 @@
                                             "const": "Detail promo berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4366,11 +3861,7 @@
                                             "const": "Promo tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4382,9 +3873,7 @@
             },
             "put": {
                 "operationId": "promos.update",
-                "tags": [
-                    "Promo"
-                ],
+                "tags": ["Promo"],
                 "parameters": [
                     {
                         "name": "id",
@@ -4473,11 +3962,7 @@
                                             "const": "Promo berhasil diupdate"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4500,11 +3985,7 @@
                                             "const": "Promo tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4519,9 +4000,7 @@
             },
             "delete": {
                 "operationId": "promos.destroy",
-                "tags": [
-                    "Promo"
-                ],
+                "tags": ["Promo"],
                 "parameters": [
                     {
                         "name": "id",
@@ -4550,11 +4029,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4577,11 +4052,7 @@
                                             "const": "Promo berhasil dihapus"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4604,11 +4075,7 @@
                                             "const": "Promo tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4622,9 +4089,7 @@
         "/admin/reservations": {
             "post": {
                 "operationId": "reservation.store",
-                "tags": [
-                    "Reservation"
-                ],
+                "tags": ["Reservation"],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -4653,11 +4118,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4680,11 +4141,7 @@
                                             "const": "Reservasi berhasil dibuat"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4710,11 +4167,7 @@
                                             "const": "Pasien lama tidak ditemukan. Silakan pilih kategori pasien baru jika ini pasien pertama kali."
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4726,9 +4179,7 @@
             },
             "get": {
                 "operationId": "reservation.index",
-                "tags": [
-                    "Reservation"
-                ],
+                "tags": ["Reservation"],
                 "responses": {
                     "500": {
                         "description": "",
@@ -4747,11 +4198,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4809,11 +4256,7 @@
                                             "const": "Data reservasi berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4827,9 +4270,7 @@
         "/admin/reservations/{id}": {
             "get": {
                 "operationId": "reservation.show",
-                "tags": [
-                    "Reservation"
-                ],
+                "tags": ["Reservation"],
                 "parameters": [
                     {
                         "name": "id",
@@ -4858,11 +4299,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4885,11 +4322,7 @@
                                             "const": "Detail reservasi berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4912,11 +4345,7 @@
                                             "const": "Reservasi tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4928,9 +4357,7 @@
             },
             "put": {
                 "operationId": "reservation.update",
-                "tags": [
-                    "Reservation"
-                ],
+                "tags": ["Reservation"],
                 "parameters": [
                     {
                         "name": "id",
@@ -4969,11 +4396,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -4996,11 +4419,7 @@
                                             "const": "Status reservasi berhasil diupdate"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5023,11 +4442,7 @@
                                             "const": "Reservasi tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5042,9 +4457,7 @@
             },
             "delete": {
                 "operationId": "reservation.destroy",
-                "tags": [
-                    "Reservation"
-                ],
+                "tags": ["Reservation"],
                 "parameters": [
                     {
                         "name": "id",
@@ -5073,11 +4486,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5100,11 +4509,7 @@
                                             "const": "Reservasi berhasil dihapus"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5127,11 +4532,7 @@
                                             "const": "Reservasi tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5145,9 +4546,7 @@
         "/admin/reservations/{id}/patient-details": {
             "put": {
                 "operationId": "reservation.updatePatientDetails",
-                "tags": [
-                    "Reservation"
-                ],
+                "tags": ["Reservation"],
                 "parameters": [
                     {
                         "name": "id",
@@ -5200,11 +4599,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5227,11 +4622,7 @@
                                             "const": "Data pasien pada reservasi berhasil disimpan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5257,11 +4648,7 @@
                                             "const": "Reservasi tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5275,9 +4662,7 @@
         "/admin/rontgens": {
             "get": {
                 "operationId": "rontgen.index",
-                "tags": [
-                    "Rontgen"
-                ],
+                "tags": ["Rontgen"],
                 "responses": {
                     "500": {
                         "description": "",
@@ -5296,11 +4681,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5358,11 +4739,7 @@
                                             "const": "Data rontgen berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5374,9 +4751,7 @@
             },
             "post": {
                 "operationId": "rontgen.store",
-                "tags": [
-                    "Rontgen"
-                ],
+                "tags": ["Rontgen"],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -5405,11 +4780,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5432,11 +4803,7 @@
                                             "const": "Data rontgen berhasil ditambahkan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5459,11 +4826,7 @@
                                             "const": "Pasien tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5480,9 +4843,7 @@
         "/admin/rontgens/{id}": {
             "get": {
                 "operationId": "rontgen.show",
-                "tags": [
-                    "Rontgen"
-                ],
+                "tags": ["Rontgen"],
                 "parameters": [
                     {
                         "name": "id",
@@ -5511,11 +4872,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5538,11 +4895,7 @@
                                             "const": "Detail rontgen berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5565,11 +4918,7 @@
                                             "const": "Data rontgen tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5581,9 +4930,7 @@
             },
             "put": {
                 "operationId": "rontgen.update",
-                "tags": [
-                    "Rontgen"
-                ],
+                "tags": ["Rontgen"],
                 "parameters": [
                     {
                         "name": "id",
@@ -5621,11 +4968,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5648,11 +4991,7 @@
                                             "const": "Data rontgen berhasil diupdate"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5675,11 +5014,7 @@
                                             "const": "Data rontgen tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5694,9 +5029,7 @@
             },
             "delete": {
                 "operationId": "rontgen.destroy",
-                "tags": [
-                    "Rontgen"
-                ],
+                "tags": ["Rontgen"],
                 "parameters": [
                     {
                         "name": "id",
@@ -5725,11 +5058,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5752,11 +5081,7 @@
                                             "const": "Data rontgen berhasil dihapus"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5779,11 +5104,7 @@
                                             "const": "Data rontgen tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5797,9 +5118,7 @@
         "/admin/rontgens/{id}/download": {
             "get": {
                 "operationId": "rontgen.download",
-                "tags": [
-                    "Rontgen"
-                ],
+                "tags": ["Rontgen"],
                 "parameters": [
                     {
                         "name": "id",
@@ -5828,11 +5147,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5917,9 +5232,7 @@
         "/services": {
             "get": {
                 "operationId": "public.service.index",
-                "tags": [
-                    "Service"
-                ],
+                "tags": ["Service"],
                 "responses": {
                     "500": {
                         "description": "",
@@ -5938,11 +5251,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5968,11 +5277,7 @@
                                             "const": "Data layanan berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -5983,9 +5288,7 @@
         "/services/{id}": {
             "get": {
                 "operationId": "public.service.show",
-                "tags": [
-                    "Service"
-                ],
+                "tags": ["Service"],
                 "parameters": [
                     {
                         "name": "id",
@@ -6014,11 +5317,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6041,11 +5340,7 @@
                                             "const": "Detail layanan berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6068,11 +5363,7 @@
                                             "const": "Layanan tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6083,9 +5374,7 @@
         "/admin/services": {
             "get": {
                 "operationId": "services.index",
-                "tags": [
-                    "Service"
-                ],
+                "tags": ["Service"],
                 "responses": {
                     "500": {
                         "description": "",
@@ -6104,11 +5393,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6166,11 +5451,7 @@
                                             "const": "Data layanan berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6182,9 +5463,7 @@
             },
             "post": {
                 "operationId": "services.store",
-                "tags": [
-                    "Service"
-                ],
+                "tags": ["Service"],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -6264,11 +5543,7 @@
                                             "const": "Layanan berhasil ditambahkan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6285,9 +5560,7 @@
         "/admin/services/{id}": {
             "get": {
                 "operationId": "services.show",
-                "tags": [
-                    "Service"
-                ],
+                "tags": ["Service"],
                 "parameters": [
                     {
                         "name": "id",
@@ -6316,11 +5589,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6343,11 +5612,7 @@
                                             "const": "Detail layanan berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6370,11 +5635,7 @@
                                             "const": "Layanan tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6386,9 +5647,7 @@
             },
             "put": {
                 "operationId": "services.update",
-                "tags": [
-                    "Service"
-                ],
+                "tags": ["Service"],
                 "parameters": [
                     {
                         "name": "id",
@@ -6426,11 +5685,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6453,11 +5708,7 @@
                                             "const": "Layanan berhasil diupdate"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6480,11 +5731,7 @@
                                             "const": "Layanan tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6499,9 +5746,7 @@
             },
             "delete": {
                 "operationId": "services.destroy",
-                "tags": [
-                    "Service"
-                ],
+                "tags": ["Service"],
                 "parameters": [
                     {
                         "name": "id",
@@ -6530,11 +5775,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6557,11 +5798,7 @@
                                             "const": "Layanan berhasil dihapus"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6584,11 +5821,7 @@
                                             "const": "Layanan tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6602,9 +5835,7 @@
         "/testimonials": {
             "get": {
                 "operationId": "public.testimonial.index",
-                "tags": [
-                    "Testimonial"
-                ],
+                "tags": ["Testimonial"],
                 "responses": {
                     "500": {
                         "description": "",
@@ -6623,11 +5854,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6653,11 +5880,7 @@
                                             "const": "Data testimoni berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6668,9 +5891,7 @@
         "/admin/testimonials": {
             "get": {
                 "operationId": "testimonials.index",
-                "tags": [
-                    "Testimonial"
-                ],
+                "tags": ["Testimonial"],
                 "responses": {
                     "500": {
                         "description": "",
@@ -6689,11 +5910,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6751,11 +5968,7 @@
                                             "const": "Data testimoni berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6767,9 +5980,7 @@
             },
             "post": {
                 "operationId": "testimonials.store",
-                "tags": [
-                    "Testimonial"
-                ],
+                "tags": ["Testimonial"],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -6798,11 +6009,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6825,11 +6032,7 @@
                                             "const": "Testimoni berhasil ditambahkan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6846,9 +6049,7 @@
         "/admin/testimonials/{id}": {
             "get": {
                 "operationId": "testimonials.show",
-                "tags": [
-                    "Testimonial"
-                ],
+                "tags": ["Testimonial"],
                 "parameters": [
                     {
                         "name": "id",
@@ -6877,11 +6078,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6904,11 +6101,7 @@
                                             "const": "Detail testimoni berhasil diambil"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6931,11 +6124,7 @@
                                             "const": "Testimoni tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -6947,9 +6136,7 @@
             },
             "put": {
                 "operationId": "testimonials.update",
-                "tags": [
-                    "Testimonial"
-                ],
+                "tags": ["Testimonial"],
                 "parameters": [
                     {
                         "name": "id",
@@ -6987,11 +6174,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -7014,11 +6197,7 @@
                                             "const": "Testimoni berhasil diupdate"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -7041,11 +6220,7 @@
                                             "const": "Testimoni tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -7060,9 +6235,7 @@
             },
             "delete": {
                 "operationId": "testimonials.destroy",
-                "tags": [
-                    "Testimonial"
-                ],
+                "tags": ["Testimonial"],
                 "parameters": [
                     {
                         "name": "id",
@@ -7091,11 +6264,7 @@
                                             "type": "string"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -7118,11 +6287,7 @@
                                             "const": "Testimoni berhasil dihapus"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -7145,11 +6310,7 @@
                                             "const": "Testimoni tidak ditemukan"
                                         }
                                     },
-                                    "required": [
-                                        "success",
-                                        "data",
-                                        "message"
-                                    ]
+                                    "required": ["success", "data", "message"]
                                 }
                             }
                         }
@@ -7179,10 +6340,7 @@
                         "type": "string"
                     },
                     "image_url": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "writer": {
                         "type": "string"
@@ -7216,10 +6374,7 @@
                         "type": "integer"
                     }
                 },
-                "required": [
-                    "date",
-                    "total"
-                ],
+                "required": ["date", "total"],
                 "title": "Admin.DashboardByDateResource"
             },
             "Admin.DashboardMonthlyAnalyticsResource": {
@@ -7232,10 +6387,7 @@
                         "type": "integer"
                     }
                 },
-                "required": [
-                    "service_name",
-                    "total_reservations"
-                ],
+                "required": ["service_name", "total_reservations"],
                 "title": "Admin.DashboardMonthlyAnalyticsResource"
             },
             "Admin.DashboardRecentReservationResource": {
@@ -7308,26 +6460,17 @@
                         "type": "string"
                     },
                     "specialization": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "photo_url": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "schedule": {
                         "type": "array",
                         "items": {}
                     },
                     "statement": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "created_at": {
                         "type": "string"
@@ -7383,16 +6526,10 @@
                         "type": "integer"
                     },
                     "image_url": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "caption": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "created_at": {
                         "type": "string"
@@ -7435,10 +6572,7 @@
                         "type": "string"
                     },
                     "medical_history": {
-                        "type": [
-                            "object",
-                            "null"
-                        ],
+                        "type": ["object", "null"],
                         "properties": {
                             "id": {
                                 "type": "string"
@@ -7485,10 +6619,7 @@
                         ]
                     },
                     "dental_history": {
-                        "type": [
-                            "object",
-                            "null"
-                        ],
+                        "type": ["object", "null"],
                         "properties": {
                             "id": {
                                 "type": "string"
@@ -7657,10 +6788,7 @@
                         "type": "string"
                     },
                     "medical_history": {
-                        "type": [
-                            "object",
-                            "null"
-                        ],
+                        "type": ["object", "null"],
                         "properties": {
                             "has_allergy": {
                                 "type": "string"
@@ -7703,10 +6831,7 @@
                         ]
                     },
                     "dental_history": {
-                        "type": [
-                            "object",
-                            "null"
-                        ],
+                        "type": ["object", "null"],
                         "properties": {
                             "frequent_tooth_pain": {
                                 "type": "string"
@@ -7804,10 +6929,7 @@
                         "type": "string"
                     },
                     "image_url": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "detail": {
                         "type": "string"
@@ -7865,10 +6987,7 @@
                                 "type": "string"
                             },
                             "medical_history": {
-                                "type": [
-                                    "object",
-                                    "null"
-                                ],
+                                "type": ["object", "null"],
                                 "properties": {
                                     "has_allergy": {
                                         "type": "string"
@@ -7911,10 +7030,7 @@
                                 ]
                             },
                             "dental_history": {
-                                "type": [
-                                    "object",
-                                    "null"
-                                ],
+                                "type": ["object", "null"],
                                 "properties": {
                                     "frequent_tooth_pain": {
                                         "type": "string"
@@ -8201,11 +7317,7 @@
                                 "type": "string"
                             }
                         },
-                        "required": [
-                            "id",
-                            "name",
-                            "specialization"
-                        ]
+                        "required": ["id", "name", "specialization"]
                     },
                     "complain": {
                         "type": "string"
@@ -8270,11 +7382,7 @@
                                 "type": "string"
                             }
                         },
-                        "required": [
-                            "id",
-                            "name",
-                            "phone"
-                        ]
+                        "required": ["id", "name", "phone"]
                     },
                     "services": {
                         "type": "string"
@@ -8289,10 +7397,7 @@
                                 "type": "string"
                             }
                         },
-                        "required": [
-                            "id",
-                            "name"
-                        ]
+                        "required": ["id", "name"]
                     },
                     "complain": {
                         "type": "string"
@@ -8348,11 +7453,7 @@
                         "type": "string"
                     }
                 },
-                "required": [
-                    "id",
-                    "status",
-                    "created_at"
-                ],
+                "required": ["id", "status", "created_at"],
                 "title": "Admin.ReservationStatusResource"
             },
             "Admin.RontgenDetailResource": {
@@ -8380,10 +7481,7 @@
                                 "type": "string"
                             },
                             "medical_history": {
-                                "type": [
-                                    "object",
-                                    "null"
-                                ],
+                                "type": ["object", "null"],
                                 "properties": {
                                     "has_allergy": {
                                         "type": "string"
@@ -8426,10 +7524,7 @@
                                 ]
                             },
                             "dental_history": {
-                                "type": [
-                                    "object",
-                                    "null"
-                                ],
+                                "type": ["object", "null"],
                                 "properties": {
                                     "frequent_tooth_pain": {
                                         "type": "string"
@@ -8514,11 +7609,67 @@
                             "dental_history"
                         ]
                     },
-                    "xray_image_url": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                    "doctor": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "specialization": {
+                                "type": "string"
+                            }
+                        },
+                        "required": ["id", "name", "specialization"]
+                    },
+                    "latest_image_url": {
+                        "type": ["string", "null"]
+                    },
+                    "examination_images": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "image_url": {
+                                    "type": ["string", "null"]
+                                },
+                                "image_type": {
+                                    "type": "string"
+                                },
+                                "created_at": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "image_url",
+                                "image_type",
+                                "created_at"
+                            ]
+                        }
+                    },
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "tag_name": {
+                                    "type": "string"
+                                },
+                                "detail": {
+                                    "type": ["string", "null"]
+                                }
+                            },
+                            "required": ["id", "tag_name", "detail"]
+                        }
                     },
                     "detail": {
                         "type": "string"
@@ -8533,7 +7684,10 @@
                 "required": [
                     "id",
                     "patient",
-                    "xray_image_url",
+                    "doctor",
+                    "latest_image_url",
+                    "examination_images",
+                    "tags",
                     "detail",
                     "created_at",
                     "updated_at"
@@ -8559,17 +7713,22 @@
                                 "type": "string"
                             }
                         },
-                        "required": [
-                            "id",
-                            "name",
-                            "phone"
-                        ]
+                        "required": ["id", "name", "phone"]
                     },
-                    "xray_image_url": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                    "doctor": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            }
+                        },
+                        "required": ["id", "name"]
+                    },
+                    "latest_image_url": {
+                        "type": ["string", "null"]
                     },
                     "detail": {
                         "type": "string"
@@ -8581,7 +7740,8 @@
                 "required": [
                     "id",
                     "patient",
-                    "xray_image_url",
+                    "doctor",
+                    "latest_image_url",
                     "detail",
                     "created_at"
                 ],
@@ -8603,16 +7763,22 @@
                                 "type": "string"
                             }
                         },
-                        "required": [
-                            "id",
-                            "name"
-                        ]
+                        "required": ["id", "name"]
                     },
-                    "xray_image_url": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                    "doctor": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            }
+                        },
+                        "required": ["id", "name"]
+                    },
+                    "latest_image_url": {
+                        "type": ["string", "null"]
                     },
                     "detail": {
                         "type": "string"
@@ -8624,7 +7790,8 @@
                 "required": [
                     "id",
                     "patient",
-                    "xray_image_url",
+                    "doctor",
+                    "latest_image_url",
                     "detail",
                     "updated_at"
                 ],
@@ -8643,22 +7810,13 @@
                         "type": "string"
                     },
                     "icon_url": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "article_content": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "support_image_url": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "created_at": {
                         "type": "string"
@@ -8695,10 +7853,7 @@
                         "type": "string"
                     },
                     "photo_url": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "created_at": {
                         "type": "string"
@@ -8730,10 +7885,7 @@
                         "minLength": 8
                     }
                 },
-                "required": [
-                    "email",
-                    "password"
-                ],
+                "required": ["email", "password"],
                 "title": "AdminLoginRequest"
             },
             "Public.ArticleDetailResource": {
@@ -8752,10 +7904,7 @@
                         "type": "string"
                     },
                     "image_url": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "writer": {
                         "type": "string"
@@ -8792,10 +7941,7 @@
                         "type": "string"
                     },
                     "image_url": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "writer": {
                         "type": "string"
@@ -8828,26 +7974,17 @@
                         "type": "string"
                     },
                     "specialization": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "photo_url": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "schedule": {
                         "type": "array",
                         "items": {}
                     },
                     "statement": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     }
                 },
                 "required": [
@@ -8873,11 +8010,7 @@
                         "type": "string"
                     }
                 },
-                "required": [
-                    "id",
-                    "question",
-                    "answer"
-                ],
+                "required": ["id", "question", "answer"],
                 "title": "Public.FaqResource"
             },
             "Public.GalleryResource": {
@@ -8887,27 +8020,16 @@
                         "type": "integer"
                     },
                     "image_url": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "caption": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "uploaded_at": {
                         "type": "string"
                     }
                 },
-                "required": [
-                    "id",
-                    "image_url",
-                    "caption",
-                    "uploaded_at"
-                ],
+                "required": ["id", "image_url", "caption", "uploaded_at"],
                 "title": "Public.GalleryResource"
             },
             "Public.PromoResource": {
@@ -8920,10 +8042,7 @@
                         "type": "string"
                     },
                     "image_url": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "detail": {
                         "type": "string"
@@ -8941,9 +8060,7 @@
                             },
                             {
                                 "type": "integer",
-                                "enum": [
-                                    0
-                                ]
+                                "enum": [0]
                             }
                         ]
                     }
@@ -8972,19 +8089,13 @@
                         "type": "string"
                     },
                     "icon_url": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "article_content": {
                         "type": "string"
                     },
                     "support_image_url": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     }
                 },
                 "required": [
@@ -9010,18 +8121,10 @@
                         "type": "string"
                     },
                     "icon_url": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     }
                 },
-                "required": [
-                    "id",
-                    "name",
-                    "detail",
-                    "icon_url"
-                ],
+                "required": ["id", "name", "detail", "icon_url"],
                 "title": "Public.ServiceListResource"
             },
             "Public.TestimonialResource": {
@@ -9040,10 +8143,7 @@
                         "type": "string"
                     },
                     "photo_url": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "created_at": {
                         "type": "string"
@@ -9064,10 +8164,7 @@
                 "properties": {
                     "patient_category": {
                         "type": "string",
-                        "enum": [
-                            "new",
-                            "existing"
-                        ]
+                        "enum": ["new", "existing"]
                     },
                     "name": {
                         "type": "string",
@@ -9078,33 +8175,18 @@
                         "maxLength": 20
                     },
                     "gender": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
-                        "enum": [
-                            "male",
-                            "female"
-                        ]
+                        "type": ["string", "null"],
+                        "enum": ["male", "female"]
                     },
                     "address": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "birth_date": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "format": "date-time"
                     },
                     "age": {
-                        "type": [
-                            "integer",
-                            "null"
-                        ],
+                        "type": ["integer", "null"],
                         "minimum": 0,
                         "maximum": 150
                     },
@@ -9159,11 +8241,7 @@
                         "maxLength": 2048
                     }
                 },
-                "required": [
-                    "title",
-                    "content",
-                    "image"
-                ],
+                "required": ["title", "content", "image"],
                 "title": "StoreArticleRequest"
             },
             "StoreDoctorRequest": {
@@ -9174,10 +8252,7 @@
                         "maxLength": 150
                     },
                     "specialization": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "maxLength": 150
                     },
                     "photo": {
@@ -9193,17 +8268,10 @@
                         }
                     },
                     "statement": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     }
                 },
-                "required": [
-                    "name",
-                    "photo",
-                    "schedule"
-                ],
+                "required": ["name", "photo", "schedule"],
                 "title": "StoreDoctorRequest"
             },
             "StoreFaqRequest": {
@@ -9216,10 +8284,7 @@
                         "type": "string"
                     }
                 },
-                "required": [
-                    "question",
-                    "answer"
-                ],
+                "required": ["question", "answer"],
                 "title": "StoreFaqRequest"
             },
             "StoreGalleryRequest": {
@@ -9232,16 +8297,11 @@
                         "maxLength": 2048
                     },
                     "caption": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "maxLength": 255
                     }
                 },
-                "required": [
-                    "image"
-                ],
+                "required": ["image"],
                 "title": "StoreGalleryRequest"
             },
             "StorePromoRequest": {
@@ -9286,23 +8346,30 @@
                     "patient_id": {
                         "type": "integer"
                     },
-                    "xray_image": {
-                        "type": "string",
-                        "format": "binary",
-                        "contentMediaType": "application/octet-stream",
-                        "maxLength": 5120
+                    "doctor_id": {
+                        "type": ["integer", "null"]
+                    },
+                    "images": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "binary",
+                            "contentMediaType": "application/octet-stream",
+                            "maxLength": 5120
+                        },
+                        "minItems": 1
                     },
                     "detail": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
+                    },
+                    "tag_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
                     }
                 },
-                "required": [
-                    "patient_id",
-                    "xray_image"
-                ],
+                "required": ["patient_id", "images"],
                 "title": "StoreRontgenRequest"
             },
             "StoreServiceRequest": {
@@ -9356,20 +8423,13 @@
                         "type": "string"
                     },
                     "photo": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "format": "binary",
                         "contentMediaType": "application/octet-stream",
                         "maxLength": 2048
                     }
                 },
-                "required": [
-                    "name",
-                    "rating",
-                    "testimoni"
-                ],
+                "required": ["name", "rating", "testimoni"],
                 "title": "StoreTestimonialRequest"
             },
             "UpdateArticleRequest": {
@@ -9383,10 +8443,7 @@
                         "type": "string"
                     },
                     "image": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "format": "binary",
                         "contentMediaType": "application/octet-stream",
                         "maxLength": 2048
@@ -9402,17 +8459,11 @@
                         "maxLength": 150
                     },
                     "specialization": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "maxLength": 150
                     },
                     "photo": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "format": "binary",
                         "contentMediaType": "application/octet-stream",
                         "maxLength": 2048
@@ -9421,10 +8472,7 @@
                         "type": "string"
                     },
                     "statement": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     }
                 },
                 "title": "UpdateDoctorRequest"
@@ -9445,19 +8493,13 @@
                 "type": "object",
                 "properties": {
                     "image": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "format": "binary",
                         "contentMediaType": "application/octet-stream",
                         "maxLength": 2048
                     },
                     "caption": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "maxLength": 255
                     }
                 },
@@ -9471,66 +8513,39 @@
                         "maxLength": 150
                     },
                     "nickname": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "maxLength": 100
                     },
                     "gender": {
                         "type": "string",
-                        "enum": [
-                            "male",
-                            "female"
-                        ]
+                        "enum": ["male", "female"]
                     },
                     "age": {
-                        "type": [
-                            "integer",
-                            "null"
-                        ],
+                        "type": ["integer", "null"],
                         "minimum": 0,
                         "maximum": 150
                     },
                     "birth_place": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "maxLength": 100
                     },
                     "birth_date": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "format": "date-time"
                     },
                     "address": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "village": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "maxLength": 100
                     },
                     "district": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "maxLength": 100
                     },
                     "city": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "maxLength": 100
                     },
                     "phone": {
@@ -9538,32 +8553,20 @@
                         "maxLength": 20
                     },
                     "occupation": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "maxLength": 100
                     },
                     "parent_name": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "maxLength": 150
                     },
                     "height": {
-                        "type": [
-                            "number",
-                            "null"
-                        ],
+                        "type": ["number", "null"],
                         "minimum": 0,
                         "maximum": 999.99
                     },
                     "weight": {
-                        "type": [
-                            "number",
-                            "null"
-                        ],
+                        "type": ["number", "null"],
                         "minimum": 0,
                         "maximum": 999.99
                     }
@@ -9578,10 +8581,7 @@
                         "maxLength": 150
                     },
                     "image": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "format": "binary",
                         "contentMediaType": "application/octet-stream",
                         "maxLength": 2048
@@ -9613,69 +8613,39 @@
                         "maxLength": 150
                     },
                     "nickname": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "maxLength": 100
                     },
                     "gender": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
-                        "enum": [
-                            "male",
-                            "female"
-                        ]
+                        "type": ["string", "null"],
+                        "enum": ["male", "female"]
                     },
                     "age": {
-                        "type": [
-                            "integer",
-                            "null"
-                        ],
+                        "type": ["integer", "null"],
                         "minimum": 0,
                         "maximum": 150
                     },
                     "birth_place": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "maxLength": 100
                     },
                     "birth_date": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "format": "date-time"
                     },
                     "address": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
+                        "type": ["string", "null"]
                     },
                     "village": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "maxLength": 100
                     },
                     "district": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "maxLength": 100
                     },
                     "city": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "maxLength": 100
                     },
                     "phone": {
@@ -9683,32 +8653,20 @@
                         "maxLength": 20
                     },
                     "occupation": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "maxLength": 100
                     },
                     "parent_name": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "maxLength": 150
                     },
                     "height": {
-                        "type": [
-                            "number",
-                            "null"
-                        ],
+                        "type": ["number", "null"],
                         "minimum": 0,
                         "maximum": 999.99
                     },
                     "weight": {
-                        "type": [
-                            "number",
-                            "null"
-                        ],
+                        "type": ["number", "null"],
                         "minimum": 0,
                         "maximum": 999.99
                     },
@@ -9716,58 +8674,31 @@
                         "type": "object",
                         "properties": {
                             "has_allergy": {
-                                "type": [
-                                    "boolean",
-                                    "null"
-                                ]
+                                "type": ["boolean", "null"]
                             },
                             "allergy_detail": {
-                                "type": [
-                                    "string",
-                                    "null"
-                                ]
+                                "type": ["string", "null"]
                             },
                             "has_systemic_disease": {
-                                "type": [
-                                    "boolean",
-                                    "null"
-                                ]
+                                "type": ["boolean", "null"]
                             },
                             "systemic_disease_detail": {
-                                "type": [
-                                    "string",
-                                    "null"
-                                ]
+                                "type": ["string", "null"]
                             },
                             "undergoing_treatment": {
-                                "type": [
-                                    "boolean",
-                                    "null"
-                                ]
+                                "type": ["boolean", "null"]
                             },
                             "treatment_detail": {
-                                "type": [
-                                    "string",
-                                    "null"
-                                ]
+                                "type": ["string", "null"]
                             },
                             "ever_hospitalized": {
-                                "type": [
-                                    "boolean",
-                                    "null"
-                                ]
+                                "type": ["boolean", "null"]
                             },
                             "hospitalized_reason": {
-                                "type": [
-                                    "string",
-                                    "null"
-                                ]
+                                "type": ["string", "null"]
                             },
                             "smoking_or_alcohol": {
-                                "type": [
-                                    "boolean",
-                                    "null"
-                                ]
+                                "type": ["boolean", "null"]
                             }
                         }
                     },
@@ -9775,106 +8706,54 @@
                         "type": "object",
                         "properties": {
                             "frequent_tooth_pain": {
-                                "type": [
-                                    "boolean",
-                                    "null"
-                                ]
+                                "type": ["boolean", "null"]
                             },
                             "tooth_pain_detail": {
-                                "type": [
-                                    "string",
-                                    "null"
-                                ]
+                                "type": ["string", "null"]
                             },
                             "bleeding_gums": {
-                                "type": [
-                                    "boolean",
-                                    "null"
-                                ]
+                                "type": ["boolean", "null"]
                             },
                             "ever_dental_treatment": {
-                                "type": [
-                                    "boolean",
-                                    "null"
-                                ]
+                                "type": ["boolean", "null"]
                             },
                             "dental_treatment_detail": {
-                                "type": [
-                                    "string",
-                                    "null"
-                                ]
+                                "type": ["string", "null"]
                             },
                             "brushing_frequency": {
-                                "type": [
-                                    "string",
-                                    "null"
-                                ],
-                                "enum": [
-                                    "1",
-                                    "2",
-                                    "more_than_2"
-                                ]
+                                "type": ["string", "null"],
+                                "enum": ["1", "2", "more_than_2"]
                             },
                             "use_floss_or_mouthwash": {
-                                "type": [
-                                    "boolean",
-                                    "null"
-                                ]
+                                "type": ["boolean", "null"]
                             },
                             "bad_habits": {
-                                "type": [
-                                    "boolean",
-                                    "null"
-                                ]
+                                "type": ["boolean", "null"]
                             },
                             "bad_habits_detail": {
-                                "type": [
-                                    "string",
-                                    "null"
-                                ]
+                                "type": ["string", "null"]
                             },
                             "ever_braces": {
-                                "type": [
-                                    "boolean",
-                                    "null"
-                                ]
+                                "type": ["boolean", "null"]
                             },
                             "braces_years": {
-                                "type": [
-                                    "integer",
-                                    "null"
-                                ],
+                                "type": ["integer", "null"],
                                 "minimum": 0
                             },
                             "root_canal_treatment": {
-                                "type": [
-                                    "boolean",
-                                    "null"
-                                ]
+                                "type": ["boolean", "null"]
                             },
                             "root_canal_detail": {
-                                "type": [
-                                    "string",
-                                    "null"
-                                ]
+                                "type": ["string", "null"]
                             },
                             "dentures": {
-                                "type": [
-                                    "boolean",
-                                    "null"
-                                ]
+                                "type": ["boolean", "null"]
                             },
                             "routine_checkup": {
-                                "type": [
-                                    "boolean",
-                                    "null"
-                                ]
+                                "type": ["boolean", "null"]
                             },
                             "dental_checkup_frequency": {
-                                "type": [
-                                    "string",
-                                    "null"
-                                ],
+                                "type": ["string", "null"],
                                 "enum": [
                                     "6_months",
                                     "1_year",
@@ -9883,19 +8762,12 @@
                                 ]
                             },
                             "doctor_notes": {
-                                "type": [
-                                    "string",
-                                    "null"
-                                ]
+                                "type": ["string", "null"]
                             }
                         }
                     }
                 },
-                "required": [
-                    "patient_id",
-                    "name",
-                    "phone"
-                ],
+                "required": ["patient_id", "name", "phone"],
                 "title": "UpdateReservationPatientDetailsRequest"
             },
             "UpdateReservationStatusRequest": {
@@ -9911,16 +8783,33 @@
                         ]
                     }
                 },
-                "required": [
-                    "status"
-                ],
+                "required": ["status"],
                 "title": "UpdateReservationStatusRequest"
             },
             "UpdateRontgenRequest": {
                 "type": "object",
                 "properties": {
+                    "doctor_id": {
+                        "type": "integer"
+                    },
+                    "images": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "binary",
+                            "contentMediaType": "application/octet-stream",
+                            "maxLength": 5120
+                        },
+                        "minItems": 1
+                    },
                     "detail": {
                         "type": "string"
+                    },
+                    "tag_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
                     }
                 },
                 "title": "UpdateRontgenRequest"
@@ -9936,10 +8825,7 @@
                         "type": "string"
                     },
                     "icon": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "format": "binary",
                         "contentMediaType": "application/octet-stream",
                         "maxLength": 1024
@@ -9948,10 +8834,7 @@
                         "type": "string"
                     },
                     "support_image": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "format": "binary",
                         "contentMediaType": "application/octet-stream",
                         "maxLength": 2048
@@ -9975,10 +8858,7 @@
                         "type": "string"
                     },
                     "photo": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
+                        "type": ["string", "null"],
                         "format": "binary",
                         "contentMediaType": "application/octet-stream",
                         "maxLength": 2048
@@ -10010,10 +8890,7 @@
                                     }
                                 }
                             },
-                            "required": [
-                                "message",
-                                "errors"
-                            ]
+                            "required": ["message", "errors"]
                         }
                     }
                 }
@@ -10030,9 +8907,7 @@
                                     "description": "Error overview."
                                 }
                             },
-                            "required": [
-                                "message"
-                            ]
+                            "required": ["message"]
                         }
                     }
                 }

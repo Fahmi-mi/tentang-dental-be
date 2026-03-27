@@ -6,7 +6,6 @@ use Dedoc\Scramble\Attributes\SchemaName;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 #[SchemaName("Admin.PatientDetailResource")]
 class PatientDetailResource extends JsonResource
@@ -72,7 +71,8 @@ class PatientDetailResource extends JsonResource
             'rontgens' => $this->rontgens->map(function ($rontgen) {
                 return [
                     'id' => $rontgen->id,
-                    'xray_image_url' => $this->getRontgenImageUrl($rontgen->xray_image),
+                    'doctor_id' => $rontgen->doctor_id,
+                    'latest_image_url' => $rontgen->latest_image_url,
                     'detail' => $rontgen->detail,
                     'created_at' => optional($rontgen->created_at)->format('Y-m-d H:i:s'),
                 ];
@@ -80,22 +80,5 @@ class PatientDetailResource extends JsonResource
             'created_at' => optional($this->created_at)->format('Y-m-d H:i:s'),
             'updated_at' => optional($this->updated_at)->format('Y-m-d H:i:s'),
         ];
-    }
-
-    private function getRontgenImageUrl(?string $fileName): ?string
-    {
-        if (!$fileName) {
-            return null;
-        }
-
-        if (Storage::disk('public')->exists('rontgen/' . $fileName)) {
-            return asset('storage/rontgen/' . $fileName);
-        }
-
-        if (Storage::disk('public')->exists('rontgens/' . $fileName)) {
-            return asset('storage/rontgens/' . $fileName);
-        }
-
-        return null;
     }
 }

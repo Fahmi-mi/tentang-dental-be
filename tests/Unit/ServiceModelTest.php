@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Service;
+use App\Models\Patient;
+use App\Models\Doctor;
 use App\Models\Reservation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -36,8 +38,8 @@ test('service can be created with valid data', function () {
 
 test('service belongs to many reservations through pivot table', function () {
     $service = Service::factory()->create();
-    $patient = \App\Models\Patient::factory()->create();
-    $doctor = \App\Models\Doctor::factory()->create();
+    $patient = Patient::factory()->create();
+    $doctor = Doctor::factory()->create();
     
     $reservation1 = Reservation::create([
         'patient_id' => $patient->id,

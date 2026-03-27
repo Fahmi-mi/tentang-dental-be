@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Admin;
+use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Rontgen;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -28,7 +29,7 @@ test('registration admin can view rontgen list', function () {
             'success',
             'data' => [
                 'rontgens' => [
-                    '*' => ['id', 'patient', 'xray_image_url', 'detail', 'created_at']
+                    '*' => ['id', 'patient', 'doctor', 'latest_image_url', 'detail', 'created_at']
                 ],
                 'pagination'
             ]
@@ -38,12 +39,14 @@ test('registration admin can view rontgen list', function () {
 test('rontgen admin can create rontgen', function () {
     $admin = Admin::factory()->create(['role' => 'rontgen']);
     Sanctum::actingAs($admin);
-    
+
     $patient = Patient::factory()->create();
+    $doctor = Doctor::factory()->create();
     
     $response = $this->postJson('/api/admin/rontgens', [
         'patient_id' => $patient->id,
-        'xray_image' => UploadedFile::fake()->image('rontgen.jpg'),
+        'doctor_id' => $doctor->id,
+        'images' => [UploadedFile::fake()->image('rontgen.jpg')],
         'detail' => 'Rontgen panoramic gigi',
     ]);
     
@@ -119,11 +122,13 @@ test('rontgen belongs to patient', function () {
 test('registration admin cannot create rontgen', function () {
     $admin = Admin::factory()->create(['role' => 'registration']);
     Sanctum::actingAs($admin);
-    
+
     $patient = Patient::factory()->create();
+    $doctor = Doctor::factory()->create();
     
     $response = $this->postJson('/api/admin/rontgens', [
         'patient_id' => $patient->id,
+        'doctor_id' => $doctor->id,
         'detail' => 'Test',
     ]);
     

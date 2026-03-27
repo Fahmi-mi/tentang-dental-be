@@ -3,6 +3,7 @@
 use App\Models\Promo;
 use App\Models\Service;
 use App\Models\Article;
+use App\Models\Admin;
 use App\Models\Gallery;
 use App\Models\Doctor;
 use App\Models\Testimonial;
@@ -106,7 +107,7 @@ test('service response has icon and support_image not image field', function () 
 });
 
 test('can get list of articles with writer info', function () {
-    $admin = \App\Models\Admin::factory()->create(['name' => 'Admin Writer']);
+    $admin = Admin::factory()->create(['name' => 'Admin Writer']);
     Article::factory()->count(3)->create(['admin_id' => $admin->id]);
     
     $response = $this->getJson('/api/articles');
@@ -125,7 +126,7 @@ test('can get list of articles with writer info', function () {
 });
 
 test('can get single article by slug', function () {
-    $admin = \App\Models\Admin::factory()->create(['name' => 'John Admin']);
+    $admin = Admin::factory()->create(['name' => 'John Admin']);
     $article = Article::factory()->create([
         'admin_id' => $admin->id,
         'title' => 'Tips Merawat Gigi',

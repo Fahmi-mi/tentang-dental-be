@@ -23,7 +23,7 @@ class RontgenController extends Controller
     public function index(Request $request)
     {
         try {
-            $query = Rontgen::with('patient');
+            $query = Rontgen::with(['patient', 'doctor', 'primaryImage']);
 
             if ($request->has('patient_id')) {
                 $query->where('patient_id', $request->patient_id);
@@ -47,10 +47,10 @@ class RontgenController extends Controller
     public function store(StoreRontgenRequest $request)
     {
         DB::beginTransaction();
-        
+
         try {
             $patient = Patient::find($request->patient_id);
-            
+
             if (!$patient) {
                 return response()->json(
                     FileHelper::formatResponse(false, null, 'Pasien tidak ditemukan'),
@@ -58,17 +58,45 @@ class RontgenController extends Controller
                 );
             }
 
-            $imageName = FileHelper::uploadImage($request->file('xray_image'), 'rontgen');
+            $doctorId = $request->doctor_id;
+            if (!$doctorId) {
+                $doctorId = $patient->reservations()->latest('reservation_date')->value('doctor_id');
+            }
 
-            if (!$imageName) {
-                throw new \Exception('Gagal mengupload gambar rontgen');
+            if (!$doctorId) {
+                return response()->json(
+                    FileHelper::formatResponse(false, null, 'Dokter belum tersedia untuk pasien ini. Silakan kirim doctor_id'),
+                    422
+                );
             }
 
             $rontgen = Rontgen::create([
                 'patient_id' => $request->patient_id,
-                'xray_image' => $imageName,
+                'doctor_id' => $doctorId,
                 'detail' => $request->detail ?? null,
             ]);
+
+            $storedImages = [];
+            foreach ($request->file('images', []) as $imageFile) {
+                $imageName = FileHelper::uploadImage($imageFile, 'rontgen');
+
+                if (!$imageName) {
+                    throw new \Exception('Gagal mengupload salah satu gambar pemeriksaan');
+                }
+
+                $storedImages[] = $imageName;
+
+                $rontgen->examinationImages()->create([
+                    'image_path' => $imageName,
+                    'image_type' => (string) $imageFile->getClientMimeType(),
+                ]);
+            }
+
+            if ($request->filled('tag_ids')) {
+                $rontgen->tags()->sync($request->tag_ids);
+            }
+
+            $rontgen->load(['patient', 'doctor', 'primaryImage', 'tags']);
             $rontgen->setRelation('patient', $patient);
 
             DB::commit();
@@ -80,9 +108,9 @@ class RontgenController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            
-            if (isset($imageName)) {
-                FileHelper::deleteImage('rontgen/' . $imageName);
+
+            if (isset($storedImages)) {
+                $this->deleteRontgenImages($storedImages);
             }
 
             return response()->json(
@@ -95,7 +123,7 @@ class RontgenController extends Controller
     public function show($id)
     {
         try {
-            $rontgen = Rontgen::with('patient.medicalHistory', 'patient.dentalHistory')->find($id);
+            $rontgen = Rontgen::with(['patient.medicalHistory', 'patient.dentalHistory', 'doctor', 'primaryImage', 'examinationImages', 'tags'])->find($id);
 
             if (!$rontgen) {
                 return response()->json(
@@ -120,9 +148,9 @@ class RontgenController extends Controller
     public function update(UpdateRontgenRequest $request, $id)
     {
         DB::beginTransaction();
-        
+
         try {
-            $rontgen = Rontgen::find($id);
+            $rontgen = Rontgen::with(['examinationImages', 'patient', 'doctor', 'tags'])->find($id);
 
             if (!$rontgen) {
                 return response()->json(
@@ -131,28 +159,50 @@ class RontgenController extends Controller
                 );
             }
 
-            $oldImage = $rontgen->xray_image;
+            if ($request->has('doctor_id')) {
+                $rontgen->doctor_id = $request->doctor_id;
+            }
 
-            if ($request->hasFile('xray_image')) {
-                $imageName = FileHelper::uploadImage($request->file('xray_image'), 'rontgen');
-                if ($imageName) {
-                    $rontgen->xray_image = $imageName;
+            if ($request->hasFile('images')) {
+                $oldImages = $rontgen->examinationImages->pluck('image_path')->filter()->values()->all();
+                $newImages = [];
+
+                foreach ($request->file('images', []) as $imageFile) {
+                    $imageName = FileHelper::uploadImage($imageFile, 'rontgen');
+
+                    if (!$imageName) {
+                        throw new \Exception('Gagal mengupload salah satu gambar pemeriksaan');
+                    }
+
+                    $newImages[] = $imageName;
                 }
+
+                $rontgen->examinationImages()->delete();
+
+                foreach ($newImages as $index => $imagePath) {
+                    $mimeType = (string) $request->file('images')[$index]->getClientMimeType();
+                    $rontgen->examinationImages()->create([
+                        'image_path' => $imagePath,
+                        'image_type' => $mimeType,
+                    ]);
+                }
+
+                $this->deleteRontgenImages($oldImages);
             }
 
             if ($request->has('detail')) {
                 $rontgen->detail = $request->detail;
             }
 
-            $rontgen->save();
-
-            if ($request->hasFile('xray_image') && $oldImage) {
-                FileHelper::deleteImage('rontgen/' . $oldImage);
+            if ($request->has('tag_ids')) {
+                $rontgen->tags()->sync($request->tag_ids ?? []);
             }
+
+            $rontgen->save();
 
             DB::commit();
 
-            $rontgen->load('patient');
+            $rontgen->load(['patient', 'doctor', 'primaryImage', 'tags']);
 
             return response()->json(
                 FileHelper::formatResponse(true, new RontgenUpdateResource($rontgen), 'Data rontgen berhasil diupdate'),
@@ -172,9 +222,9 @@ class RontgenController extends Controller
     public function destroy($id)
     {
         DB::beginTransaction();
-        
+
         try {
-            $rontgen = Rontgen::find($id);
+            $rontgen = Rontgen::with('examinationImages')->find($id);
 
             if (!$rontgen) {
                 return response()->json(
@@ -183,13 +233,11 @@ class RontgenController extends Controller
                 );
             }
 
-            $oldImage = $rontgen->xray_image;
+            $oldImages = $rontgen->examinationImages->pluck('image_path')->filter()->values()->all();
 
             $rontgen->delete();
 
-            if ($oldImage) {
-                FileHelper::deleteImage('rontgen/' . $oldImage);
-            }
+            $this->deleteRontgenImages($oldImages);
 
             DB::commit();
 
@@ -211,7 +259,7 @@ class RontgenController extends Controller
     public function download($id)
     {
         try {
-            $rontgen = Rontgen::find($id);
+            $rontgen = Rontgen::with('primaryImage')->find($id);
 
             if (!$rontgen) {
                 return response()->json(
@@ -220,9 +268,18 @@ class RontgenController extends Controller
                 );
             }
 
+            $fileName = optional($rontgen->primaryImage)->image_path;
+
+            if (!$fileName) {
+                return response()->json(
+                    FileHelper::formatResponse(false, null, 'File rontgen tidak ditemukan di storage'),
+                    404
+                );
+            }
+
             $possiblePaths = [
-                'rontgen/' . $rontgen->xray_image,
-                'rontgens/' . $rontgen->xray_image,
+                'rontgen/' . $fileName,
+                'rontgens/' . $fileName,
             ];
 
             $path = null;
@@ -246,6 +303,14 @@ class RontgenController extends Controller
                 FileHelper::formatResponse(false, null, 'Gagal download rontgen: ' . $e->getMessage()),
                 500
             );
+        }
+    }
+
+    private function deleteRontgenImages(array $fileNames): void
+    {
+        foreach ($fileNames as $fileName) {
+            FileHelper::deleteImage('rontgen/' . $fileName);
+            FileHelper::deleteImage('rontgens/' . $fileName);
         }
     }
 }

@@ -33,4 +33,9 @@ class Admin extends User
     {
         return $this->hasMany(Article::class);
     }
+
+    public function notifications()
+    {
+        return $this->hasMany(AdminNotification::class);
+    }
 }

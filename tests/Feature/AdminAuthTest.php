@@ -46,7 +46,7 @@ test('admin can register with name email and password', function () {
             'data' => [
                 'name' => 'New Admin',
                 'email' => 'new-admin@test.com',
-                'role' => 'registration',
+                'role' => 'rontgen',
             ],
         ]);
 

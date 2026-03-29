@@ -6,7 +6,6 @@ use Dedoc\Scramble\Attributes\SchemaName;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 #[SchemaName("Admin.RontgenUpdateResource")]
 class RontgenUpdateResource extends JsonResource
@@ -19,26 +18,13 @@ class RontgenUpdateResource extends JsonResource
                 'id' => optional($this->patient)->id,
                 'name' => optional($this->patient)->name,
             ],
-            'xray_image_url' => $this->getRontgenImageUrl($this->xray_image),
+            'doctor' => [
+                'id' => optional($this->doctor)->id,
+                'name' => optional($this->doctor)->name,
+            ],
+            'latest_image_url' => $this->latest_image_url,
             'detail' => $this->detail,
             'updated_at' => optional($this->updated_at)->format('Y-m-d H:i:s'),
         ];
-    }
-
-    private function getRontgenImageUrl(?string $fileName): ?string
-    {
-        if (!$fileName) {
-            return null;
-        }
-
-        if (Storage::disk('public')->exists('rontgen/' . $fileName)) {
-            return asset('storage/rontgen/' . $fileName);
-        }
-
-        if (Storage::disk('public')->exists('rontgens/' . $fileName)) {
-            return asset('storage/rontgens/' . $fileName);
-        }
-
-        return null;
     }
 }

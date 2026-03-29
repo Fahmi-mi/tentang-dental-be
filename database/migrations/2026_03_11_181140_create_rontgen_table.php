@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('rontgen', function (Blueprint $table) {
             $table->id();
             $table->foreignId('patient_id')->constrained('patients')->onDelete('cascade');
-            $table->string('xray_image', 255);
+            $table->foreignId('doctor_id')->constrained('doctors')->onDelete('cascade');
             $table->text('detail')->nullable();
             $table->timestamps();
             
             $table->index('patient_id');
+            $table->index('doctor_id');
         });
     }
 

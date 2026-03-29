@@ -5,6 +5,8 @@ use App\Models\Patient;
 use App\Models\Reservation;
 use App\Models\Doctor;
 use App\Models\Service;
+use App\Models\PatientMedicalHistory;
+use App\Models\PatientDentalHistory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 
@@ -221,7 +223,7 @@ test('reservation response has appointment_time not reservation_time', function 
 
 test('patient detail shows medical history', function () {
     $patient = Patient::factory()->create();
-    \App\Models\PatientMedicalHistory::create([
+    PatientMedicalHistory::create([
         'patient_id' => $patient->id,
         'has_allergy' => true,
         'allergy_detail' => 'Seafood',
@@ -252,7 +254,7 @@ test('patient detail shows medical history', function () {
 
 test('patient detail shows dental history', function () {
     $patient = Patient::factory()->create();
-    \App\Models\PatientDentalHistory::create([
+    PatientDentalHistory::create([
         'patient_id' => $patient->id,
         'frequent_tooth_pain' => false,
         'bleeding_gums' => false,

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Rontgen extends Model
 {
@@ -13,24 +14,53 @@ class Rontgen extends Model
 
     protected $fillable = [
         'patient_id',
-        'xray_image',
+        'doctor_id',
         'detail',
     ];
 
-    protected $appends = ['xray_image_url'];
+    protected $appends = ['latest_image_url'];
 
-    // Accessor for xray_image URL
-    public function getXrayImageUrlAttribute()
+    public function getLatestImageUrlAttribute(): ?string
     {
-        if ($this->xray_image) {
-            return asset('storage/' . $this->xray_image);
+        $imagePath = optional($this->primaryImage)->image_path;
+
+        if (!$imagePath) {
+            return null;
         }
+
+        if (Storage::disk('public')->exists('rontgen/' . $imagePath)) {
+            return asset('storage/rontgen/' . $imagePath);
+        }
+
+        if (Storage::disk('public')->exists('rontgens/' . $imagePath)) {
+            return asset('storage/rontgens/' . $imagePath);
+        }
+
         return null;
     }
 
-    // Relationship
     public function patient()
     {
         return $this->belongsTo(Patient::class);
+    }
+
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class);
+    }
+
+    public function examinationImages()
+    {
+        return $this->hasMany(ExaminationImage::class);
+    }
+
+    public function primaryImage()
+    {
+        return $this->hasOne(ExaminationImage::class)->latestOfMany('id');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'exammination_tags', 'rontgen_id', 'tag_id');
     }
 }

@@ -16,6 +16,7 @@ class Admin extends User
         'email',
         'password',
         'role',
+        'profile_image',
     ];
 
     protected $hidden = [
@@ -31,5 +32,10 @@ class Admin extends User
     public function articles()
     {
         return $this->hasMany(Article::class);
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(AdminNotification::class);
     }
 }

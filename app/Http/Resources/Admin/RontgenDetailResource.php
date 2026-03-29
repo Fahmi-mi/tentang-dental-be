@@ -55,14 +55,34 @@ class RontgenDetailResource extends JsonResource
                     'doctor_notes' => $dentalHistory->doctor_notes,
                 ] : null,
             ],
-            'xray_image_url' => $this->getRontgenImageUrl($this->xray_image),
+            'doctor' => [
+                'id' => optional($this->doctor)->id,
+                'name' => optional($this->doctor)->name,
+                'specialization' => optional($this->doctor)->specialization,
+            ],
+            'latest_image_url' => $this->latest_image_url,
+            'examination_images' => $this->examinationImages->map(function ($image) {
+                return [
+                    'id' => $image->id,
+                    'image_url' => $this->toPublicImageUrl($image->image_path),
+                    'image_type' => $image->image_type,
+                    'created_at' => optional($image->created_at)->format('Y-m-d H:i:s'),
+                ];
+            })->values(),
+            'tags' => $this->tags->map(function ($tag) {
+                return [
+                    'id' => $tag->id,
+                    'tag_name' => $tag->tag_name,
+                    'detail' => $tag->detail,
+                ];
+            })->values(),
             'detail' => $this->detail,
             'created_at' => optional($this->created_at)->format('Y-m-d H:i:s'),
             'updated_at' => optional($this->updated_at)->format('Y-m-d H:i:s'),
         ];
     }
 
-    private function getRontgenImageUrl(?string $fileName): ?string
+    private function toPublicImageUrl(?string $fileName): ?string
     {
         if (!$fileName) {
             return null;

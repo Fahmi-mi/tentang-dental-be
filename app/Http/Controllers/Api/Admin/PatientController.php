@@ -40,7 +40,7 @@ class PatientController extends Controller
     public function show($id)
     {
         try {
-            $patient = Patient::with(['medicalHistory', 'dentalHistory', 'reservations.services', 'reservations.doctor', 'rontgens'])
+            $patient = Patient::with(['medicalHistory', 'dentalHistory', 'reservations.services', 'reservations.doctor', 'rontgens.primaryImage'])
                 ->find($id);
 
             if (!$patient) {
@@ -122,7 +122,7 @@ class PatientController extends Controller
     public function destroy($id)
     {
         try {
-            $patient = Patient::with(['reservations', 'rontgens'])->find($id);
+            $patient = Patient::with(['reservations', 'rontgens.examinationImages'])->find($id);
 
             if (!$patient) {
                 return response()->json(
@@ -143,7 +143,10 @@ class PatientController extends Controller
             }
 
             foreach ($patient->rontgens as $rontgen) {
-                FileHelper::deleteImage('rontgen/' . $rontgen->xray_image);
+                foreach ($rontgen->examinationImages as $image) {
+                    FileHelper::deleteImage('rontgen/' . $image->image_path);
+                    FileHelper::deleteImage('rontgens/' . $image->image_path);
+                }
             }
 
             $patient->delete();

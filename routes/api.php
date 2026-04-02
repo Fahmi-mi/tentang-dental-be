@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\Public\DoctorController;
 use App\Http\Controllers\Api\Public\FaqController;
 use App\Http\Controllers\Api\Public\GalleryController;
 use App\Http\Controllers\Api\Public\PromoController;
+use App\Http\Controllers\Api\Public\ReservationController as PublicReservationController;
 use App\Http\Controllers\Api\Public\ServiceController;
 use App\Http\Controllers\Api\Public\TestimonialController;
 use Illuminate\Support\Facades\Route;
@@ -38,6 +39,8 @@ Route::get('/doctors/{id}', [DoctorController::class, 'show']);
 Route::get('/testimonials', [TestimonialController::class, 'index']);
 
 Route::get('/faqs', [FaqController::class, 'index']);
+
+Route::post('/reservations', [PublicReservationController::class, 'store']);
 
 Route::prefix('admin')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
@@ -68,7 +71,6 @@ Route::prefix('admin')->group(function () {
             Route::get('/dashboard/service-analytics', [DashboardController::class, 'serviceAnalytics']);
             
             // Reservation Management
-            Route::post('/reservations', [AdminReservationController::class, 'store']);
             Route::get('/reservations', [AdminReservationController::class, 'index']);
             Route::get('/reservations/{id}', [AdminReservationController::class, 'show']);
             Route::put('/reservations/{id}', [AdminReservationController::class, 'update']);

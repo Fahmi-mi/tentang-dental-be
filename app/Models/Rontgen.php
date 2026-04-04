@@ -16,6 +16,7 @@ class Rontgen extends Model
         'patient_id',
         'doctor_id',
         'detail',
+        'status',
     ];
 
     protected $appends = ['latest_image_url'];

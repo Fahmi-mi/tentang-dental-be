@@ -22,31 +22,39 @@ class StoreRontgenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'patient_id' => 'required|exists:patients,id',
-            'doctor_id' => 'nullable|exists:doctors,id',
-            'images' => 'required|array|min:1',
-            'images.*' => 'required|image|mimes:jpeg,jpg,png,webp|max:5120',
-            'detail' => 'nullable|string',
-            'tag_ids' => 'sometimes|array',
-            'tag_ids.*' => 'exists:tags,id',
+            'patient_id'    => 'required|exists:patients,id',
+            'doctor_id'     => 'nullable|exists:doctors,id',
+            'images'        => 'sometimes|array|min:1',
+            'images.*'      => 'required|image|mimes:jpeg,jpg,png,webp|max:5120',
+            'image_types'   => 'sometimes|array|min:1',
+            'image_types.*' => 'required|in:xray,profil_gigi,intraoral',
+            'status'        => 'sometimes|in:menunggu,di_dalam_ruangan,perlu_upload_foto,selesai', 
+            'detail'        => 'nullable|string',
+            'tag_ids'       => 'sometimes|array',
+            'tag_ids.*'     => 'exists:tags,id',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'patient_id.required' => 'ID pasien wajib diisi',
-            'patient_id.exists' => 'Data pasien tidak ditemukan',
-            'doctor_id.exists' => 'Data dokter tidak ditemukan',
-            'images.required' => 'Minimal satu gambar pemeriksaan wajib diupload',
-            'images.array' => 'Gambar pemeriksaan harus berupa array',
-            'images.min' => 'Minimal satu gambar pemeriksaan wajib diupload',
-            'images.*.required' => 'File gambar pemeriksaan wajib diisi',
-            'images.*.image' => 'File harus berupa gambar',
-            'images.*.mimes' => 'Format gambar harus jpeg, jpg, png, atau webp',
-            'images.*.max' => 'Ukuran gambar pemeriksaan maksimal 5MB',
-            'tag_ids.array' => 'Tag harus berupa array',
-            'tag_ids.*.exists' => 'Tag tidak ditemukan',
+            'patient_id.required'    => 'ID pasien wajib diisi',
+            'patient_id.exists'      => 'Data pasien tidak ditemukan',
+            'doctor_id.exists'       => 'Data dokter tidak ditemukan',
+            'images.required'        => 'Minimal satu gambar pemeriksaan wajib diupload',
+            'images.array'           => 'Gambar pemeriksaan harus berupa array',
+            'images.min'             => 'Minimal satu gambar pemeriksaan wajib diupload',
+            'images.*.required'      => 'File gambar pemeriksaan wajib diisi',
+            'images.*.image'         => 'File harus berupa gambar',
+            'images.*.mimes'         => 'Format gambar harus jpeg, jpg, png, atau webp',
+            'images.*.max'           => 'Ukuran gambar pemeriksaan maksimal 5MB',
+            'image_types.required'   => 'Tipe gambar wajib diisi',
+            'image_types.array'      => 'Tipe gambar harus berupa array',
+            'image_types.*.required' => 'Tipe gambar wajib diisi',
+            'image_types.*.in'       => 'Tipe gambar harus xray, profil_gigi, atau intraoral',
+            'status.in'              => 'Status tidak valid',
+            'tag_ids.array'          => 'Tag harus berupa array',
+            'tag_ids.*.exists'       => 'Tag tidak ditemukan',
         ];
     }
 }

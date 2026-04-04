@@ -25,6 +25,15 @@ class RontgenListResource extends JsonResource
             ],
             'latest_image_url' => $this->latest_image_url,
             'detail' => $this->detail,
+            'status' => $this->status,           // ← tambah ini
+            'tags' => $this->whenLoaded('tags', function () {  // ← tambah ini
+                return $this->tags->map(function ($tag) {
+                    return [
+                        'id' => $tag->id,
+                        'tag_name' => $tag->tag_name,
+                    ];
+                })->values();
+            }),
             'created_at' => optional($this->created_at)->format('Y-m-d H:i:s'),
         ];
     }

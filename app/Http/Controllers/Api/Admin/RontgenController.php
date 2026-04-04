@@ -74,10 +74,13 @@ class RontgenController extends Controller
                 'patient_id' => $request->patient_id,
                 'doctor_id' => $doctorId,
                 'detail' => $request->detail ?? null,
+                'status'     => $request->status ?? 'perlu_upload_foto',
             ]);
 
             $storedImages = [];
-            foreach ($request->file('images', []) as $imageFile) {
+            $imageTypes = $request->input('image_types', []); 
+
+            foreach ($request->file('images', []) as $index => $imageFile) { 
                 $imageName = FileHelper::uploadImage($imageFile, 'rontgen');
 
                 if (!$imageName) {
@@ -88,7 +91,7 @@ class RontgenController extends Controller
 
                 $rontgen->examinationImages()->create([
                     'image_path' => $imageName,
-                    'image_type' => (string) $imageFile->getClientMimeType(),
+                    'image_type' => $imageTypes[$index] ?? 'xray', 
                 ]);
             }
 
@@ -166,6 +169,7 @@ class RontgenController extends Controller
             if ($request->hasFile('images')) {
                 $oldImages = $rontgen->examinationImages->pluck('image_path')->filter()->values()->all();
                 $newImages = [];
+                $imageTypes = $request->input('image_types', []);
 
                 foreach ($request->file('images', []) as $imageFile) {
                     $imageName = FileHelper::uploadImage($imageFile, 'rontgen');
@@ -180,10 +184,9 @@ class RontgenController extends Controller
                 $rontgen->examinationImages()->delete();
 
                 foreach ($newImages as $index => $imagePath) {
-                    $mimeType = (string) $request->file('images')[$index]->getClientMimeType();
                     $rontgen->examinationImages()->create([
                         'image_path' => $imagePath,
-                        'image_type' => $mimeType,
+                        'image_type' => $imageTypes[$index] ?? 'xray', 
                     ]);
                 }
 
@@ -192,6 +195,10 @@ class RontgenController extends Controller
 
             if ($request->has('detail')) {
                 $rontgen->detail = $request->detail;
+            }
+
+            if ($request->has('status')) {
+                $rontgen->status = $request->status;
             }
 
             if ($request->has('tag_ids')) {

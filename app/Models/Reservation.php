@@ -25,7 +25,7 @@ class Reservation extends Model
         'reservation_date' => 'date',
         'birth_date' => 'date',
         'age' => 'integer',
-        'appointment_time' => 'datetime:H:i',
+        'appointment_time' => 'string',
     ];
 
     public $timestamps = false;

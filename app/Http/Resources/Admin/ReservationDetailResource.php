@@ -116,12 +116,29 @@ class ReservationDetailResource extends JsonResource
             ],
             'complain' => $this->complain,
             'reservation_date' => $this->reservation_date,
-            'appointment_time' => substr((string) $this->appointment_time, 0, 5),
+            'appointment_time' => $this->normalizeTime($this->appointment_time),
             'birth_date' => $this->birth_date,
             'age' => $this->age,
             'patient_category' => $this->patient_category,
             'status' => $this->status,
             'created_at' => optional($this->created_at)->format('Y-m-d H:i:s'),
         ];
+    }
+
+    private function normalizeTime($value): ?string
+    {
+        if (!$value) return null;
+
+        $text = (string) $value;
+
+        if (preg_match('/^\d{2}:\d{2}(:\d{2})?$/', $text)) {
+            return substr($text, 0, 5);
+        }
+
+        try {
+            return \Carbon\Carbon::parse($text)->format('H:i');
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 }

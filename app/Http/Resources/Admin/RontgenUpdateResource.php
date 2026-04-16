@@ -11,20 +11,21 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class RontgenUpdateResource extends JsonResource
 {
     public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'patient' => [
-                'id' => optional($this->patient)->id,
-                'name' => optional($this->patient)->name,
-            ],
-            'doctor' => [
-                'id' => optional($this->doctor)->id,
-                'name' => optional($this->doctor)->name,
-            ],
-            'latest_image_url' => $this->latest_image_url,
-            'detail' => $this->detail,
-            'updated_at' => optional($this->updated_at)->format('Y-m-d H:i:s'),
-        ];
+{
+    return [
+        'id' => $this->id,
+        'patient' => [
+            'id' => optional($this->patient)->id,
+            'name' => optional($this->patient)->name,
+        ],
+        'doctor' => [
+            'id' => optional($this->doctor)->id,
+            'name' => optional($this->doctor)->name,
+        ],
+        'latest_image_url' => $this->latest_image_url,
+        'detail' => $this->detail,
+        'status' => $this->status, 
+        'updated_at' => optional($this->updated_at)->format('Y-m-d H:i:s'),
+    ];
     }
 }

@@ -67,10 +67,7 @@ Route::prefix('admin')->group(function () {
             Route::apiResource('testimonials', AdminTestimonialController::class);
             Route::apiResource('faqs', AdminFaqController::class);
             
-            // Dashboard & Analytics
-            Route::get('/dashboard', [DashboardController::class, 'index']);
-            Route::get('/dashboard/reservation-stats', [DashboardController::class, 'reservationStats']);
-            Route::get('/dashboard/service-analytics', [DashboardController::class, 'serviceAnalytics']);
+            
             
             // Reservation Management
             Route::put('/reservations/{id}', [AdminReservationController::class, 'update']);
@@ -91,7 +88,7 @@ Route::prefix('admin')->group(function () {
             Route::get('/rontgens', [RontgenController::class, 'index']);
             Route::get('/rontgens/{id}', [RontgenController::class, 'show']);
             Route::get('/rontgens/{id}/download', [RontgenController::class, 'download']);
-            
+
             Route::get('/reservations', [AdminReservationController::class, 'index']);
             Route::get('/reservations/{id}', [AdminReservationController::class, 'show']);
 
@@ -100,6 +97,11 @@ Route::prefix('admin')->group(function () {
             Route::get('/notifications', [NotificationController::class, 'index']);
             Route::put('/notifications/read-all', [NotificationController::class, 'markAllRead']);
             Route::put('/notifications/{id}/read', [NotificationController::class, 'markRead']);
+
+            // Dashboard & Analytics
+            Route::get('/dashboard', [DashboardController::class, 'index']);
+            Route::get('/dashboard/reservation-stats', [DashboardController::class, 'reservationStats']);
+            Route::get('/dashboard/service-analytics', [DashboardController::class, 'serviceAnalytics']);
         });
         
         Route::middleware('role:rontgen')->group(function () {

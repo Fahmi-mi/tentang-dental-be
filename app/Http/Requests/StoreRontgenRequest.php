@@ -24,8 +24,8 @@ class StoreRontgenRequest extends FormRequest
         return [
             'patient_id'    => 'required|exists:patients,id',
             'doctor_id'     => 'nullable|exists:doctors,id',
-            'images'        => 'sometimes|array|min:1',
-            'images.*'      => 'required|image|mimes:jpeg,jpg,png,webp|max:5120',
+            'images' => 'sometimes|array',
+            'images.*' => 'image|mimes:jpeg,jpg,png,webp|max:5120',
             'image_types'   => 'sometimes|array|min:1',
             'image_types.*' => 'required|in:xray,profil_gigi,intraoral',
             'status'        => 'sometimes|in:menunggu,di_dalam_ruangan,perlu_upload_foto,selesai', 

@@ -23,7 +23,7 @@ class RontgenController extends Controller
     public function index(Request $request)
     {
         try {
-            $query = Rontgen::with(['patient', 'doctor', 'primaryImage']);
+            $query = Rontgen::with(['patient', 'doctor', 'primaryImage', 'examinationImages', 'tags']);
 
             if ($request->has('patient_id')) {
                 $query->where('patient_id', $request->patient_id);

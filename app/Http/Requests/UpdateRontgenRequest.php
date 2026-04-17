@@ -28,6 +28,7 @@ class UpdateRontgenRequest extends FormRequest
             'images.*' => 'required|image|mimes:jpeg,jpg,png,webp|max:5120',
             'tag_ids' => 'sometimes|array',
             'tag_ids.*' => 'exists:tags,id',
+            'image_types.*' => 'required|in:xray,profil_gigi,intraoral',
         ];
     }
 

@@ -15,6 +15,24 @@ class DoctorController extends Controller
 {
     use FormatsApiResponse;
 
+    public function scheduleOptions()
+    {
+        try {
+            $defaultSchedule = config('doctor_schedule.default', []);
+
+            return $this->successResponse([
+                'default_schedule' => $defaultSchedule,
+                'time_slot_options' => config('doctor_schedule.time_slots', []),
+                'days' => array_keys($defaultSchedule),
+            ], 'Pilihan jadwal dokter berhasil diambil');
+        } catch (\Exception $e) {
+            return response()->json(
+                FileHelper::formatResponse(false, null, 'Terjadi kesalahan: ' . $e->getMessage()),
+                500
+            );
+        }
+    }
+
     public function index()
     {
         try {

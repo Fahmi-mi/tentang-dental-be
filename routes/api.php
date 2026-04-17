@@ -63,6 +63,7 @@ Route::prefix('admin')->group(function () {
             Route::apiResource('services', AdminServiceController::class);
             Route::apiResource('articles', AdminArticleController::class);
             Route::apiResource('galleries', AdminGalleryController::class);
+            Route::get('/doctors/schedule-options', [AdminDoctorController::class, 'scheduleOptions']);
             Route::apiResource('doctors', AdminDoctorController::class);
             Route::apiResource('testimonials', AdminTestimonialController::class);
             Route::apiResource('faqs', AdminFaqController::class);

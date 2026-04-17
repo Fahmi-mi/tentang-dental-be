@@ -293,7 +293,6 @@ class ReservationController extends Controller
 	{
 		$schedule = $doctor->schedule;
 
-		// Handle double-encoded JSON
 		if (is_string($schedule)) {
 			$decoded = json_decode($schedule, true);
 			$schedule = is_array($decoded) ? $decoded : [];
@@ -317,29 +316,71 @@ class ReservationController extends Controller
 		];
 
 		$localizedDayName = $dayMap[$dayName] ?? $dayName;
-		$appointment = Carbon::createFromFormat('H:i', $time);
+		$appointmentTime = Carbon::createFromFormat('H:i', $time)->format('H:i');
+		$timeRanges = [];
 
-		// Format: array of strings like "Kamis 08.00 - 16.00"
-		foreach ($schedule as $scheduleItem) {
-			// Cek apakah string schedule memuat nama hari
-			if (stripos($scheduleItem, $localizedDayName) !== false) {
-				// Extract time range: "Kamis 08.00 - 16.00" → "08.00 - 16.00"
-				if (preg_match('/(\d{1,2})\.(\d{2})\s*-\s*(\d{1,2})\.(\d{2})/', $scheduleItem, $matches)) {
-					$startHour = str_pad($matches[1], 2, '0', STR_PAD_LEFT);
-					$startMin = $matches[2];
-					$endHour = str_pad($matches[3], 2, '0', STR_PAD_LEFT);
-					$endMin = $matches[4];
+		if ($this->isAssocArray($schedule)) {
+			$dayRanges = $schedule[$localizedDayName] ?? $schedule[$dayName] ?? [];
+			if (is_string($dayRanges)) {
+				$dayRanges = [$dayRanges];
+			}
 
-					$startTime = Carbon::createFromFormat('H:i', "$startHour:$startMin");
-					$endTime = Carbon::createFromFormat('H:i', "$endHour:$endMin");
-
-					if ($appointment->betweenIncluded($startTime, $endTime)) {
-						return true;
+			if (is_array($dayRanges)) {
+				foreach ($dayRanges as $range) {
+					if (is_string($range)) {
+						$timeRanges[] = $range;
 					}
+				}
+			}
+		} else {
+			foreach ($schedule as $scheduleItem) {
+				if (!is_string($scheduleItem)) {
+					continue;
+				}
+
+				if (
+					stripos($scheduleItem, $localizedDayName) !== false ||
+					stripos($scheduleItem, $dayName) !== false
+				) {
+					$timeRanges[] = $scheduleItem;
 				}
 			}
 		}
 
+		foreach ($timeRanges as $rangeText) {
+			[$startTime, $endTime] = $this->extractTimeRange($rangeText);
+			if (!$startTime || !$endTime) {
+				continue;
+			}
+
+			if ($appointmentTime >= $startTime && $appointmentTime <= $endTime) {
+				return true;
+			}
+		}
+
 		return false;
+	}
+
+	private function extractTimeRange(string $text): array
+	{
+		if (!preg_match('/(\d{1,2})[\.:](\d{2})\s*-\s*(\d{1,2})[\.:](\d{2})/', $text, $matches)) {
+			return [null, null];
+		}
+
+		$startHour = str_pad($matches[1], 2, '0', STR_PAD_LEFT);
+		$startMin = $matches[2];
+		$endHour = str_pad($matches[3], 2, '0', STR_PAD_LEFT);
+		$endMin = $matches[4];
+
+		return ["$startHour:$startMin", "$endHour:$endMin"];
+	}
+
+	private function isAssocArray(array $array): bool
+	{
+		if ($array === []) {
+			return false;
+		}
+
+		return array_keys($array) !== range(0, count($array) - 1);
 	}
 }

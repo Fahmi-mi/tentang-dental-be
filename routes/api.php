@@ -92,7 +92,9 @@ Route::prefix('admin')->group(function () {
             Route::get('/reservations', [AdminReservationController::class, 'index']);
             Route::get('/reservations/{id}', [AdminReservationController::class, 'show']);
 
-            
+            Route::get('/doctors', [AdminDoctorController::class, 'index']);
+    Route::get('/doctors/{id}', [AdminDoctorController::class, 'show']);
+
             Route::get('/tags', [TagController::class, 'index']);
             Route::get('/notifications', [NotificationController::class, 'index']);
             Route::put('/notifications/read-all', [NotificationController::class, 'markAllRead']);

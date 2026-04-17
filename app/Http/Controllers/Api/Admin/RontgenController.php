@@ -15,6 +15,7 @@ use App\Helpers\FileHelper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use App\Models\Notification;
 
 class RontgenController extends Controller
 {
@@ -210,6 +211,17 @@ class RontgenController extends Controller
             }
 
             $rontgen->save();
+
+            if ($request->hasFile('images')) {
+    \App\Models\Notification::create([
+        'admin_id'   => \Illuminate\Support\Facades\Auth::id(),
+        'title'      => 'Foto Rontgen Diupload',
+        'message'    => 'Foto pemeriksaan pasien ' . optional($rontgen->patient)->name . ' telah berhasil diupload.',
+        'type'       => 'xray_uploaded',
+        'is_read'    => false,
+        'created_at' => now(),
+    ]);
+}
 
             DB::commit();
 

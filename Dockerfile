@@ -1,4 +1,4 @@
-FROM php:8.3-cli-alpine
+FROM php:8.4-cli-alpine
 
 # System dependencies + PHP extensions needed by Laravel and project packages
 RUN apk add --no-cache \
@@ -28,6 +28,7 @@ RUN apk add --no-cache \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) \
     bcmath \
+    dom \
     exif \
     gd \
     intl \

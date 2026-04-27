@@ -11,6 +11,7 @@ RUN apk add --no-cache \
     freetype \
     libwebp \
     libzip \
+    sqlite-libs \
     oniguruma \
     && apk add --no-cache --virtual .build-deps \
     $PHPIZE_DEPS \
@@ -20,6 +21,7 @@ RUN apk add --no-cache \
     freetype-dev \
     libwebp-dev \
     libzip-dev \
+    sqlite-dev \
     oniguruma-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) \

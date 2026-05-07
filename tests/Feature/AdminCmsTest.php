@@ -202,6 +202,32 @@ test('admin can create doctor with schedule', function () {
         ]);
 });
 
+test('admin can get doctor schedule options for create form', function () {
+    $response = $this->getJson('/api/admin/doctors/schedule-options');
+
+    $response->assertStatus(200)
+        ->assertJsonStructure([
+            'success',
+            'data' => [
+                'default_schedule' => [
+                    'senin',
+                    'selasa',
+                    'rabu',
+                    'kamis',
+                    'jumat',
+                    'sabtu',
+                    'minggu',
+                ],
+                'time_slot_options',
+                'days',
+            ],
+            'message',
+        ])
+        ->assertJsonPath('data.default_schedule.senin.0', '08:00-14:00')
+        ->assertJsonPath('data.default_schedule.selasa', [])
+        ->assertJsonPath('data.time_slot_options.0', '08:00-14:00');
+});
+
 test('admin can create testimonial', function () {
     $response = $this->postJson('/api/admin/testimonials', [
         'name' => 'John Doe',

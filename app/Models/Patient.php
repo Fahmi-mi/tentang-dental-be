@@ -50,6 +50,11 @@ class Patient extends Model
         return $this->hasMany(Reservation::class);
     }
 
+    public function latestReservation()
+    {
+        return $this->hasOne(Reservation::class)->latestOfMany('reservation_date');
+    }
+
     public function rontgens()
     {
         return $this->hasMany(Rontgen::class);

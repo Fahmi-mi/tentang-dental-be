@@ -142,6 +142,7 @@ test('admin patient detail response contract remains stable', function () {
         'age',
         'medical_history',
         'dental_history',
+        'last_reservation',
         'reservations',
         'rontgens',
         'created_at',

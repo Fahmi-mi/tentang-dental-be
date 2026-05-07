@@ -12,14 +12,25 @@ class PatientDetailResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $latestReservation = $this->latestReservation;
+
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'nickname' => $this->nickname,
             'phone' => $this->phone,
+            'birth_place' => $this->birth_place,
             'birth_date' => $this->birth_date,
             'gender' => $this->gender,
             'address' => $this->address,
+            'village' => $this->village,
+            'district' => $this->district,
+            'city' => $this->city,
             'age' => $this->age,
+            'occupation' => $this->occupation,
+            'parent_name' => $this->parent_name,
+            'height' => $this->height,
+            'weight' => $this->weight,
             'medical_history' => $this->medicalHistory ? [
                 'id' => $this->medicalHistory->id,
                 'has_allergy' => $this->medicalHistory->has_allergy,
@@ -51,6 +62,19 @@ class PatientDetailResource extends JsonResource
                 'routine_checkup' => $this->dentalHistory->routine_checkup,
                 'dental_checkup_frequency' => $this->dentalHistory->dental_checkup_frequency,
                 'doctor_notes' => $this->dentalHistory->doctor_notes,
+            ] : null,
+            'last_reservation' => $latestReservation ? [
+                'id' => $latestReservation->id,
+                'doctor_name' => optional($latestReservation->doctor)->name,
+                'reservation_date' => optional($latestReservation->reservation_date)->format('Y-m-d'),
+                'appointment_time' => substr((string) $latestReservation->appointment_time, 0, 5),
+                'status' => $latestReservation->status,
+                'services' => $latestReservation->services->map(function ($service) {
+                    return [
+                        'id' => $service->id,
+                        'name' => $service->name,
+                    ];
+                })->values(),
             ] : null,
             'reservations' => $this->reservations->map(function ($reservation) {
                 return [

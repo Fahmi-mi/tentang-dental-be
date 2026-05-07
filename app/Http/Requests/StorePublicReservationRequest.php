@@ -15,6 +15,7 @@ class StorePublicReservationRequest extends FormRequest
     {
         return [
             'patient_category' => 'required|in:new,existing',
+            'patient_id' => 'nullable|required_if:patient_category,existing|exists:patients,id',
             'name' => 'required|string|max:150',
             'phone' => 'required|string|max:20',
             'gender' => 'nullable|in:male,female',
@@ -36,6 +37,8 @@ class StorePublicReservationRequest extends FormRequest
         return [
             'patient_category.required' => 'Kategori pasien wajib dipilih',
             'patient_category.in' => 'Kategori pasien harus new atau existing',
+            'patient_id.required_if' => 'Nomor pasien wajib diisi untuk pasien lama',
+            'patient_id.exists' => 'Nomor pasien tidak ditemukan',
             'name.required' => 'Nama lengkap wajib diisi',
             'phone.required' => 'Nomor telepon wajib diisi',
             'doctor_id.required' => 'Dokter wajib dipilih',

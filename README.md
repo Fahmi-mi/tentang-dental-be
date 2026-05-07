@@ -219,6 +219,7 @@ Semua endpoint berikut berada di bawah /admin dan butuh Sanctum + role:registrat
 
 | Method | Endpoint                                 | Keterangan                                 |
 | ------ | ---------------------------------------- | ------------------------------------------ |
+| POST   | /admin/reservations                      | Buat reservasi dari panel admin            |
 | GET    | /admin/reservations                      | List reservasi                             |
 | GET    | /admin/reservations/{id}                 | Detail reservasi                           |
 | PUT    | /admin/reservations/{id}                 | Update status reservasi                    |
@@ -240,6 +241,7 @@ Butuh Sanctum + role:registration,rontgen.
 | ------ | --------------------------------- | ------------------------ |
 | GET    | /admin/patients                   | List pasien              |
 | GET    | /admin/patients/{id}              | Detail pasien            |
+| GET    | /admin/patients/{id}/rontgens     | List rontgen per pasien  |
 | GET    | /admin/patients/{id}/download-pdf | Download PDF data pasien |
 | GET    | /admin/rontgens                   | List rontgen             |
 | GET    | /admin/rontgens/{id}              | Detail rontgen           |
@@ -391,7 +393,15 @@ Atau:
 vendor/bin/pest
 ```
 
-## 13) Ringkasan Modul
+## 13) Update Dokumentasi API
+
+Untuk regenerasi file OpenAPI `api.json` dari kode terbaru:
+
+```bash
+php artisan scramble:export --path=api.json
+```
+
+## 14) Ringkasan Modul
 
 - Public module: konsumsi konten website.
 - Admin Registration module: CMS + dashboard + reservation + patient write.

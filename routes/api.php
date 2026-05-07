@@ -63,6 +63,7 @@ Route::prefix('admin')->group(function () {
             Route::apiResource('services', AdminServiceController::class);
             Route::apiResource('articles', AdminArticleController::class);
             Route::apiResource('galleries', AdminGalleryController::class);
+            Route::get('/doctors/schedule-options', [AdminDoctorController::class, 'scheduleOptions']);
             Route::apiResource('doctors', AdminDoctorController::class);
             Route::apiResource('testimonials', AdminTestimonialController::class);
             Route::apiResource('faqs', AdminFaqController::class);
@@ -83,6 +84,7 @@ Route::prefix('admin')->group(function () {
             // Shared read/download access
             Route::get('/patients', [PatientController::class, 'index']);
             Route::get('/patients/{id}', [PatientController::class, 'show']);
+            Route::get('/patients/{id}/rontgens', [PatientController::class, 'rontgens']);
             Route::get('/patients/{id}/download-pdf', [PatientController::class, 'downloadPdf']);
 
             Route::get('/rontgens', [RontgenController::class, 'index']);

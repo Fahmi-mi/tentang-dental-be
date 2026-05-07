@@ -20,7 +20,11 @@ class PatientController extends Controller
     public function index()
     {
         try {
-            $patients = Patient::with(['medicalHistory', 'dentalHistory'])
+            $patients = Patient::with([
+                'medicalHistory',
+                'dentalHistory',
+                'latestReservation.services',
+            ])
                 ->latest()
                 ->paginate(10);
             return $this->paginatedResourceResponse(
@@ -40,7 +44,15 @@ class PatientController extends Controller
     public function show($id)
     {
         try {
-            $patient = Patient::with(['medicalHistory', 'dentalHistory', 'reservations.services', 'reservations.doctor', 'rontgens.primaryImage'])
+            $patient = Patient::with([
+                'medicalHistory',
+                'dentalHistory',
+                'reservations.services',
+                'reservations.doctor',
+                'latestReservation.services',
+                'latestReservation.doctor',
+                'rontgens.primaryImage',
+            ])
                 ->find($id);
 
             if (!$patient) {
@@ -63,6 +75,89 @@ class PatientController extends Controller
         }
     }
 
+    public function rontgens($id)
+    {
+        try {
+            $patient = Patient::with([
+                'rontgens.doctor',
+                'rontgens.examinationImages',
+            ])->find($id);
+
+            if (!$patient) {
+                return response()->json(
+                    FileHelper::formatResponse(false, null, 'Pasien tidak ditemukan'),
+                    404
+                );
+            }
+
+            $data = [
+                'patient' => [
+                    'id' => $patient->id,
+                    'patient_number' => 'PT-' . str_pad((string) $patient->id, 6, '0', STR_PAD_LEFT),
+                    'name' => $patient->name,
+                    'phone' => $patient->phone,
+                    'birth_date' => $patient->birth_date,
+                    'gender' => $patient->gender,
+                    'age' => $patient->age,
+                ],
+                'rontgens' => $patient->rontgens
+                    ->sortByDesc('created_at')
+                    ->values()
+                    ->map(function ($rontgen) {
+                        return [
+                            'id' => $rontgen->id,
+                            'doctor' => [
+                                'id' => optional($rontgen->doctor)->id,
+                                'name' => optional($rontgen->doctor)->name,
+                            ],
+                            'detail' => $rontgen->detail,
+                            'status' => $rontgen->status,
+                            'latest_image_url' => $rontgen->latest_image_url,
+                            'images' => $rontgen->examinationImages
+                                ->sortByDesc('id')
+                                ->values()
+                                ->map(function ($image) {
+                                    return [
+                                        'id' => $image->id,
+                                        'image_url' => $this->toPublicImageUrl($image->image_path),
+                                        'image_type' => $image->image_type,
+                                        'created_at' => optional($image->created_at)->format('Y-m-d H:i:s'),
+                                    ];
+                                }),
+                            'created_at' => optional($rontgen->created_at)->format('Y-m-d H:i:s'),
+                        ];
+                    }),
+            ];
+
+            return response()->json(
+                FileHelper::formatResponse(true, $data, 'Data rontgen pasien berhasil diambil'),
+                200
+            );
+        } catch (\Exception $e) {
+            return response()->json(
+                FileHelper::formatResponse(false, null, 'Terjadi kesalahan: ' . $e->getMessage()),
+                500
+            );
+        }
+    }
+
+    private function toPublicImageUrl(?string $fileName): ?string
+    {
+        if (!$fileName) {
+            return null;
+        }
+
+        if (Storage::disk('public')->exists('rontgen/' . $fileName)) {
+            return asset('storage/rontgen/' . $fileName);
+        }
+
+        if (Storage::disk('public')->exists('rontgens/' . $fileName)) {
+            return asset('storage/rontgens/' . $fileName);
+        }
+
+        return null;
+    }
+
     public function update(UpdatePatientRequest $request, $id)
     {
         try {
@@ -76,11 +171,20 @@ class PatientController extends Controller
             }
 
             if ($request->has('name')) $patient->name = $request->name;
+            if ($request->has('nickname')) $patient->nickname = $request->nickname;
             if ($request->has('phone')) $patient->phone = $request->phone;
             if ($request->has('birth_date')) $patient->birth_date = $request->birth_date;
+            if ($request->has('birth_place')) $patient->birth_place = $request->birth_place;
             if ($request->has('gender')) $patient->gender = $request->gender;
             if ($request->has('address')) $patient->address = $request->address;
+            if ($request->has('village')) $patient->village = $request->village;
+            if ($request->has('district')) $patient->district = $request->district;
+            if ($request->has('city')) $patient->city = $request->city;
             if ($request->has('age')) $patient->age = $request->age;
+            if ($request->has('occupation')) $patient->occupation = $request->occupation;
+            if ($request->has('parent_name')) $patient->parent_name = $request->parent_name;
+            if ($request->has('height')) $patient->height = $request->height;
+            if ($request->has('weight')) $patient->weight = $request->weight;
 
             $patient->save();
 

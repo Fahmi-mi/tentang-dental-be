@@ -11,16 +11,7 @@ class DoctorFactory extends Factory
 
     public function definition(): array
     {
-        // Fixed schedule as per BACKEND_PLAN
-        $schedule = [
-            'senin' => ['08:00-14:00', '14:00-21:00'],
-            'selasa' => [], // Libur
-            'rabu' => ['14:00-17:00', '17:00-21:00'],
-            'kamis' => ['08:00-14:00', '14:00-21:00'],
-            'jumat' => ['14:00-17:00', '17:00-21:00'],
-            'sabtu' => ['08:00-14:00', '14:00-21:00'],
-            'minggu' => ['08:00-14:00', '14:00-21:00'],
-        ];
+        $schedule = config('doctor_schedule.default', []);
 
         return [
             'name' => 'Dr. ' . fake()->name(),

@@ -7,6 +7,8 @@ use App\Models\Doctor;
 use App\Models\Service;
 use App\Models\PatientMedicalHistory;
 use App\Models\PatientDentalHistory;
+use App\Models\Rontgen;
+use App\Models\ExaminationImage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 
@@ -18,7 +20,21 @@ beforeEach(function () {
 });
 
 test('admin can get list of patients without email field', function () {
-    Patient::factory()->count(3)->create();
+    $patient = Patient::factory()->create();
+    $doctor = Doctor::factory()->create();
+    $service = Service::factory()->create(['name' => 'Scaling']);
+
+    $reservation = Reservation::create([
+        'patient_id' => $patient->id,
+        'doctor_id' => $doctor->id,
+        'complain' => 'Kontrol',
+        'reservation_date' => now(),
+        'appointment_time' => '09:00:00',
+        'status' => 'validated',
+    ]);
+    $reservation->services()->attach([$service->id]);
+
+    Patient::factory()->count(2)->create();
     
     $response = $this->getJson('/api/admin/patients');
     
@@ -27,12 +43,24 @@ test('admin can get list of patients without email field', function () {
             'success',
             'data' => [
                 'patients' => [
-                    '*' => ['id', 'name', 'phone', 'gender', 'age', 'birth_date']
+                    '*' => [
+                        'id',
+                        'patient_number',
+                        'name',
+                        'phone',
+                        'gender',
+                        'age',
+                        'birth_date',
+                        'latest_reservation_date',
+                        'latest_services',
+                    ]
                 ],
                 'pagination'
             ]
         ]);
     
+    $response->assertJsonPath('data.patients.0.patient_number', 'PT-' . str_pad((string) $patient->id, 6, '0', STR_PAD_LEFT));
+    $response->assertJsonPath('data.patients.0.latest_services.0', 'Scaling');
     $response->assertJsonMissing(['email']);
 });
 
@@ -58,6 +86,12 @@ test('admin can get patient detail with services plural relationship', function 
         ->assertJsonStructure([
             'data' => [
                 'id', 'name', 'phone',
+                'last_reservation' => [
+                    'id', 'doctor_name', 'reservation_date', 'appointment_time', 'status',
+                    'services' => [
+                        '*' => ['id', 'name']
+                    ]
+                ],
                 'reservations' => [
                     '*' => [
                         'id', 'complain', 'status',
@@ -68,6 +102,59 @@ test('admin can get patient detail with services plural relationship', function 
                 ]
             ]
         ]);
+
+    $response->assertJsonPath('data.last_reservation.services.0.name', 'Scaling');
+    $response->assertJsonPath('data.last_reservation.services.1.name', 'Bleaching');
+});
+
+test('admin can get patient rontgens endpoint with all images', function () {
+    $patient = Patient::factory()->create(['name' => 'Jane Doe']);
+    $doctor = Doctor::factory()->create(['name' => 'Dr. Andi']);
+
+    $rontgen = Rontgen::factory()->create([
+        'patient_id' => $patient->id,
+        'doctor_id' => $doctor->id,
+        'detail' => 'Kontrol rahang',
+        'status' => 'selesai',
+    ]);
+
+    ExaminationImage::create([
+        'rontgen_id' => $rontgen->id,
+        'image_path' => 'sample-1.jpg',
+        'image_type' => 'xray',
+    ]);
+
+    ExaminationImage::create([
+        'rontgen_id' => $rontgen->id,
+        'image_path' => 'sample-2.jpg',
+        'image_type' => 'intraoral',
+    ]);
+
+    $response = $this->getJson("/api/admin/patients/{$patient->id}/rontgens");
+
+    $response->assertStatus(200)
+        ->assertJsonStructure([
+            'success',
+            'data' => [
+                'patient' => ['id', 'patient_number', 'name', 'phone', 'birth_date', 'gender', 'age'],
+                'rontgens' => [
+                    '*' => [
+                        'id',
+                        'doctor' => ['id', 'name'],
+                        'detail',
+                        'status',
+                        'latest_image_url',
+                        'images' => [
+                            '*' => ['id', 'image_url', 'image_type', 'created_at']
+                        ],
+                        'created_at',
+                    ]
+                ]
+            ]
+        ]);
+
+    $response->assertJsonPath('data.patient.name', 'Jane Doe');
+    $response->assertJsonCount(2, 'data.rontgens.0.images');
 });
 
 test('admin can update patient with birth_date field', function () {
@@ -87,6 +174,65 @@ test('admin can update patient with birth_date field', function () {
                 'name' => 'Updated Name',
             ]
         ]);
+});
+
+test('admin update persists and returns extended patient profile fields', function () {
+    $patient = Patient::factory()->create();
+
+    $payload = [
+        'name' => 'Updated Extended Name',
+        'nickname' => 'Fahmi',
+        'phone' => $patient->phone,
+        'birth_place' => 'Bandung',
+        'birth_date' => '1995-03-10',
+        'gender' => 'male',
+        'address' => 'Jl. Mawar',
+        'village' => 'Cibiru',
+        'district' => 'Cileunyi',
+        'city' => 'Bandung',
+        'age' => 31,
+        'occupation' => 'Developer',
+        'parent_name' => 'Bapak A',
+        'height' => 172.5,
+        'weight' => 67.3,
+    ];
+
+    $updateResponse = $this->putJson("/api/admin/patients/{$patient->id}", $payload);
+
+    $updateResponse->assertStatus(200)
+        ->assertJsonPath('data.nickname', 'Fahmi')
+        ->assertJsonPath('data.birth_place', 'Bandung')
+        ->assertJsonPath('data.village', 'Cibiru')
+        ->assertJsonPath('data.district', 'Cileunyi')
+        ->assertJsonPath('data.city', 'Bandung')
+        ->assertJsonPath('data.occupation', 'Developer')
+        ->assertJsonPath('data.parent_name', 'Bapak A')
+        ->assertJsonPath('data.height', '172.50')
+        ->assertJsonPath('data.weight', '67.30');
+
+    $this->assertDatabaseHas('patients', [
+        'id' => $patient->id,
+        'nickname' => 'Fahmi',
+        'birth_place' => 'Bandung',
+        'village' => 'Cibiru',
+        'district' => 'Cileunyi',
+        'city' => 'Bandung',
+        'occupation' => 'Developer',
+        'parent_name' => 'Bapak A',
+    ]);
+
+    $detailResponse = $this->getJson("/api/admin/patients/{$patient->id}");
+
+    $detailResponse->assertStatus(200)
+        ->assertJsonPath('data.nickname', 'Fahmi')
+        ->assertJsonPath('data.birth_place', 'Bandung')
+        ->assertJsonPath('data.village', 'Cibiru')
+        ->assertJsonPath('data.district', 'Cileunyi')
+        ->assertJsonPath('data.city', 'Bandung')
+        ->assertJsonPath('data.occupation', 'Developer')
+        ->assertJsonPath('data.parent_name', 'Bapak A')
+        ->assertJsonPath('data.height', '172.50')
+        ->assertJsonPath('data.weight', '67.30');
 });
 
 test('admin can delete patient', function () {

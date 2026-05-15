@@ -37,6 +37,15 @@ class ReservationController extends Controller
 				);
 			}
 
+			if (!$this->isSlotAvailable($doctor, $request->reservation_date, $request->appointment_time)) {
+				DB::rollBack();
+
+				return response()->json(
+					FileHelper::formatResponse(false, null, 'Slot jam reservasi sudah terisi atau tidak tersedia'),
+					422
+				);
+			}
+
 			$patient = null;
 
 			if ($request->patient_category === 'existing') {
@@ -373,6 +382,134 @@ class ReservationController extends Controller
 		$endMin = $matches[4];
 
 		return ["$startHour:$startMin", "$endHour:$endMin"];
+	}
+
+	private function isSlotAvailable(Doctor $doctor, string $date, string $time): bool
+	{
+		$slots = $this->getAvailableSlots($doctor, $date);
+		$availableStarts = array_map(fn ($slot) => $slot['start_time'], $slots);
+		return in_array($time, $availableStarts, true);
+	}
+
+	private function getAvailableSlots(Doctor $doctor, string $date): array
+	{
+		$dayRanges = $this->getDoctorDayRanges($doctor->schedule, $date);
+		if (empty($dayRanges)) {
+			return [];
+		}
+
+		$slots = $this->buildHourlySlots($dayRanges);
+		$availableStarts = $this->filterReservedSlots($doctor->id, $date, $slots);
+		$now = Carbon::now(config('app.timezone'));
+		$targetDate = Carbon::parse($date, config('app.timezone'));
+
+		return array_values(array_filter($slots, function ($slot) use ($availableStarts, $now, $targetDate) {
+			if (!in_array($slot['start_time'], $availableStarts, true)) {
+				return false;
+			}
+
+			if ($targetDate->isSameDay($now)) {
+				$slotStart = Carbon::parse($targetDate->format('Y-m-d') . ' ' . $slot['start_time'], config('app.timezone'));
+				return $slotStart->gt($now);
+			}
+
+			return $targetDate->isAfter($now->copy()->startOfDay());
+		}));
+	}
+
+	private function filterReservedSlots(int $doctorId, string $date, array $slots): array
+	{
+		$reservedTimes = Reservation::query()
+			->where('doctor_id', $doctorId)
+			->whereDate('reservation_date', $date)
+			->where('status', '!=', 'cancelled')
+			->pluck('appointment_time')
+			->map(fn ($time) => substr((string) $time, 0, 5))
+			->all();
+
+		return array_values(array_filter(array_map(fn ($slot) => $slot['start_time'], $slots), function ($startTime) use ($reservedTimes) {
+			return !in_array($startTime, $reservedTimes, true);
+		}));
+	}
+
+	private function buildHourlySlots(array $ranges): array
+	{
+		$slots = [];
+		foreach ($ranges as $range) {
+			[$startTime, $endTime] = $this->extractTimeRange($range);
+			if (!$startTime || !$endTime) {
+				continue;
+			}
+
+			$cursor = Carbon::createFromFormat('H:i', $startTime, config('app.timezone'));
+			$end = Carbon::createFromFormat('H:i', $endTime, config('app.timezone'));
+
+			while ($cursor->lt($end)) {
+				$next = $cursor->copy()->addHour();
+				if ($next->gt($end)) {
+					break;
+				}
+
+				$slots[] = [
+					'start_time' => $cursor->format('H:i'),
+					'end_time' => $next->format('H:i'),
+					'label' => $cursor->format('H:i') . ' - ' . $next->format('H:i'),
+				];
+
+				$cursor = $next;
+			}
+		}
+
+		return $slots;
+	}
+
+	private function getDoctorDayRanges($schedule, string $date): array
+	{
+		if (is_string($schedule)) {
+			$decoded = json_decode($schedule, true);
+			$schedule = is_array($decoded) ? $decoded : [];
+		} else {
+			$schedule = is_array($schedule) ? $schedule : [];
+		}
+
+		if (empty($schedule)) {
+			return [];
+		}
+
+		$dayName = strtolower(Carbon::parse($date)->englishDayOfWeek);
+		$dayMap = [
+			'monday' => 'senin',
+			'tuesday' => 'selasa',
+			'wednesday' => 'rabu',
+			'thursday' => 'kamis',
+			'friday' => 'jumat',
+			'saturday' => 'sabtu',
+			'sunday' => 'minggu',
+		];
+		$localizedDayName = $dayMap[$dayName] ?? $dayName;
+
+		if ($this->isAssocArray($schedule)) {
+			$dayRanges = $schedule[$localizedDayName] ?? $schedule[$dayName] ?? [];
+			if (is_string($dayRanges)) {
+				return [$dayRanges];
+			}
+			return array_values(array_filter($dayRanges, 'is_string'));
+		}
+
+		$matches = [];
+		foreach ($schedule as $scheduleItem) {
+			if (!is_string($scheduleItem)) {
+				continue;
+			}
+			if (
+				stripos($scheduleItem, $localizedDayName) !== false ||
+				stripos($scheduleItem, $dayName) !== false
+			) {
+				$matches[] = $scheduleItem;
+			}
+		}
+
+		return $matches;
 	}
 
 	private function isAssocArray(array $array): bool

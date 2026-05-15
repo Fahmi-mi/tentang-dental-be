@@ -1994,6 +1994,89 @@
                 }
             }
         },
+        "/admin/doctors/schedule-options": {
+            "get": {
+                "operationId": "doctor.scheduleOptions",
+                "tags": [
+                    "Doctor"
+                ],
+                "responses": {
+                    "500": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "null"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "success",
+                                        "data",
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "default_schedule": {
+                                                    "type": "string"
+                                                },
+                                                "time_slot_options": {
+                                                    "type": "string"
+                                                },
+                                                "days": {
+                                                    "type": "array",
+                                                    "items": {}
+                                                }
+                                            },
+                                            "required": [
+                                                "default_schedule",
+                                                "time_slot_options",
+                                                "days"
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Pilihan jadwal dokter berhasil diambil"
+                                        }
+                                    },
+                                    "required": [
+                                        "success",
+                                        "data",
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
         "/admin/doctors": {
             "get": {
                 "operationId": "doctors.index",
@@ -5259,7 +5342,7 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "const": "Pasien lama tidak ditemukan. Silakan gunakan kategori pasien baru jika ini kunjungan pertama."
+                                            "const": "Nomor pasien tidak ditemukan. Pastikan nomor pasien benar atau gunakan kategori pasien baru."
                                         }
                                     },
                                     "required": [
@@ -5270,6 +5353,118 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/reservations/available-slots": {
+            "get": {
+                "operationId": "reservation.availableSlots",
+                "tags": [
+                    "Reservation"
+                ],
+                "parameters": [
+                    {
+                        "name": "doctor_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "reservation_date",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "null"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "success",
+                                        "data",
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Public.ReservationAvailableSlotsResource"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Slot tersedia berhasil diambil"
+                                        }
+                                    },
+                                    "required": [
+                                        "success",
+                                        "data",
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "null"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Dokter tidak ditemukan"
+                                        }
+                                    },
+                                    "required": [
+                                        "success",
+                                        "data",
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
                     }
                 }
             }
@@ -5916,6 +6111,141 @@
                                         "success",
                                         "data",
                                         "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/admin/rontgens/{id}/images/{imageId}": {
+            "delete": {
+                "operationId": "rontgen.deleteImage",
+                "tags": [
+                    "Rontgen"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "imageId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "null"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "success",
+                                        "data",
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "data": {
+                                            "type": "null"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Foto rontgen berhasil dihapus"
+                                        }
+                                    },
+                                    "required": [
+                                        "success",
+                                        "data",
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "success": {
+                                                    "type": "boolean"
+                                                },
+                                                "data": {
+                                                    "type": "null"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "const": "Foto rontgen tidak ditemukan"
+                                                }
+                                            },
+                                            "required": [
+                                                "success",
+                                                "data",
+                                                "message"
+                                            ]
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "success": {
+                                                    "type": "boolean"
+                                                },
+                                                "data": {
+                                                    "type": "null"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "const": "Data rontgen tidak ditemukan"
+                                                }
+                                            },
+                                            "required": [
+                                                "success",
+                                                "data",
+                                                "message"
+                                            ]
+                                        }
                                     ]
                                 }
                             }
@@ -8172,7 +8502,13 @@
                     "name": {
                         "type": "string"
                     },
+                    "nickname": {
+                        "type": "string"
+                    },
                     "phone": {
+                        "type": "string"
+                    },
+                    "birth_place": {
                         "type": "string"
                     },
                     "birth_date": {
@@ -8184,7 +8520,28 @@
                     "address": {
                         "type": "string"
                     },
+                    "village": {
+                        "type": "string"
+                    },
+                    "district": {
+                        "type": "string"
+                    },
+                    "city": {
+                        "type": "string"
+                    },
                     "age": {
+                        "type": "string"
+                    },
+                    "occupation": {
+                        "type": "string"
+                    },
+                    "parent_name": {
+                        "type": "string"
+                    },
+                    "height": {
+                        "type": "string"
+                    },
+                    "weight": {
                         "type": "string"
                     },
                     "medical_history": {
@@ -8369,11 +8726,20 @@
                 "required": [
                     "id",
                     "name",
+                    "nickname",
                     "phone",
+                    "birth_place",
                     "birth_date",
                     "gender",
                     "address",
+                    "village",
+                    "district",
+                    "city",
                     "age",
+                    "occupation",
+                    "parent_name",
+                    "height",
+                    "weight",
                     "medical_history",
                     "dental_history",
                     "last_reservation",
@@ -8454,7 +8820,13 @@
                     "name": {
                         "type": "string"
                     },
+                    "nickname": {
+                        "type": "string"
+                    },
                     "phone": {
+                        "type": "string"
+                    },
+                    "birth_place": {
                         "type": "string"
                     },
                     "birth_date": {
@@ -8466,7 +8838,28 @@
                     "address": {
                         "type": "string"
                     },
+                    "village": {
+                        "type": "string"
+                    },
+                    "district": {
+                        "type": "string"
+                    },
+                    "city": {
+                        "type": "string"
+                    },
                     "age": {
+                        "type": "string"
+                    },
+                    "occupation": {
+                        "type": "string"
+                    },
+                    "parent_name": {
+                        "type": "string"
+                    },
+                    "height": {
+                        "type": "string"
+                    },
+                    "weight": {
                         "type": "string"
                     },
                     "medical_history": {
@@ -8597,11 +8990,20 @@
                 "required": [
                     "id",
                     "name",
+                    "nickname",
                     "phone",
+                    "birth_place",
                     "birth_date",
                     "gender",
                     "address",
+                    "village",
+                    "district",
+                    "city",
                     "age",
+                    "occupation",
+                    "parent_name",
+                    "height",
+                    "weight",
                     "medical_history",
                     "dental_history"
                 ],
@@ -9965,6 +10367,31 @@
                 ],
                 "title": "Public.PromoResource"
             },
+            "Public.ReservationAvailableSlotsResource": {
+                "type": "object",
+                "properties": {
+                    "slots": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "minItems": 0,
+                                "maxItems": 0,
+                                "additionalItems": false
+                            }
+                        ]
+                    }
+                },
+                "required": [
+                    "slots"
+                ],
+                "title": "Public.ReservationAvailableSlotsResource"
+            },
             "Public.ServiceDetailResource": {
                 "type": "object",
                 "properties": {
@@ -10196,7 +10623,8 @@
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "minItems": 1
                     },
                     "statement": {
                         "type": [
@@ -10294,6 +10722,12 @@
                         "enum": [
                             "new",
                             "existing"
+                        ]
+                    },
+                    "patient_id": {
+                        "type": [
+                            "integer",
+                            "null"
                         ]
                     },
                     "name": {

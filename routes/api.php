@@ -43,6 +43,7 @@ Route::get('/testimonials', [TestimonialController::class, 'index']);
 Route::get('/faqs', [FaqController::class, 'index']);
 
 Route::post('/reservations', [PublicReservationController::class, 'store']);
+Route::get('/reservations/available-slots', [PublicReservationController::class, 'availableSlots']);
 
 Route::prefix('admin')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
@@ -84,6 +85,7 @@ Route::prefix('admin')->group(function () {
             // Patient Management (write)
             Route::put('/patients/{id}', [PatientController::class, 'update']);
             Route::delete('/patients/{id}', [PatientController::class, 'destroy']);
+            Route::delete('/rontgens/{id}/images/{imageId}', [RontgenController::class, 'deleteImage']);
         });
 
         Route::middleware('role:registration,rontgen')->group(function () {

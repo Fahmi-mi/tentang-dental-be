@@ -263,6 +263,48 @@ class RontgenController extends Controller
         }
     }
 
+    public function deleteImage($id, $imageId)
+    {
+        DB::beginTransaction();
+
+        try {
+            $rontgen = Rontgen::with('examinationImages')->find($id);
+
+            if (!$rontgen) {
+                return response()->json(
+                    FileHelper::formatResponse(false, null, 'Data rontgen tidak ditemukan'),
+                    404
+                );
+            }
+
+            $image = $rontgen->examinationImages->firstWhere('id', (int) $imageId);
+
+            if (!$image) {
+                return response()->json(
+                    FileHelper::formatResponse(false, null, 'Foto rontgen tidak ditemukan'),
+                    404
+                );
+            }
+
+            $this->deleteRontgenImages([$image->image_path]);
+            $image->delete();
+
+            DB::commit();
+
+            return response()->json(
+                FileHelper::formatResponse(true, null, 'Foto rontgen berhasil dihapus'),
+                200
+            );
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json(
+                FileHelper::formatResponse(false, null, 'Gagal menghapus foto rontgen: ' . $e->getMessage()),
+                500
+            );
+        }
+    }
+
     public function download($id)
     {
         try {

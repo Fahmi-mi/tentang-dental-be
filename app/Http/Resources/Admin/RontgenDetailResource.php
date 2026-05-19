@@ -15,6 +15,7 @@ class RontgenDetailResource extends JsonResource
     {
         $medicalHistory = optional($this->patient)->medicalHistory;
         $dentalHistory = optional($this->patient)->dentalHistory;
+        
 
         return [
             'id' => $this->id,
@@ -64,8 +65,9 @@ class RontgenDetailResource extends JsonResource
             'examination_images' => $this->examinationImages->map(function ($image) {
                 return [
                     'id' => $image->id,
-                    'image_url' => $this->toPublicImageUrl($image->image_path),
-                    'image_type' => $image->image_type,
+                    'image_url'   => $this->toPublicImageUrl($image->image_path),
+                    'image_type'  => $image->image_type,
+                    'image_phase' => $image->image_phase,
                     'created_at' => optional($image->created_at)->format('Y-m-d H:i:s'),
                 ];
             })->values(),
@@ -78,6 +80,8 @@ class RontgenDetailResource extends JsonResource
             })->values(),
             'detail' => $this->detail,
             'status' => $this->status,
+            'physical_examination' => $this->physical_examination,
+            'extra_oral_examination' => $this->extra_oral_examination,
             'created_at' => optional($this->created_at)->format('Y-m-d H:i:s'),
             'updated_at' => optional($this->updated_at)->format('Y-m-d H:i:s'),
         ];

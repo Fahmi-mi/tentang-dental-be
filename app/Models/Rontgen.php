@@ -17,6 +17,8 @@ class Rontgen extends Model
         'doctor_id',
         'detail',
         'status',
+        'chief_complaint',
+        'target_foto',
     ];
 
     protected $appends = ['latest_image_url'];
@@ -63,5 +65,15 @@ class Rontgen extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'exammination_tags', 'rontgen_id', 'tag_id');
+    }
+
+    public function physical_examination()
+    {
+        return $this->hasOne(PhysicalExamination::class, 'rontgen_id');
+    }
+
+    public function extra_oral_examination()
+    {
+        return $this->hasOne(ExtraOralExamination::class, 'rontgen_id');
     }
 }

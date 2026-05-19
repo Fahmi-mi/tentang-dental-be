@@ -13,8 +13,10 @@ class ExaminationImage extends Model
 
     protected $fillable = [
         'rontgen_id',
+        'dental_examination_id', 
         'image_path',
         'image_type',
+        'image_phase',
     ];
 
     public const UPDATED_AT = null;
@@ -22,5 +24,10 @@ class ExaminationImage extends Model
     public function rontgen()
     {
         return $this->belongsTo(Rontgen::class);
+    }
+
+    public function dentalExamination()
+    {
+        return $this->belongsTo(DentalExamination::class);
     }
 }

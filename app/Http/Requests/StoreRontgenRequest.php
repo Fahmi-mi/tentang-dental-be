@@ -30,6 +30,7 @@ class StoreRontgenRequest extends FormRequest
             'image_types.*' => 'required|in:xray,profil_gigi,intraoral',
             'status'        => 'sometimes|in:menunggu,di_dalam_ruangan,perlu_upload_foto,selesai', 
             'detail'        => 'nullable|string',
+            'target_foto'   => 'nullable|string',
             'tag_ids'       => 'sometimes|array',
             'tag_ids.*'     => 'exists:tags,id',
         ];

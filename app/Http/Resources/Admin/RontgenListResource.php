@@ -18,6 +18,7 @@ class RontgenListResource extends JsonResource
             'id' => optional($this->patient)->id,
             'name' => optional($this->patient)->name,
             'phone' => optional($this->patient)->phone,
+            'age'   => optional($this->patient)->age,
         ],
         'doctor' => [
             'id' => optional($this->doctor)->id,
@@ -26,6 +27,7 @@ class RontgenListResource extends JsonResource
         'latest_image_url' => $this->latest_image_url,
         'detail' => $this->detail,
         'status' => $this->status,
+        'target_foto' => $this->target_foto,
         'tags' => $this->whenLoaded('tags', function () {
             return $this->tags->map(function ($tag) {
                 return [

@@ -15,17 +15,19 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         // Admin Registration
-        Admin::create([
-            'name' => 'Admin Registration',
+        Admin::firstOrCreate([
             'email' => 'admin@tentangdental.com',
+        ], [
+            'name' => 'Admin Registration',
             'password' => Hash::make('password'),
             'role' => 'registration',
         ]);
 
         // Admin Rontgen
-        Admin::create([
-            'name' => 'Admin Rontgen',
+        Admin::firstOrCreate([
             'email' => 'rontgen@tentangdental.com',
+        ], [
+            'name' => 'Admin Rontgen',
             'password' => Hash::make('password'),
             'role' => 'rontgen',
         ]);

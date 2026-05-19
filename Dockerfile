@@ -80,4 +80,4 @@ EXPOSE 10000
 
 USER www-data
 
-CMD ["sh", "-c", "php artisan storage:link >/dev/null 2>&1 || true; php artisan serve --host=0.0.0.0 --port=${PORT}"]
+CMD ["sh", "-c", "php artisan migrate --force && php artisan storage:link 2>/dev/null || true && php artisan serve --host=0.0.0.0 --port=${PORT}"]

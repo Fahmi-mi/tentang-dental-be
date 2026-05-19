@@ -69,7 +69,8 @@ RUN mkdir -p storage/framework/cache \
     storage/framework/views \
     storage/logs \
     bootstrap/cache \
-    && chown -R www-data:www-data storage bootstrap/cache
+    && chown -R www-data:www-data storage bootstrap/cache public \
+    && chmod -R 775 storage bootstrap/cache public
 
 ENV APP_ENV=production \
     APP_DEBUG=false \
@@ -80,4 +81,4 @@ EXPOSE 10000
 
 USER www-data
 
-CMD ["sh", "-c", "php artisan migrate --force && php artisan storage:link 2>/dev/null || true && php artisan serve --host=0.0.0.0 --port=${PORT}"]
+CMD ["sh", "-c", "php artisan migrate --force && php artisan db:seed --force && php artisan storage:link && php artisan serve --host=0.0.0.0 --port=10000"]

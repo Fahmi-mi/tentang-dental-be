@@ -1,0 +1,133 @@
+<?php
+
+use App\Http\Controllers\Api\Admin\AuthController;
+use App\Http\Controllers\Api\Admin\DashboardController;
+use App\Http\Controllers\Api\Admin\PatientController;
+use App\Http\Controllers\Api\Admin\RontgenController;
+use App\Http\Controllers\Api\Admin\PromoController as AdminPromoController;
+use App\Http\Controllers\Api\Admin\ServiceController as AdminServiceController;
+use App\Http\Controllers\Api\Admin\ArticleController as AdminArticleController;
+use App\Http\Controllers\Api\Admin\GalleryController as AdminGalleryController;
+use App\Http\Controllers\Api\Admin\DoctorController as AdminDoctorController;
+use App\Http\Controllers\Api\Admin\TestimonialController as AdminTestimonialController;
+use App\Http\Controllers\Api\Admin\FaqController as AdminFaqController;
+use App\Http\Controllers\Api\Admin\ReservationController as AdminReservationController;
+use App\Http\Controllers\Api\Public\ArticleController;
+use App\Http\Controllers\Api\Public\DoctorController;
+use App\Http\Controllers\Api\Public\FaqController;
+use App\Http\Controllers\Api\Public\GalleryController;
+use App\Http\Controllers\Api\Public\PromoController;
+use App\Http\Controllers\Api\Public\ReservationController as PublicReservationController;
+use App\Http\Controllers\Api\Public\ServiceController;
+use App\Http\Controllers\Api\Public\TestimonialController;
+use App\Http\Controllers\Api\Admin\NotificationController;
+use App\Http\Controllers\Api\Admin\TagController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\Admin\PhysicalExaminationController;
+use App\Http\Controllers\Api\Admin\ExtraOralExaminationController;
+use App\Http\Controllers\Api\Admin\DentalExaminationController;
+
+Route::get('/promos', [PromoController::class, 'index']);
+Route::get('/promos/{id}', [PromoController::class, 'show']);
+
+Route::get('/services', [ServiceController::class, 'index']);
+Route::get('/services/{id}', [ServiceController::class, 'show']);
+
+Route::get('/articles', [ArticleController::class, 'index']);
+Route::get('/articles/{slug}', [ArticleController::class, 'show']);
+
+Route::get('/galleries', [GalleryController::class, 'index']);
+
+Route::get('/doctors', [DoctorController::class, 'index']);
+Route::get('/doctors/{id}', [DoctorController::class, 'show']);
+
+Route::get('/testimonials', [TestimonialController::class, 'index']);
+
+Route::get('/faqs', [FaqController::class, 'index']);
+
+Route::post('/reservations', [PublicReservationController::class, 'store']);
+Route::get('/reservations/available-slots', [PublicReservationController::class, 'availableSlots']);
+
+Route::prefix('admin')->group(function () {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
+    
+    Route::middleware('auth:sanctum')->group(function () {
+        // Auth management
+        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::post('/refresh', [AuthController::class, 'refresh']);
+        Route::get('/me', [AuthController::class, 'me']);
+        Route::put('/profile', [AuthController::class, 'updateProfile']);
+        Route::put('/change-email', [AuthController::class, 'changeEmail']);
+        Route::put('/change-password', [AuthController::class, 'changePassword']);
+        
+        Route::middleware('role:registration')->group(function () {
+            // CMS Management
+            Route::apiResource('promos', AdminPromoController::class);
+            Route::apiResource('services', AdminServiceController::class);
+            Route::apiResource('articles', AdminArticleController::class);
+            Route::apiResource('galleries', AdminGalleryController::class);
+            Route::get('/doctors/schedule-options', [AdminDoctorController::class, 'scheduleOptions']);
+            Route::apiResource('doctors', AdminDoctorController::class);
+            Route::apiResource('testimonials', AdminTestimonialController::class);
+            Route::apiResource('faqs', AdminFaqController::class);
+            
+            
+            // Reservation Management
+            Route::put('/reservations/{id}', [AdminReservationController::class, 'update']);
+            Route::put('/reservations/{id}/patient-details', [AdminReservationController::class, 'updatePatientDetails']);
+            Route::delete('/reservations/{id}', [AdminReservationController::class, 'destroy']);
+            
+            // Patient Management (write)
+            Route::put('/patients/{id}', [PatientController::class, 'update']);
+            Route::delete('/patients/{id}', [PatientController::class, 'destroy']);
+            Route::delete('/rontgens/{id}/images/{imageId}', [RontgenController::class, 'deleteImage']);
+        });
+
+        Route::middleware('role:registration,rontgen')->group(function () {
+            // Shared read/download access
+            Route::get('/patients', [PatientController::class, 'index']);
+            Route::get('/patients/{id}', [PatientController::class, 'show']);
+            Route::get('/patients/{id}/rontgens', [PatientController::class, 'rontgens']);
+            Route::get('/patients/{id}/download-pdf', [PatientController::class, 'downloadPdf']);
+
+            Route::get('/rontgens', [RontgenController::class, 'index']);
+            Route::get('/rontgens/{id}', [RontgenController::class, 'show']);
+            Route::get('/rontgens/{id}/download', [RontgenController::class, 'download']);
+
+            Route::get('/reservations', [AdminReservationController::class, 'index']);
+            Route::get('/reservations/{id}', [AdminReservationController::class, 'show']);
+
+            Route::get('/doctors', [AdminDoctorController::class, 'index']);
+            Route::get('/doctors/{id}', [AdminDoctorController::class, 'show']);
+
+            Route::get('/tags', [TagController::class, 'index']);
+            Route::get('/notifications', [NotificationController::class, 'index']);
+            Route::put('/notifications/read-all', [NotificationController::class, 'markAllRead']);
+            Route::put('/notifications/{id}/read', [NotificationController::class, 'markRead']);
+
+            // Dashboard & Analytics
+            Route::get('/dashboard', [DashboardController::class, 'index']);
+            Route::get('/dashboard/reservation-stats', [DashboardController::class, 'reservationStats']);
+            Route::get('/dashboard/service-analytics', [DashboardController::class, 'serviceAnalytics']);
+
+            // Examinations
+            Route::post('/physical-examinations', [PhysicalExaminationController::class, 'store']);
+            Route::get('/physical-examinations/{rontgenId}', [PhysicalExaminationController::class, 'show']);
+
+            Route::post('/extra-oral-examinations', [ExtraOralExaminationController::class, 'store']);
+            Route::get('/extra-oral-examinations/{rontgenId}', [ExtraOralExaminationController::class, 'show']);
+
+            Route::get('/dental-examinations', [DentalExaminationController::class, 'index']);
+            Route::post('/dental-examinations', [DentalExaminationController::class, 'store']);
+            Route::put('/dental-examinations/{id}', [DentalExaminationController::class, 'update']);
+        });
+        
+        Route::middleware('role:rontgen')->group(function () {
+            // Rontgen Management (write)
+            Route::post('/rontgens', [RontgenController::class, 'store']);
+            Route::put('/rontgens/{id}', [RontgenController::class, 'update']);
+            Route::delete('/rontgens/{id}', [RontgenController::class, 'destroy']);
+        });
+    });
+});

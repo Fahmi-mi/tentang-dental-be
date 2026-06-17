@@ -27,6 +27,10 @@ use App\Http\Controllers\Api\Admin\PhysicalExaminationController;
 use App\Http\Controllers\Api\Admin\ExtraOralExaminationController;
 use App\Http\Controllers\Api\Admin\DentalExaminationController;
 
+Route::options('/{any}', function () {
+    return response()->json([], 200);
+})->where('any', '.*');
+
 Route::get('/promos', [PromoController::class, 'index']);
 Route::get('/promos/{id}', [PromoController::class, 'show']);
 
